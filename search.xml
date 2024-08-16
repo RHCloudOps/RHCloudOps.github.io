@@ -1,128 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Tomcat+Nginx负载均衡(3.2.4)</title>
-    <url>/2024/08/13/Tomcat+Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1(3.2.4)/</url>
-    <content><![CDATA[<h1 id="Tomcat-Nginx负载均衡"><a href="#Tomcat-Nginx负载均衡" class="headerlink" title="Tomcat+Nginx负载均衡"></a>Tomcat+Nginx负载均衡</h1><h2 id="一、Nginx负载均衡的作用"><a href="#一、Nginx负载均衡的作用" class="headerlink" title="一、Nginx负载均衡的作用"></a>一、Nginx负载均衡的作用</h2><p>在单机上运行多个 Tomcat 实例，并将它们与 Nginx 配合使用进行负载均衡，可以带来以下好处：</p>
-<h3 id="1-提高资源利用率："><a href="#1-提高资源利用率：" class="headerlink" title="1.提高资源利用率："></a>1.提高资源利用率：</h3><ul>
-<li><strong>最大化使用单台机器的计算资源</strong>：通过在同一台服务器上运行多个 Tomcat 实例，可以更好地利用 CPU 和内存资源。这尤其在虚拟化环境中有效。</li>
-</ul>
-<h3 id="2-负载分配："><a href="#2-负载分配：" class="headerlink" title="2.负载分配："></a>2.负载分配：</h3><ul>
-<li><strong>均衡请求负载</strong>：Nginx 作为负载均衡器，可以将用户请求分配到不同的 Tomcat 实例上，这样可以避免某个实例过载，提升整体性能。</li>
-<li><strong>动态调整</strong>：Nginx 可以根据不同实例的负载情况，智能地调整请求的分配策略。</li>
-</ul>
-<h3 id="3-性能优化："><a href="#3-性能优化：" class="headerlink" title="3.性能优化："></a>3.性能优化：</h3><ul>
-<li><strong>缓存和静态内容处理</strong>：Nginx 可以缓存响应结果，直接处理静态内容，减轻 Tomcat 实例的负担，提高响应速度。</li>
-<li><strong>减少 Tomcat 的处理负担</strong>：通过将静态内容交由 Nginx 处理，Tomcat 可以专注于处理动态请求，从而提高效率。</li>
-</ul>
-<h3 id="4-易于管理和扩展："><a href="#4-易于管理和扩展：" class="headerlink" title="4.易于管理和扩展："></a>4.易于管理和扩展：</h3><ul>
-<li><strong>集中管理</strong>：Nginx 的负载均衡和反向代理功能可以帮助集中管理流量，简化配置和监控。</li>
-<li><strong>方便扩展</strong>：如果未来需要扩展到更多的 Tomcat 实例或多台服务器，Nginx 负载均衡的设置可以轻松适应扩展需求。</li>
-</ul>
-<h2 id="二、必须完成的配置"><a href="#二、必须完成的配置" class="headerlink" title="二、必须完成的配置"></a>二、必须完成的配置</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1.环境准备"></a>1.环境准备</h3><p><strong>1.1Apache-Tomcat-8.0.53</strong> </p>
-<p><strong>1.2JDK1.8.0_211-b12</strong></p>
-<p><strong>1.3MariaDB-5.5.68</strong></p>
-<p><strong>1.4JAVA的Web应用</strong></p>
-<p><strong>1.5tomcat单机多实例</strong></p>
-<blockquote>
-<p>这里以上一篇文档配置的Tomcat 单机多实例的基础上演示！！！</p>
-</blockquote>
-<h3 id="2-yum安装Nginx1-26-1"><a href="#2-yum安装Nginx1-26-1" class="headerlink" title="2.yum安装Nginx1.26.1"></a>2.yum安装Nginx1.26.1</h3><h4 id="2-1安装-EPEL-仓库"><a href="#2-1安装-EPEL-仓库" class="headerlink" title="2.1安装 EPEL 仓库"></a>2.1安装 EPEL 仓库</h4><p>Nginx 在默认的 CentOS 仓库中通常不包含最新版本，因此需要安装 EPEL 仓库：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# yum -y install epel-release</span><br><span class="line">更新完毕:</span><br><span class="line">  epel-release.noarch 0:7-14                                                   </span><br><span class="line">完毕！</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="2-2创建-Nginx-官方仓库文件"><a href="#2-2创建-Nginx-官方仓库文件" class="headerlink" title="2.2创建 Nginx 官方仓库文件"></a>2.2创建 Nginx 官方仓库文件</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/yum.repos.d/nginx.repo</span><br></pre></td></tr></table></figure>
-
-<p>  然后将以下内容粘贴到文件中：</p>
-   <figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[nginx]</span></span><br><span class="line"><span class="attr">name</span>=nginx repo</span><br><span class="line"><span class="attr">baseurl</span>=http://nginx.org/packages/centos/<span class="number">7</span>/<span class="variable">$basearch</span>/</span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgkey</span>=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">   </span><br></pre></td></tr></table></figure>
-
-<h4 id="2-3安装-Nginx1-26-1"><a href="#2-3安装-Nginx1-26-1" class="headerlink" title="2.3安装 Nginx1.26.1"></a>2.3安装 Nginx1.26.1</h4><p>首先，可以检查仓库中是否包含所需版本的 Nginx：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# yum list nginx --show-duplicates</span><br><span class="line">nginx.x86_64      1:1.26.0-1.el7.ngx                   nginx-stable </span><br><span class="line">nginx.x86_64      1:1.26.1-1.el7.ngx                   nginx-stable </span><br><span class="line">nginx.x86_64      1:1.26.1-2.el7.ngx                   nginx-stable</span><br></pre></td></tr></table></figure>
-
-
-
-<p>然后使用 yum安装特定版本的 Nginx：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# yum -y install nginx-1.26.1</span><br><span class="line">已安装:</span><br><span class="line">  nginx.x86_64 1:1.26.1-2.el7.ngx                                              </span><br><span class="line">作为依赖被安装:</span><br><span class="line">  pcre2.x86_64 0:10.23-2.el7                                                   </span><br><span class="line">完毕！</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="2-4启动和启用-Nginx-服务"><a href="#2-4启动和启用-Nginx-服务" class="headerlink" title="2.4启动和启用 Nginx 服务"></a>2.4启动和启用 Nginx 服务</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# systemctl start nginx</span><br><span class="line">[root@localhost ~]# systemctl <span class="built_in">enable</span> nginx</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/nginx.service to /usr/lib/systemd/system/nginx.service.</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="2-5检查-Nginx-版本以确认安装"><a href="#2-5检查-Nginx-版本以确认安装" class="headerlink" title="2.5检查 Nginx 版本以确认安装"></a>2.5检查 Nginx 版本以确认安装</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nginx -v</span><br><span class="line">nginx version: nginx/1.26.1</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="三、Tomcat-Nginx负载均衡配置"><a href="#三、Tomcat-Nginx负载均衡配置" class="headerlink" title="三、Tomcat+Nginx负载均衡配置"></a>三、Tomcat+Nginx负载均衡配置</h2><h3 id="1-在-etc-nginx目录中创建子配置文件nginx-conf"><a href="#1-在-etc-nginx目录中创建子配置文件nginx-conf" class="headerlink" title="1.在&#x2F;etc&#x2F;nginx目录中创建子配置文件nginx.conf"></a>1.在&#x2F;etc&#x2F;nginx目录中创建子配置文件nginx.conf</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2-在http-模块的最后添加以下内容"><a href="#2-在http-模块的最后添加以下内容" class="headerlink" title="2.在http{ }模块的最后添加以下内容"></a>2.在http{ }模块的最后添加以下内容</h3><figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"> upstream tomcat_pool &#123;</span><br><span class="line">    <span class="comment">#所有 Tomcat 服务器的权重都是 1，所以请求会均匀分配</span></span><br><span class="line">    <span class="comment">#如果在 2 秒内，某个服务器出现 2 次失败，它会被标记为不可用</span></span><br><span class="line">    server 192.168.133.134:8081 <span class="attr">weight</span>=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">2</span><span class="comment">;</span></span><br><span class="line">    server 192.168.133.134:8082 <span class="attr">weight</span>=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">2</span><span class="comment">;</span></span><br><span class="line">    server 192.168.133.134:8083 <span class="attr">weight</span>=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">2</span><span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       80<span class="comment">;</span></span><br><span class="line">    server_name  localhost<span class="comment">;</span></span><br><span class="line">    access_log  /var/log/nginx/access.log  main<span class="comment">;</span></span><br><span class="line">location / &#123;</span><br><span class="line">            proxy_pass http://tomcat_pool<span class="comment">;</span></span><br><span class="line">            proxy_redirect off<span class="comment">;</span></span><br><span class="line">            proxy_set_header Host $host<span class="comment">;</span></span><br><span class="line">            <span class="comment">#重新定义或者添加发往后端服务器的请求头</span></span><br><span class="line">            proxy_set_header X-Real-IP $remote_addr<span class="comment">;</span></span><br><span class="line">            <span class="comment">#将客户端真实IP地址传递给后端服务器</span></span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for<span class="comment">;</span></span><br><span class="line">            <span class="comment">#将代理服务的IP信息传递给后端服务器</span></span><br><span class="line">            &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="3-检查Nginx语法并启动"><a href="#3-检查Nginx语法并启动" class="headerlink" title="3.检查Nginx语法并启动"></a>3.检查Nginx语法并启动</h3><h4 id="3-1检查Nginx语法"><a href="#3-1检查Nginx语法" class="headerlink" title="3.1检查Nginx语法"></a>3.1检查Nginx语法</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nginx -t</span><br><span class="line">nginx: [warn] conflicting server name <span class="string">&quot;localhost&quot;</span> on 0.0.0.0:80, ignored</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf <span class="built_in">test</span> is successful</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="3-2重启Nginx服务"><a href="#3-2重启Nginx服务" class="headerlink" title="3.2重启Nginx服务"></a>3.2重启Nginx服务</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# systemctl restart nginx</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="四、测试nginx负载"><a href="#四、测试nginx负载" class="headerlink" title="四、测试nginx负载"></a>四、测试nginx负载</h2><h3 id="1-Nginx-反向代理配置没有生效-error"><a href="#1-Nginx-反向代理配置没有生效-error" class="headerlink" title="1.Nginx 反向代理配置没有生效(error)"></a>1.Nginx 反向代理配置没有生效(error)</h3><p><strong>访问服务器IP，无需添加端口号</strong></p>
-<blockquote>
-<p><a href="http://192.168.133.134/">http://192.168.133.134</a></p>
-</blockquote>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/324001.png" alt="324001"></p>
-<p>显示Welcome to nginx!的页面，说明 Nginx 反向代理配置没有生效！可能是 Nginx 配置中有其他 <code>server</code> 块处理了端口 80 上的请求。检查是否有其他配置文件或 <code>server</code> 块可能会影响配置！</p>
-<h3 id="2-检查-Nginx-默认页面"><a href="#2-检查-Nginx-默认页面" class="headerlink" title="2.检查 Nginx 默认页面"></a>2.检查 Nginx 默认页面</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# grep -r <span class="string">&quot;server &#123;&quot;</span> /etc/nginx/conf.d/</span><br><span class="line">/etc/nginx/conf.d/default.conf:server &#123;</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# grep -r <span class="string">&quot;server &#123;&quot;</span> /etc/nginx/nginx.conf</span><br><span class="line">    server &#123;</span><br></pre></td></tr></table></figure>
-
-<p> <strong><code>grep</code> 结果显示在 <code>/etc/nginx/conf.d/default.conf</code> 中有一个 <code>server</code> 块</strong></p>
-<h3 id="3-修改配置文件default-conf"><a href="#3-修改配置文件default-conf" class="headerlink" title="3.修改配置文件default.conf"></a>3.修改配置文件default.conf</h3><h4 id="3-1查看default-conf文件内容"><a href="#3-1查看default-conf文件内容" class="headerlink" title="3.1查看default.conf文件内容"></a>3.1查看default.conf文件内容</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/nginx/conf.d/default.conf</span><br></pre></td></tr></table></figure>
-
-<p><strong>这个配置导致访问 <code>192.168.133.134</code> 时展示默认页面</strong></p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80<span class="comment">;</span></span><br><span class="line">    server_name  localhost<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  /var/log/nginx/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /usr/share/nginx/html<span class="comment">;</span></span><br><span class="line">        index  index.html index.htm<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="3-2反向代理Tomcat作为后端服务器"><a href="#3-2反向代理Tomcat作为后端服务器" class="headerlink" title="3.2反向代理Tomcat作为后端服务器"></a>3.2反向代理Tomcat作为后端服务器</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/nginx/conf.d/default.conf</span><br></pre></td></tr></table></figure>
-
-<p><strong>修改server { }模块中location &#x2F; { }的部分</strong></p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80<span class="comment">;</span></span><br><span class="line">    server_name  localhost<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  /var/log/nginx/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://tomcat_pool<span class="comment">;</span></span><br><span class="line">        proxy_redirect off<span class="comment">;</span></span><br><span class="line">        proxy_set_header Host $host<span class="comment">;</span></span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr<span class="comment">;</span></span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>proxy_pass</strong>：Nginx 中的一个指令，用于指定将请求代理到哪个 URL 或后端服务器。</p>
-</li>
-<li><p><strong><a href="http://tomcat_pool/">http://tomcat_pool</a></strong>：这是要代理到的目标地址。这里的 <code>tomcat_pool</code> 并不是一个直接的 URL，而是一个在 Nginx 配置文件中定义的服务器池名称。</p>
-</li>
-<li><p>**服务器池 (server pool)**：在 Nginx 中，你可以定义一个或多个服务器池，这些服务器池包含一个或多个后端服务器的列表。通过这种方式，可以实现负载均衡和故障转移等功能。</p>
-</li>
-</ul>
-<h2 id="五、重新加载-Nginx-配置并查看负载均衡状态"><a href="#五、重新加载-Nginx-配置并查看负载均衡状态" class="headerlink" title="五、重新加载 Nginx 配置并查看负载均衡状态"></a>五、重新加载 Nginx 配置并查看负载均衡状态</h2><h3 id="1-重新加载-Nginx-配置"><a href="#1-重新加载-Nginx-配置" class="headerlink" title="1.重新加载 Nginx 配置"></a>1.重新加载 Nginx 配置</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nginx -t</span><br><span class="line">nginx: [warn] conflicting server name <span class="string">&quot;localhost&quot;</span> on 0.0.0.0:80, ignored</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf <span class="built_in">test</span> is successful</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# systemctl reload nginx</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2-访问服务器IP显示JavaWeb页面"><a href="#2-访问服务器IP显示JavaWeb页面" class="headerlink" title="2.访问服务器IP显示JavaWeb页面"></a>2.访问服务器IP显示JavaWeb页面</h3><p><strong>无需加端口也能访问到Tomcat部署的JavaWeb应用</strong></p>
-<blockquote>
-<p><a href="http://192.168.133.134/">http://192.168.133.134</a></p>
-</blockquote>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/324002.png" alt="324002"></p>
-]]></content>
-      <categories>
-        <category>第三阶段：大型网站高阶架构</category>
-        <category>2.Tomcat</category>
-      </categories>
-      <tags>
-        <tag>Tomcat</tag>
-        <tag>JDK</tag>
-        <tag>mariadb</tag>
-        <tag>JavaWeb</tag>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Nginx面试题(3.1.0)</title>
     <url>/2024/08/14/Nginx%E9%9D%A2%E8%AF%95%E9%A2%98(3.1.0)/</url>
     <content><![CDATA[<h1 id="Nginx面试题"><a href="#Nginx面试题" class="headerlink" title="Nginx面试题"></a>Nginx面试题</h1><h2 id="1-Nginx-的工作原理是什么？"><a href="#1-Nginx-的工作原理是什么？" class="headerlink" title="1. Nginx 的工作原理是什么？"></a>1. Nginx 的工作原理是什么？</h2><p>Nginx 是一个高性能的 HTTP 和反向代理服务器，同时也可以作为邮件代理服务器。它的工作原理基于事件驱动和异步处理模型：</p>
@@ -196,81 +74,6 @@
       <tags>
         <tag>Nginx</tag>
         <tag>面试题</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>以jspgou为例部署传统javaweb项目(3.2.2)</title>
-    <url>/2024/08/13/%E4%BB%A5jspgou%E4%B8%BA%E4%BE%8B%E9%83%A8%E7%BD%B2%E4%BC%A0%E7%BB%9Fjavaweb%E9%A1%B9%E7%9B%AE(3.2.2)/</url>
-    <content><![CDATA[<h1 id="以jspgou为例部署传统javaweb项目"><a href="#以jspgou为例部署传统javaweb项目" class="headerlink" title="以jspgou为例部署传统javaweb项目"></a>以jspgou为例部署传统javaweb项目</h1><h2 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1.关闭防火墙</span><br><span class="line">[root@localhost ~]# systemctl stop firewalld</span><br><span class="line">[root@localhost ~]# systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line"></span><br><span class="line">  <span class="comment">#systemctl stop firewalld 只是临时停止服务。</span></span><br><span class="line">  <span class="comment">#systemctl disable firewalld 禁止服务开机启动，但不影响当前状态。 </span></span><br><span class="line"></span><br><span class="line">2.关闭 selinux</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line"></span><br><span class="line">3.yum安装必要工具</span><br><span class="line">[root@localhost ~]# yum -y install wget</span><br><span class="line">[root@localhost ~]# yum -y install unzip</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="必须完成的配置"><a href="#必须完成的配置" class="headerlink" title="必须完成的配置"></a>必须完成的配置</h3><p><strong>1.Apache-Tomcat-8.0.53</strong> </p>
-<p><strong>2.JDK1.8.0_211-b12</strong></p>
-<h2 id="二、mariadb数据库的安装和配置"><a href="#二、mariadb数据库的安装和配置" class="headerlink" title="二、mariadb数据库的安装和配置"></a>二、mariadb数据库的安装和配置</h2><h3 id="2-1安装mariadb及其服务"><a href="#2-1安装mariadb及其服务" class="headerlink" title="2.1安装mariadb及其服务"></a>2.1安装mariadb及其服务</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# yum install mariadb mariadb-server -y</span><br><span class="line">已安装:</span><br><span class="line">  mariadb.x86_64 1:5.5.68-1.el7   mariadb-server.x86_64 1:5.5.68-1.el7  </span><br><span class="line"></span><br><span class="line">[root@localhost ~]# systemctl start mariadb</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# mysqladmin -uroot password <span class="string">&#x27;123&#x27;</span>   </span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">ls</span> /usr/local/tomcat/webapps/</span><br><span class="line">docs  examples  host-manager  manager  ROOT</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">ls</span> /usr/local/tomcat/webapps/ROOT</span><br><span class="line">asf-logo-wide.svg  bg-nav.png    RELEASE-NOTES.txt  tomcat-power.gif</span><br><span class="line">bg-button.png      bg-upper.png  tomcat.css         tomcat.svg</span><br><span class="line">bg-middle.png      favicon.ico   tomcat.gif         WEB-INF</span><br><span class="line">bg-nav-item.png    index.jsp     tomcat.png</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2-2创建数据库"><a href="#2-2创建数据库" class="headerlink" title="2.2创建数据库"></a>2.2创建数据库</h3><p><strong>使用root用户登录mysql数据库</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# mysql -uroot -p<span class="string">&#x27;123&#x27;</span></span><br><span class="line">Welcome to the MariaDB monitor.  Commands end with ; or \g.</span><br><span class="line">Your MariaDB connection <span class="built_in">id</span> is 3</span><br><span class="line">Server version: 5.5.68-MariaDB MariaDB Server</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.</span><br><span class="line"></span><br><span class="line">Type <span class="string">&#x27;help;&#x27;</span> or <span class="string">&#x27;\h&#x27;</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">&#x27;\c&#x27;</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; </span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>在mysql数据库中创建jspgou数据库，字符集为utf-8</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">create</span> database jspgou <span class="type">CHARACTER</span> <span class="keyword">SET</span> <span class="operator">=</span> utf8;</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> flush privileges;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">SHOW</span> DATABASES;</span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="operator">|</span> Database           <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="operator">|</span> information_schema <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> jspgou             <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> mysql              <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> performance_schema <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> test               <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="number">5</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> exit</span><br><span class="line">Bye</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>重启mariadb数据库</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# systemctl restart mariadb</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2-3下载jspgouV6安装包并解压"><a href="#2-3下载jspgouV6安装包并解压" class="headerlink" title="2.3下载jspgouV6安装包并解压"></a>2.3下载jspgouV6安装包并解压</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1、上传项目包jspgouV6-ROOT.zip</span><br><span class="line">wget ftp://10.36.105.250//notes/stage3/2.tomcat/package/jspgouV6-ROOT.zip</span><br><span class="line"></span><br><span class="line">2、解压</span><br><span class="line">[root@localhost ~]# unzip  jspgouV6-ROOT.zip</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">ls</span></span><br><span class="line">anaconda-ks.cfg       jspgouV6-ROOT.zip       必读.txt</span><br><span class="line">DB        ROOT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2-4修改jspgou程序的数据库配置"><a href="#2-4修改jspgou程序的数据库配置" class="headerlink" title="2.4修改jspgou程序的数据库配置"></a>2.4修改jspgou程序的数据库配置</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# <span class="built_in">cd</span> ROOT/WEB-INF/config/</span><br><span class="line">[root@localhost config]# <span class="built_in">ls</span></span><br><span class="line">application-context.xml  jspgou-admin-servlet.xml</span><br><span class="line">cache-context.xml        jspgou-context.xml</span><br><span class="line">checkcode-context.xml    jspgou-front-servlet.xml</span><br><span class="line">jdbc.properties          jspgou-servlet-admin-api.xml</span><br><span class="line">jeecore-context.xml      plug</span><br><span class="line">jspgou                   shiro-context.xml</span><br><span class="line"></span><br><span class="line">[root@localhost config]# vim jdbc.properties</span><br><span class="line"></span><br><span class="line"><span class="comment">#程序包内ROOT/WEB-INF/config/jdbc.properties文件第20行</span></span><br><span class="line">jdbc.url=jdbc:mysql://127.0.0.1:3306jspgou?characterEncoding=UTF-8</span><br><span class="line">jdbc.username=root   <span class="comment">#在生产环境中必须用普通账户</span></span><br><span class="line">jdbc.password=123</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2-5-导入数据"><a href="#2-5-导入数据" class="headerlink" title="2.5.导入数据"></a>2.5.导入数据</h3><ul>
-<li>将压缩包内 DB文件夹中jspgou.sql文件导入至创建好的jspgou数据库中，</li>
-<li>如导入中出现执行sql语句过长问题，请修改mysql配置文件my.cnf中max_allowed_packet参数为64m，默认为1m</li>
-<li>导入数据库时如果报错：把所有datetime类型的字段默认值改成CURRENT_TIMESTAMP</li>
-<li><strong>注意：如果用Mariadb数据库不会出现如上错误，可以直接导入</strong></li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@tomcat DB]# mysql -uroot -p123 -D jspgou &lt; /root/DB/jspgou.sql</span><br><span class="line"></span><br><span class="line"><span class="comment">#-D：指定数据库，找到jspgou软件包中数据库jspgou.sql的位置</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="三、部署网站"><a href="#三、部署网站" class="headerlink" title="三、部署网站"></a>三、部署网站</h2><h3 id="3-1启动tomcat并查看端口"><a href="#3-1启动tomcat并查看端口" class="headerlink" title="3.1启动tomcat并查看端口"></a>3.1启动tomcat并查看端口</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">将程序解压后的ROOT文件夹拷贝到tomcat安装目录下的webapps文件夹下（例如：/usr/local/tomcat/webapps/），启动tomcat，启动后检查一下端口</span><br><span class="line"></span><br><span class="line"><span class="comment">#可以先将webapps下面的所有文件删掉</span></span><br><span class="line">[root@localhost DB]# <span class="built_in">rm</span> -rf /usr/local/tomcat/webapps/*</span><br><span class="line"></span><br><span class="line"><span class="comment">#返回/root目录</span></span><br><span class="line">[root@localhost ~]# <span class="built_in">cd</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> ROOT/ /usr/local/tomcat/webapps/ -r</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法1：默认重启tomcat（没有对tomcat进行systemd托管）</span></span><br><span class="line">[root@localhost ~]# /usr/local/tomcat/bin/shutdown.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# /usr/local/tomcat/bin/startup.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line">Tomcat started.</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法2：systemctl重启tomcat（有对tomcat进行systemd托管）</span></span><br><span class="line">[root@localhost ~]# systemctl restart tomcat.service</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# netstat -ntlp</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    </span><br><span class="line">tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      2412/mysqld         </span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      996/sshd            </span><br><span class="line">tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      1247/master         </span><br><span class="line">tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      12878/java          </span><br><span class="line">tcp6       0      0 :::8009                 :::*                    LISTEN      12878/java          </span><br><span class="line">tcp6       0      0 :::8080                 :::*                    LISTEN      12878/java          </span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN      996/sshd            </span><br><span class="line">tcp6       0      0 ::1:25                  :::*                    LISTEN      1247/master         </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="3-2部署成功验证"><a href="#3-2部署成功验证" class="headerlink" title="3.2部署成功验证"></a>3.2部署成功验证</h3><p><strong>在浏览器输入以下地址，如能正常显示，即表示部署成功</strong></p>
-<blockquote>
-<p><a href="http://192.168.133.134:8080/">http://192.168.133.134:8080</a></p>
-</blockquote>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/322001.png" alt="322001"></p>
-<p><strong>系统管理后台登录：</strong></p>
-<blockquote>
-<p><a href="http://192.168.133.134:8080/jeeadmin/jspgou/index.do">http://192.168.133.134:8080/jeeadmin/jspgou/index.do</a></p>
-<p>用户名：admin</p>
-<p>密码：123456</p>
-</blockquote>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/322002.png" alt="322002"></p>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/322003.png" alt="322003"></p>
-]]></content>
-      <categories>
-        <category>第三阶段：大型网站高阶架构</category>
-        <category>2.Tomcat</category>
-      </categories>
-      <tags>
-        <tag>Tomcat</tag>
-        <tag>JDK</tag>
-        <tag>mariadb</tag>
-        <tag>jspgou</tag>
       </tags>
   </entry>
   <entry>
@@ -409,8 +212,8 @@
         <category>2.Tomcat</category>
       </categories>
       <tags>
-        <tag>Tomcat</tag>
         <tag>面试题</tag>
+        <tag>Tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -486,6 +289,203 @@
       <tags>
         <tag>Tomcat</tag>
         <tag>JDK</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>以jspgou为例部署传统javaweb项目(3.2.2)</title>
+    <url>/2024/08/13/%E4%BB%A5jspgou%E4%B8%BA%E4%BE%8B%E9%83%A8%E7%BD%B2%E4%BC%A0%E7%BB%9Fjavaweb%E9%A1%B9%E7%9B%AE(3.2.2)/</url>
+    <content><![CDATA[<h1 id="以jspgou为例部署传统javaweb项目"><a href="#以jspgou为例部署传统javaweb项目" class="headerlink" title="以jspgou为例部署传统javaweb项目"></a>以jspgou为例部署传统javaweb项目</h1><h2 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1.关闭防火墙</span><br><span class="line">[root@localhost ~]# systemctl stop firewalld</span><br><span class="line">[root@localhost ~]# systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line"></span><br><span class="line">  <span class="comment">#systemctl stop firewalld 只是临时停止服务。</span></span><br><span class="line">  <span class="comment">#systemctl disable firewalld 禁止服务开机启动，但不影响当前状态。 </span></span><br><span class="line"></span><br><span class="line">2.关闭 selinux</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line"></span><br><span class="line">3.yum安装必要工具</span><br><span class="line">[root@localhost ~]# yum -y install wget</span><br><span class="line">[root@localhost ~]# yum -y install unzip</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="必须完成的配置"><a href="#必须完成的配置" class="headerlink" title="必须完成的配置"></a>必须完成的配置</h3><p><strong>1.Apache-Tomcat-8.0.53</strong> </p>
+<p><strong>2.JDK1.8.0_211-b12</strong></p>
+<h2 id="二、mariadb数据库的安装和配置"><a href="#二、mariadb数据库的安装和配置" class="headerlink" title="二、mariadb数据库的安装和配置"></a>二、mariadb数据库的安装和配置</h2><h3 id="2-1安装mariadb及其服务"><a href="#2-1安装mariadb及其服务" class="headerlink" title="2.1安装mariadb及其服务"></a>2.1安装mariadb及其服务</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# yum install mariadb mariadb-server -y</span><br><span class="line">已安装:</span><br><span class="line">  mariadb.x86_64 1:5.5.68-1.el7   mariadb-server.x86_64 1:5.5.68-1.el7  </span><br><span class="line"></span><br><span class="line">[root@localhost ~]# systemctl start mariadb</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# mysqladmin -uroot password <span class="string">&#x27;123&#x27;</span>   </span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">ls</span> /usr/local/tomcat/webapps/</span><br><span class="line">docs  examples  host-manager  manager  ROOT</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">ls</span> /usr/local/tomcat/webapps/ROOT</span><br><span class="line">asf-logo-wide.svg  bg-nav.png    RELEASE-NOTES.txt  tomcat-power.gif</span><br><span class="line">bg-button.png      bg-upper.png  tomcat.css         tomcat.svg</span><br><span class="line">bg-middle.png      favicon.ico   tomcat.gif         WEB-INF</span><br><span class="line">bg-nav-item.png    index.jsp     tomcat.png</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-2创建数据库"><a href="#2-2创建数据库" class="headerlink" title="2.2创建数据库"></a>2.2创建数据库</h3><p><strong>使用root用户登录mysql数据库</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# mysql -uroot -p<span class="string">&#x27;123&#x27;</span></span><br><span class="line">Welcome to the MariaDB monitor.  Commands end with ; or \g.</span><br><span class="line">Your MariaDB connection <span class="built_in">id</span> is 3</span><br><span class="line">Server version: 5.5.68-MariaDB MariaDB Server</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.</span><br><span class="line"></span><br><span class="line">Type <span class="string">&#x27;help;&#x27;</span> or <span class="string">&#x27;\h&#x27;</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">&#x27;\c&#x27;</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; </span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>在mysql数据库中创建jspgou数据库，字符集为utf-8</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">create</span> database jspgou <span class="type">CHARACTER</span> <span class="keyword">SET</span> <span class="operator">=</span> utf8;</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> flush privileges;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">SHOW</span> DATABASES;</span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="operator">|</span> Database           <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="operator">|</span> information_schema <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> jspgou             <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> mysql              <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> performance_schema <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> test               <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="number">5</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> exit</span><br><span class="line">Bye</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>重启mariadb数据库</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# systemctl restart mariadb</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-3下载jspgouV6安装包并解压"><a href="#2-3下载jspgouV6安装包并解压" class="headerlink" title="2.3下载jspgouV6安装包并解压"></a>2.3下载jspgouV6安装包并解压</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1、上传项目包jspgouV6-ROOT.zip</span><br><span class="line">wget ftp://10.36.105.250//notes/stage3/2.tomcat/package/jspgouV6-ROOT.zip</span><br><span class="line"></span><br><span class="line">2、解压</span><br><span class="line">[root@localhost ~]# unzip  jspgouV6-ROOT.zip</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">ls</span></span><br><span class="line">anaconda-ks.cfg       jspgouV6-ROOT.zip       必读.txt</span><br><span class="line">DB        ROOT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-4修改jspgou程序的数据库配置"><a href="#2-4修改jspgou程序的数据库配置" class="headerlink" title="2.4修改jspgou程序的数据库配置"></a>2.4修改jspgou程序的数据库配置</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# <span class="built_in">cd</span> ROOT/WEB-INF/config/</span><br><span class="line">[root@localhost config]# <span class="built_in">ls</span></span><br><span class="line">application-context.xml  jspgou-admin-servlet.xml</span><br><span class="line">cache-context.xml        jspgou-context.xml</span><br><span class="line">checkcode-context.xml    jspgou-front-servlet.xml</span><br><span class="line">jdbc.properties          jspgou-servlet-admin-api.xml</span><br><span class="line">jeecore-context.xml      plug</span><br><span class="line">jspgou                   shiro-context.xml</span><br><span class="line"></span><br><span class="line">[root@localhost config]# vim jdbc.properties</span><br><span class="line"></span><br><span class="line"><span class="comment">#程序包内ROOT/WEB-INF/config/jdbc.properties文件第20行</span></span><br><span class="line">jdbc.url=jdbc:mysql://127.0.0.1:3306jspgou?characterEncoding=UTF-8</span><br><span class="line">jdbc.username=root   <span class="comment">#在生产环境中必须用普通账户</span></span><br><span class="line">jdbc.password=123</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-5-导入数据"><a href="#2-5-导入数据" class="headerlink" title="2.5.导入数据"></a>2.5.导入数据</h3><ul>
+<li>将压缩包内 DB文件夹中jspgou.sql文件导入至创建好的jspgou数据库中，</li>
+<li>如导入中出现执行sql语句过长问题，请修改mysql配置文件my.cnf中max_allowed_packet参数为64m，默认为1m</li>
+<li>导入数据库时如果报错：把所有datetime类型的字段默认值改成CURRENT_TIMESTAMP</li>
+<li><strong>注意：如果用Mariadb数据库不会出现如上错误，可以直接导入</strong></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@tomcat DB]# mysql -uroot -p123 -D jspgou &lt; /root/DB/jspgou.sql</span><br><span class="line"></span><br><span class="line"><span class="comment">#-D：指定数据库，找到jspgou软件包中数据库jspgou.sql的位置</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、部署网站"><a href="#三、部署网站" class="headerlink" title="三、部署网站"></a>三、部署网站</h2><h3 id="3-1启动tomcat并查看端口"><a href="#3-1启动tomcat并查看端口" class="headerlink" title="3.1启动tomcat并查看端口"></a>3.1启动tomcat并查看端口</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">将程序解压后的ROOT文件夹拷贝到tomcat安装目录下的webapps文件夹下（例如：/usr/local/tomcat/webapps/），启动tomcat，启动后检查一下端口</span><br><span class="line"></span><br><span class="line"><span class="comment">#可以先将webapps下面的所有文件删掉</span></span><br><span class="line">[root@localhost DB]# <span class="built_in">rm</span> -rf /usr/local/tomcat/webapps/*</span><br><span class="line"></span><br><span class="line"><span class="comment">#返回/root目录</span></span><br><span class="line">[root@localhost ~]# <span class="built_in">cd</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> ROOT/ /usr/local/tomcat/webapps/ -r</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法1：默认重启tomcat（没有对tomcat进行systemd托管）</span></span><br><span class="line">[root@localhost ~]# /usr/local/tomcat/bin/shutdown.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# /usr/local/tomcat/bin/startup.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line">Tomcat started.</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法2：systemctl重启tomcat（有对tomcat进行systemd托管）</span></span><br><span class="line">[root@localhost ~]# systemctl restart tomcat.service</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# netstat -ntlp</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    </span><br><span class="line">tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      2412/mysqld         </span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      996/sshd            </span><br><span class="line">tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      1247/master         </span><br><span class="line">tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      12878/java          </span><br><span class="line">tcp6       0      0 :::8009                 :::*                    LISTEN      12878/java          </span><br><span class="line">tcp6       0      0 :::8080                 :::*                    LISTEN      12878/java          </span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN      996/sshd            </span><br><span class="line">tcp6       0      0 ::1:25                  :::*                    LISTEN      1247/master         </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-2部署成功验证"><a href="#3-2部署成功验证" class="headerlink" title="3.2部署成功验证"></a>3.2部署成功验证</h3><p><strong>在浏览器输入以下地址，如能正常显示，即表示部署成功</strong></p>
+<blockquote>
+<p><a href="http://192.168.133.134:8080/">http://192.168.133.134:8080</a></p>
+</blockquote>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/322001.png" alt="322001"></p>
+<p><strong>系统管理后台登录：</strong></p>
+<blockquote>
+<p><a href="http://192.168.133.134:8080/jeeadmin/jspgou/index.do">http://192.168.133.134:8080/jeeadmin/jspgou/index.do</a></p>
+<p>用户名：admin</p>
+<p>密码：123456</p>
+</blockquote>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/322002.png" alt="322002"></p>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/322003.png" alt="322003"></p>
+]]></content>
+      <categories>
+        <category>第三阶段：大型网站高阶架构</category>
+        <category>2.Tomcat</category>
+      </categories>
+      <tags>
+        <tag>Tomcat</tag>
+        <tag>JDK</tag>
+        <tag>mariadb</tag>
+        <tag>jspgou</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Tomcat+Nginx负载均衡(3.2.4)</title>
+    <url>/2024/08/13/Tomcat+Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1(3.2.4)/</url>
+    <content><![CDATA[<h1 id="Tomcat-Nginx负载均衡"><a href="#Tomcat-Nginx负载均衡" class="headerlink" title="Tomcat+Nginx负载均衡"></a>Tomcat+Nginx负载均衡</h1><h2 id="一、Nginx负载均衡的作用"><a href="#一、Nginx负载均衡的作用" class="headerlink" title="一、Nginx负载均衡的作用"></a>一、Nginx负载均衡的作用</h2><p>在单机上运行多个 Tomcat 实例，并将它们与 Nginx 配合使用进行负载均衡，可以带来以下好处：</p>
+<h3 id="1-提高资源利用率："><a href="#1-提高资源利用率：" class="headerlink" title="1.提高资源利用率："></a>1.提高资源利用率：</h3><ul>
+<li><strong>最大化使用单台机器的计算资源</strong>：通过在同一台服务器上运行多个 Tomcat 实例，可以更好地利用 CPU 和内存资源。这尤其在虚拟化环境中有效。</li>
+</ul>
+<h3 id="2-负载分配："><a href="#2-负载分配：" class="headerlink" title="2.负载分配："></a>2.负载分配：</h3><ul>
+<li><strong>均衡请求负载</strong>：Nginx 作为负载均衡器，可以将用户请求分配到不同的 Tomcat 实例上，这样可以避免某个实例过载，提升整体性能。</li>
+<li><strong>动态调整</strong>：Nginx 可以根据不同实例的负载情况，智能地调整请求的分配策略。</li>
+</ul>
+<h3 id="3-性能优化："><a href="#3-性能优化：" class="headerlink" title="3.性能优化："></a>3.性能优化：</h3><ul>
+<li><strong>缓存和静态内容处理</strong>：Nginx 可以缓存响应结果，直接处理静态内容，减轻 Tomcat 实例的负担，提高响应速度。</li>
+<li><strong>减少 Tomcat 的处理负担</strong>：通过将静态内容交由 Nginx 处理，Tomcat 可以专注于处理动态请求，从而提高效率。</li>
+</ul>
+<h3 id="4-易于管理和扩展："><a href="#4-易于管理和扩展：" class="headerlink" title="4.易于管理和扩展："></a>4.易于管理和扩展：</h3><ul>
+<li><strong>集中管理</strong>：Nginx 的负载均衡和反向代理功能可以帮助集中管理流量，简化配置和监控。</li>
+<li><strong>方便扩展</strong>：如果未来需要扩展到更多的 Tomcat 实例或多台服务器，Nginx 负载均衡的设置可以轻松适应扩展需求。</li>
+</ul>
+<h2 id="二、必须完成的配置"><a href="#二、必须完成的配置" class="headerlink" title="二、必须完成的配置"></a>二、必须完成的配置</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1.环境准备"></a>1.环境准备</h3><p><strong>1.1Apache-Tomcat-8.0.53</strong> </p>
+<p><strong>1.2JDK1.8.0_211-b12</strong></p>
+<p><strong>1.3MariaDB-5.5.68</strong></p>
+<p><strong>1.4JAVA的Web应用</strong></p>
+<p><strong>1.5tomcat单机多实例</strong></p>
+<blockquote>
+<p>这里以上一篇文档配置的Tomcat 单机多实例的基础上演示！！！</p>
+</blockquote>
+<h3 id="2-yum安装Nginx1-26-1"><a href="#2-yum安装Nginx1-26-1" class="headerlink" title="2.yum安装Nginx1.26.1"></a>2.yum安装Nginx1.26.1</h3><h4 id="2-1安装-EPEL-仓库"><a href="#2-1安装-EPEL-仓库" class="headerlink" title="2.1安装 EPEL 仓库"></a>2.1安装 EPEL 仓库</h4><p>Nginx 在默认的 CentOS 仓库中通常不包含最新版本，因此需要安装 EPEL 仓库：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# yum -y install epel-release</span><br><span class="line">更新完毕:</span><br><span class="line">  epel-release.noarch 0:7-14                                                   </span><br><span class="line">完毕！</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-2创建-Nginx-官方仓库文件"><a href="#2-2创建-Nginx-官方仓库文件" class="headerlink" title="2.2创建 Nginx 官方仓库文件"></a>2.2创建 Nginx 官方仓库文件</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/yum.repos.d/nginx.repo</span><br></pre></td></tr></table></figure>
+
+<p>  然后将以下内容粘贴到文件中：</p>
+   <figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[nginx]</span></span><br><span class="line"><span class="attr">name</span>=nginx repo</span><br><span class="line"><span class="attr">baseurl</span>=http://nginx.org/packages/centos/<span class="number">7</span>/<span class="variable">$basearch</span>/</span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgkey</span>=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">   </span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3安装-Nginx1-26-1"><a href="#2-3安装-Nginx1-26-1" class="headerlink" title="2.3安装 Nginx1.26.1"></a>2.3安装 Nginx1.26.1</h4><p>首先，可以检查仓库中是否包含所需版本的 Nginx：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# yum list nginx --show-duplicates</span><br><span class="line">nginx.x86_64      1:1.26.0-1.el7.ngx                   nginx-stable </span><br><span class="line">nginx.x86_64      1:1.26.1-1.el7.ngx                   nginx-stable </span><br><span class="line">nginx.x86_64      1:1.26.1-2.el7.ngx                   nginx-stable</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后使用 yum安装特定版本的 Nginx：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# yum -y install nginx-1.26.1</span><br><span class="line">已安装:</span><br><span class="line">  nginx.x86_64 1:1.26.1-2.el7.ngx                                              </span><br><span class="line">作为依赖被安装:</span><br><span class="line">  pcre2.x86_64 0:10.23-2.el7                                                   </span><br><span class="line">完毕！</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-4启动和启用-Nginx-服务"><a href="#2-4启动和启用-Nginx-服务" class="headerlink" title="2.4启动和启用 Nginx 服务"></a>2.4启动和启用 Nginx 服务</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# systemctl start nginx</span><br><span class="line">[root@localhost ~]# systemctl <span class="built_in">enable</span> nginx</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/nginx.service to /usr/lib/systemd/system/nginx.service.</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-5检查-Nginx-版本以确认安装"><a href="#2-5检查-Nginx-版本以确认安装" class="headerlink" title="2.5检查 Nginx 版本以确认安装"></a>2.5检查 Nginx 版本以确认安装</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nginx -v</span><br><span class="line">nginx version: nginx/1.26.1</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、Tomcat-Nginx负载均衡配置"><a href="#三、Tomcat-Nginx负载均衡配置" class="headerlink" title="三、Tomcat+Nginx负载均衡配置"></a>三、Tomcat+Nginx负载均衡配置</h2><h3 id="1-在-etc-nginx目录中创建子配置文件nginx-conf"><a href="#1-在-etc-nginx目录中创建子配置文件nginx-conf" class="headerlink" title="1.在&#x2F;etc&#x2F;nginx目录中创建子配置文件nginx.conf"></a>1.在&#x2F;etc&#x2F;nginx目录中创建子配置文件nginx.conf</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-在http-模块的最后添加以下内容"><a href="#2-在http-模块的最后添加以下内容" class="headerlink" title="2.在http{ }模块的最后添加以下内容"></a>2.在http{ }模块的最后添加以下内容</h3><figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"> upstream tomcat_pool &#123;</span><br><span class="line">    <span class="comment">#所有 Tomcat 服务器的权重都是 1，所以请求会均匀分配</span></span><br><span class="line">    <span class="comment">#如果在 2 秒内，某个服务器出现 2 次失败，它会被标记为不可用</span></span><br><span class="line">    server 192.168.133.134:8081 <span class="attr">weight</span>=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">2</span><span class="comment">;</span></span><br><span class="line">    server 192.168.133.134:8082 <span class="attr">weight</span>=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">2</span><span class="comment">;</span></span><br><span class="line">    server 192.168.133.134:8083 <span class="attr">weight</span>=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">2</span><span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       80<span class="comment">;</span></span><br><span class="line">    server_name  localhost<span class="comment">;</span></span><br><span class="line">    access_log  /var/log/nginx/access.log  main<span class="comment">;</span></span><br><span class="line">location / &#123;</span><br><span class="line">            proxy_pass http://tomcat_pool<span class="comment">;</span></span><br><span class="line">            proxy_redirect off<span class="comment">;</span></span><br><span class="line">            proxy_set_header Host $host<span class="comment">;</span></span><br><span class="line">            <span class="comment">#重新定义或者添加发往后端服务器的请求头</span></span><br><span class="line">            proxy_set_header X-Real-IP $remote_addr<span class="comment">;</span></span><br><span class="line">            <span class="comment">#将客户端真实IP地址传递给后端服务器</span></span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for<span class="comment">;</span></span><br><span class="line">            <span class="comment">#将代理服务的IP信息传递给后端服务器</span></span><br><span class="line">            &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-检查Nginx语法并启动"><a href="#3-检查Nginx语法并启动" class="headerlink" title="3.检查Nginx语法并启动"></a>3.检查Nginx语法并启动</h3><h4 id="3-1检查Nginx语法"><a href="#3-1检查Nginx语法" class="headerlink" title="3.1检查Nginx语法"></a>3.1检查Nginx语法</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nginx -t</span><br><span class="line">nginx: [warn] conflicting server name <span class="string">&quot;localhost&quot;</span> on 0.0.0.0:80, ignored</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf <span class="built_in">test</span> is successful</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-2重启Nginx服务"><a href="#3-2重启Nginx服务" class="headerlink" title="3.2重启Nginx服务"></a>3.2重启Nginx服务</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# systemctl restart nginx</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、测试nginx负载"><a href="#四、测试nginx负载" class="headerlink" title="四、测试nginx负载"></a>四、测试nginx负载</h2><h3 id="1-Nginx-反向代理配置没有生效-error"><a href="#1-Nginx-反向代理配置没有生效-error" class="headerlink" title="1.Nginx 反向代理配置没有生效(error)"></a>1.Nginx 反向代理配置没有生效(error)</h3><p><strong>访问服务器IP，无需添加端口号</strong></p>
+<blockquote>
+<p><a href="http://192.168.133.134/">http://192.168.133.134</a></p>
+</blockquote>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/324001.png" alt="324001"></p>
+<p>显示Welcome to nginx!的页面，说明 Nginx 反向代理配置没有生效！可能是 Nginx 配置中有其他 <code>server</code> 块处理了端口 80 上的请求。检查是否有其他配置文件或 <code>server</code> 块可能会影响配置！</p>
+<h3 id="2-检查-Nginx-默认页面"><a href="#2-检查-Nginx-默认页面" class="headerlink" title="2.检查 Nginx 默认页面"></a>2.检查 Nginx 默认页面</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# grep -r <span class="string">&quot;server &#123;&quot;</span> /etc/nginx/conf.d/</span><br><span class="line">/etc/nginx/conf.d/default.conf:server &#123;</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# grep -r <span class="string">&quot;server &#123;&quot;</span> /etc/nginx/nginx.conf</span><br><span class="line">    server &#123;</span><br></pre></td></tr></table></figure>
+
+<p> <strong><code>grep</code> 结果显示在 <code>/etc/nginx/conf.d/default.conf</code> 中有一个 <code>server</code> 块</strong></p>
+<h3 id="3-修改配置文件default-conf"><a href="#3-修改配置文件default-conf" class="headerlink" title="3.修改配置文件default.conf"></a>3.修改配置文件default.conf</h3><h4 id="3-1查看default-conf文件内容"><a href="#3-1查看default-conf文件内容" class="headerlink" title="3.1查看default.conf文件内容"></a>3.1查看default.conf文件内容</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/nginx/conf.d/default.conf</span><br></pre></td></tr></table></figure>
+
+<p><strong>这个配置导致访问 <code>192.168.133.134</code> 时展示默认页面</strong></p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80<span class="comment">;</span></span><br><span class="line">    server_name  localhost<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  /var/log/nginx/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /usr/share/nginx/html<span class="comment">;</span></span><br><span class="line">        index  index.html index.htm<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-2反向代理Tomcat作为后端服务器"><a href="#3-2反向代理Tomcat作为后端服务器" class="headerlink" title="3.2反向代理Tomcat作为后端服务器"></a>3.2反向代理Tomcat作为后端服务器</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/nginx/conf.d/default.conf</span><br></pre></td></tr></table></figure>
+
+<p><strong>修改server { }模块中location &#x2F; { }的部分</strong></p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80<span class="comment">;</span></span><br><span class="line">    server_name  localhost<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  /var/log/nginx/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://tomcat_pool<span class="comment">;</span></span><br><span class="line">        proxy_redirect off<span class="comment">;</span></span><br><span class="line">        proxy_set_header Host $host<span class="comment">;</span></span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr<span class="comment">;</span></span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>proxy_pass</strong>：Nginx 中的一个指令，用于指定将请求代理到哪个 URL 或后端服务器。</p>
+</li>
+<li><p><strong><a href="http://tomcat_pool/">http://tomcat_pool</a></strong>：这是要代理到的目标地址。这里的 <code>tomcat_pool</code> 并不是一个直接的 URL，而是一个在 Nginx 配置文件中定义的服务器池名称。</p>
+</li>
+<li><p>**服务器池 (server pool)**：在 Nginx 中，你可以定义一个或多个服务器池，这些服务器池包含一个或多个后端服务器的列表。通过这种方式，可以实现负载均衡和故障转移等功能。</p>
+</li>
+</ul>
+<h2 id="五、重新加载-Nginx-配置并查看负载均衡状态"><a href="#五、重新加载-Nginx-配置并查看负载均衡状态" class="headerlink" title="五、重新加载 Nginx 配置并查看负载均衡状态"></a>五、重新加载 Nginx 配置并查看负载均衡状态</h2><h3 id="1-重新加载-Nginx-配置"><a href="#1-重新加载-Nginx-配置" class="headerlink" title="1.重新加载 Nginx 配置"></a>1.重新加载 Nginx 配置</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# nginx -t</span><br><span class="line">nginx: [warn] conflicting server name <span class="string">&quot;localhost&quot;</span> on 0.0.0.0:80, ignored</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf <span class="built_in">test</span> is successful</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# systemctl reload nginx</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-访问服务器IP显示JavaWeb页面"><a href="#2-访问服务器IP显示JavaWeb页面" class="headerlink" title="2.访问服务器IP显示JavaWeb页面"></a>2.访问服务器IP显示JavaWeb页面</h3><p><strong>无需加端口也能访问到Tomcat部署的JavaWeb应用</strong></p>
+<blockquote>
+<p><a href="http://192.168.133.134/">http://192.168.133.134</a></p>
+</blockquote>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/324002.png" alt="324002"></p>
+]]></content>
+      <categories>
+        <category>第三阶段：大型网站高阶架构</category>
+        <category>2.Tomcat</category>
+      </categories>
+      <tags>
+        <tag>Nginx</tag>
+        <tag>Tomcat</tag>
+        <tag>JDK</tag>
+        <tag>mariadb</tag>
+        <tag>JavaWeb</tag>
       </tags>
   </entry>
 </search>
