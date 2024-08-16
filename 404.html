@@ -54,7 +54,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2024-08-16 20:29:46'
+  postUpdate: '2024-08-16 20:41:04'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -216,7 +216,7 @@
 
   const getComment = async () => {
     try {
-      const res = await fetch('https://rhcloudops-waline-paiof5cgh-opstechie-xiaos-projects.vercel.app/api/comment?type=recent&count=6', { method: 'GET' })
+      const res = await fetch('https://rhcloudops-waline-1jx4.vercel.app/api/comment?type=recent&count=6', { method: 'GET' })
       const result = await res.json()
       const walineArray = result.data.map(e => {
         return {
