@@ -77,55 +77,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Tomcat面试题(3.2.0)</title>
-    <url>/2024/08/12/Tomcat%E9%9D%A2%E8%AF%95%E9%A2%98(3.2.0)/</url>
-    <content><![CDATA[<h1 id="Tomcat面试题"><a href="#Tomcat面试题" class="headerlink" title="Tomcat面试题"></a>Tomcat面试题</h1><h2 id="1-有没有用过web容器？用过什么web容器？"><a href="#1-有没有用过web容器？用过什么web容器？" class="headerlink" title="1.有没有用过web容器？用过什么web容器？"></a>1.有没有用过web容器？用过什么web容器？</h2><p>答：用过，tomcat</p>
-<h2 id="2-你上家公司有没有用tomcat？版本是多少？"><a href="#2-你上家公司有没有用tomcat？版本是多少？" class="headerlink" title="2.你上家公司有没有用tomcat？版本是多少？"></a>2.你上家公司有没有用tomcat？版本是多少？</h2><p>答：用过，8.5（企业中用的最多的版本就是8.5.45，8.5稳定且修复的大量bug，稳定大于一切）</p>
-<h2 id="3-什么是web容器（web中间件）"><a href="#3-什么是web容器（web中间件）" class="headerlink" title="3.什么是web容器（web中间件）"></a>3.什么是web容器（web中间件）</h2><p>答：<br>web容器是一个可以部署和运行web应用的软件环境。常见的web容器有Tomcat（最广泛使用的应用服务器,专门用来部署Java Web应用）、Jetty（另一个功能强大的轻量级Java应用服务器）、WebLogic（Oracle提供的专业Java EE应用服务器）、JBoss（开源的Java EE全功能应用服务器）和WebSphere（IBM的Java EE应用服务器）。</p>
-<h2 id="4-web容器的主要作用有"><a href="#4-web容器的主要作用有" class="headerlink" title="4.web容器的主要作用有"></a>4.web容器的主要作用有</h2><h3 id="4-1封装JVM"><a href="#4-1封装JVM" class="headerlink" title="4.1封装JVM"></a>4.1封装JVM</h3><p>​	web容器提供一个JVM环境，只需要专注于编写business logic，而不用关心JVM的细节。</p>
-<h3 id="4-2处理HTTP请求"><a href="#4-2处理HTTP请求" class="headerlink" title="4.2处理HTTP请求"></a>4.2处理HTTP请求</h3><p>​	web容器监听指定端口的HTTP请求，将请求路由到对应的web应用中。</p>
-<h3 id="4-3管理web应用生命周期"><a href="#4-3管理web应用生命周期" class="headerlink" title="4.3管理web应用生命周期"></a>4.3管理web应用生命周期</h3><p>​	web容器可以部署、启动、停止和卸载web应用，管理其整个生命周期。</p>
-<h3 id="4-4提供类加载器"><a href="#4-4提供类加载器" class="headerlink" title="4.4提供类加载器"></a>4.4提供类加载器</h3><p>​	web容器提供类加载器，为web应用管理字节码，避免與其他应用冲突。</p>
-<h3 id="4-5管理线程池"><a href="#4-5管理线程池" class="headerlink" title="4.5管理线程池"></a>4.5管理线程池</h3><p>​	web容器提供线程池来优化资源利用率，处理大量的并发请求。<br>提供其他中间件接口</p>
-<h2 id="5-nginx-apache-tomcat的区别？"><a href="#5-nginx-apache-tomcat的区别？" class="headerlink" title="5.nginx apache  tomcat的区别？"></a>5.nginx apache  tomcat的区别？</h2><p>答：<br>Nginx&#x2F;Apache 作为网页服务器，主要提供静态资源<br>Tomcat作为应用服务器，主要处理动态请求，运行 Java 程序<br>Tomcat会生成HTML内容返回给 Nginx&#x2F;Apache 返回给用户<br>Nginx&#x2F;Apache 和 Tomcat 对应用来说是一个整体，都属于应用、软件</p>
-<h2 id="6-Tomcat性能优化"><a href="#6-Tomcat性能优化" class="headerlink" title="6.Tomcat性能优化"></a>6.Tomcat性能优化</h2><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/320001.png" alt="320001"></p>
-<h3 id="6-1常规优化"><a href="#6-1常规优化" class="headerlink" title="6.1常规优化"></a>6.1常规优化</h3><ul>
-<li><strong>调整堆内存大小</strong>：设置JVM的初始堆大小(-Xms)和最大堆大小(-Xmx)，以及年轻代和永久区的大小。这些参数可以根据应用的内存需求和服务器的硬件配置进行调整，以提高性能和避免内存溢出。</li>
-<li><strong>开启GC日志</strong>：通过设置JVM参数来开启垃圾回收的详细日志记录，这有助于监控和分析垃圾回收的行为，从而进行调优。</li>
-<li><strong>DNS缓存优化</strong>：设置DNS缓存的TTL（Time To Live）值为0，可以减少DNS查询的次数，提高网络请求的效率。</li>
-</ul>
-<p><strong>面试回答示例</strong>：</p>
-<ul>
-<li>面试官问：”你如何对Tomcat的内存进行优化？”<br>回答：”我会根据应用的内存需求和服务器配置，合理设置JVM的堆内存参数，包括初始堆大小(-Xms)和最大堆大小(-Xmx)，以及年轻代和永久区的大小(-XX:NewSize, -XX:NewMaxSize)。此外，我还会开启GC日志，通过分析日志来进一步优化垃圾回收策略。”</li>
-</ul>
-<h3 id="6-2并发优化"><a href="#6-2并发优化" class="headerlink" title="6.2并发优化"></a>6.2并发优化</h3><ul>
-<li><strong>调整线程参数</strong>：在server.xml中设置最大线程数量(maxThreads)、最小空闲线程数(minsparethreads)、最大空闲线程数(maxsparethreads)等参数，以优化Tomcat处理并发请求的能力。</li>
-<li><strong>关闭DNS查询</strong>：设置enablelookups为false，关闭自动DNS查询，减少服务器资源消耗。</li>
-</ul>
-<p><strong>面试回答示例</strong>：</p>
-<ul>
-<li>面试官问：”Tomcat的并发处理能力如何优化？”<br>回答：”我会在server.xml配置文件中调整线程池参数，比如设置最大线程数和最小&#x2F;最大空闲线程数，以适应不同的并发场景。同时，我会关闭自动DNS查询，以减少不必要的资源消耗和提高响应速度。”</li>
-</ul>
-<h3 id="6-3安全优化"><a href="#6-3安全优化" class="headerlink" title="6.3安全优化"></a>6.3安全优化</h3><ul>
-<li><strong>修改默认端口</strong>：更改Tomcat的默认端口，包括关闭端口和指令端口，以避免未授权访问。</li>
-<li><strong>降权启动</strong>：避免使用root用户启动Tomcat，而是使用普通用户权限，以减少安全风险。</li>
-<li><strong>隐藏版本号</strong>：修改Tomcat的版本信息，避免敏感信息泄露。</li>
-</ul>
-<p><strong>面试回答示例</strong>：</p>
-<ul>
-<li>面试官问：”你如何提高Tomcat的安全性？”<br>回答：”我会从多个方面进行安全优化。首先，我会更改Tomcat的默认端口，避免使用容易被攻击的端口。其次，我会以普通用户权限启动Tomcat，避免使用root权限带来的安全风险。最后，我会隐藏Tomcat的版本信息，减少信息泄露的风险。”</li>
-</ul>
-]]></content>
-      <categories>
-        <category>第三阶段：大型网站高阶架构</category>
-        <category>2.Tomcat</category>
-      </categories>
-      <tags>
-        <tag>面试题</tag>
-        <tag>Tomcat</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Tomcat+Nginx负载均衡(3.2.4)</title>
     <url>/2024/08/13/Tomcat+Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1(3.2.4)/</url>
     <content><![CDATA[<h1 id="Tomcat-Nginx负载均衡"><a href="#Tomcat-Nginx负载均衡" class="headerlink" title="Tomcat+Nginx负载均衡"></a>Tomcat+Nginx负载均衡</h1><h2 id="一、Nginx负载均衡的作用"><a href="#一、Nginx负载均衡的作用" class="headerlink" title="一、Nginx负载均衡的作用"></a>一、Nginx负载均衡的作用</h2><p>在单机上运行多个 Tomcat 实例，并将它们与 Nginx 配合使用进行负载均衡，可以带来以下好处：</p>
@@ -248,6 +199,55 @@
       </tags>
   </entry>
   <entry>
+    <title>Tomcat面试题(3.2.0)</title>
+    <url>/2024/08/12/Tomcat%E9%9D%A2%E8%AF%95%E9%A2%98(3.2.0)/</url>
+    <content><![CDATA[<h1 id="Tomcat面试题"><a href="#Tomcat面试题" class="headerlink" title="Tomcat面试题"></a>Tomcat面试题</h1><h2 id="1-有没有用过web容器？用过什么web容器？"><a href="#1-有没有用过web容器？用过什么web容器？" class="headerlink" title="1.有没有用过web容器？用过什么web容器？"></a>1.有没有用过web容器？用过什么web容器？</h2><p>答：用过，tomcat</p>
+<h2 id="2-你上家公司有没有用tomcat？版本是多少？"><a href="#2-你上家公司有没有用tomcat？版本是多少？" class="headerlink" title="2.你上家公司有没有用tomcat？版本是多少？"></a>2.你上家公司有没有用tomcat？版本是多少？</h2><p>答：用过，8.5（企业中用的最多的版本就是8.5.45，8.5稳定且修复的大量bug，稳定大于一切）</p>
+<h2 id="3-什么是web容器（web中间件）"><a href="#3-什么是web容器（web中间件）" class="headerlink" title="3.什么是web容器（web中间件）"></a>3.什么是web容器（web中间件）</h2><p>答：<br>web容器是一个可以部署和运行web应用的软件环境。常见的web容器有Tomcat（最广泛使用的应用服务器,专门用来部署Java Web应用）、Jetty（另一个功能强大的轻量级Java应用服务器）、WebLogic（Oracle提供的专业Java EE应用服务器）、JBoss（开源的Java EE全功能应用服务器）和WebSphere（IBM的Java EE应用服务器）。</p>
+<h2 id="4-web容器的主要作用有"><a href="#4-web容器的主要作用有" class="headerlink" title="4.web容器的主要作用有"></a>4.web容器的主要作用有</h2><h3 id="4-1封装JVM"><a href="#4-1封装JVM" class="headerlink" title="4.1封装JVM"></a>4.1封装JVM</h3><p>​	web容器提供一个JVM环境，只需要专注于编写business logic，而不用关心JVM的细节。</p>
+<h3 id="4-2处理HTTP请求"><a href="#4-2处理HTTP请求" class="headerlink" title="4.2处理HTTP请求"></a>4.2处理HTTP请求</h3><p>​	web容器监听指定端口的HTTP请求，将请求路由到对应的web应用中。</p>
+<h3 id="4-3管理web应用生命周期"><a href="#4-3管理web应用生命周期" class="headerlink" title="4.3管理web应用生命周期"></a>4.3管理web应用生命周期</h3><p>​	web容器可以部署、启动、停止和卸载web应用，管理其整个生命周期。</p>
+<h3 id="4-4提供类加载器"><a href="#4-4提供类加载器" class="headerlink" title="4.4提供类加载器"></a>4.4提供类加载器</h3><p>​	web容器提供类加载器，为web应用管理字节码，避免與其他应用冲突。</p>
+<h3 id="4-5管理线程池"><a href="#4-5管理线程池" class="headerlink" title="4.5管理线程池"></a>4.5管理线程池</h3><p>​	web容器提供线程池来优化资源利用率，处理大量的并发请求。<br>提供其他中间件接口</p>
+<h2 id="5-nginx-apache-tomcat的区别？"><a href="#5-nginx-apache-tomcat的区别？" class="headerlink" title="5.nginx apache  tomcat的区别？"></a>5.nginx apache  tomcat的区别？</h2><p>答：<br>Nginx&#x2F;Apache 作为网页服务器，主要提供静态资源<br>Tomcat作为应用服务器，主要处理动态请求，运行 Java 程序<br>Tomcat会生成HTML内容返回给 Nginx&#x2F;Apache 返回给用户<br>Nginx&#x2F;Apache 和 Tomcat 对应用来说是一个整体，都属于应用、软件</p>
+<h2 id="6-Tomcat性能优化"><a href="#6-Tomcat性能优化" class="headerlink" title="6.Tomcat性能优化"></a>6.Tomcat性能优化</h2><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/320001.png" alt="320001"></p>
+<h3 id="6-1常规优化"><a href="#6-1常规优化" class="headerlink" title="6.1常规优化"></a>6.1常规优化</h3><ul>
+<li><strong>调整堆内存大小</strong>：设置JVM的初始堆大小(-Xms)和最大堆大小(-Xmx)，以及年轻代和永久区的大小。这些参数可以根据应用的内存需求和服务器的硬件配置进行调整，以提高性能和避免内存溢出。</li>
+<li><strong>开启GC日志</strong>：通过设置JVM参数来开启垃圾回收的详细日志记录，这有助于监控和分析垃圾回收的行为，从而进行调优。</li>
+<li><strong>DNS缓存优化</strong>：设置DNS缓存的TTL（Time To Live）值为0，可以减少DNS查询的次数，提高网络请求的效率。</li>
+</ul>
+<p><strong>面试回答示例</strong>：</p>
+<ul>
+<li>面试官问：”你如何对Tomcat的内存进行优化？”<br>回答：”我会根据应用的内存需求和服务器配置，合理设置JVM的堆内存参数，包括初始堆大小(-Xms)和最大堆大小(-Xmx)，以及年轻代和永久区的大小(-XX:NewSize, -XX:NewMaxSize)。此外，我还会开启GC日志，通过分析日志来进一步优化垃圾回收策略。”</li>
+</ul>
+<h3 id="6-2并发优化"><a href="#6-2并发优化" class="headerlink" title="6.2并发优化"></a>6.2并发优化</h3><ul>
+<li><strong>调整线程参数</strong>：在server.xml中设置最大线程数量(maxThreads)、最小空闲线程数(minsparethreads)、最大空闲线程数(maxsparethreads)等参数，以优化Tomcat处理并发请求的能力。</li>
+<li><strong>关闭DNS查询</strong>：设置enablelookups为false，关闭自动DNS查询，减少服务器资源消耗。</li>
+</ul>
+<p><strong>面试回答示例</strong>：</p>
+<ul>
+<li>面试官问：”Tomcat的并发处理能力如何优化？”<br>回答：”我会在server.xml配置文件中调整线程池参数，比如设置最大线程数和最小&#x2F;最大空闲线程数，以适应不同的并发场景。同时，我会关闭自动DNS查询，以减少不必要的资源消耗和提高响应速度。”</li>
+</ul>
+<h3 id="6-3安全优化"><a href="#6-3安全优化" class="headerlink" title="6.3安全优化"></a>6.3安全优化</h3><ul>
+<li><strong>修改默认端口</strong>：更改Tomcat的默认端口，包括关闭端口和指令端口，以避免未授权访问。</li>
+<li><strong>降权启动</strong>：避免使用root用户启动Tomcat，而是使用普通用户权限，以减少安全风险。</li>
+<li><strong>隐藏版本号</strong>：修改Tomcat的版本信息，避免敏感信息泄露。</li>
+</ul>
+<p><strong>面试回答示例</strong>：</p>
+<ul>
+<li>面试官问：”你如何提高Tomcat的安全性？”<br>回答：”我会从多个方面进行安全优化。首先，我会更改Tomcat的默认端口，避免使用容易被攻击的端口。其次，我会以普通用户权限启动Tomcat，避免使用root权限带来的安全风险。最后，我会隐藏Tomcat的版本信息，减少信息泄露的风险。”</li>
+</ul>
+]]></content>
+      <categories>
+        <category>第三阶段：大型网站高阶架构</category>
+        <category>2.Tomcat</category>
+      </categories>
+      <tags>
+        <tag>面试题</tag>
+        <tag>Tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Tomcat单机多实例(3.2.3)</title>
     <url>/2024/08/13/Tomcat%E5%8D%95%E6%9C%BA%E5%A4%9A%E5%AE%9E%E4%BE%8B(3.2.3)/</url>
     <content><![CDATA[<h1 id="Tomcat-单机多实例"><a href="#Tomcat-单机多实例" class="headerlink" title="Tomcat 单机多实例"></a>Tomcat 单机多实例</h1><h2 id="一、多实例的作用："><a href="#一、多实例的作用：" class="headerlink" title="一、多实例的作用："></a>一、多实例的作用：</h2><p><strong>单实例并发上限：175（生产环境测试结果）官方测试并发上限200</strong></p>
@@ -339,81 +339,6 @@
       </tags>
   </entry>
   <entry>
-    <title>安装Tomcat和JDK(3.2.1)</title>
-    <url>/2024/08/12/%E5%AE%89%E8%A3%85Tomcat%E5%92%8CJDK(3.2.1)/</url>
-    <content><![CDATA[<h1 id="安装Tomcat-JDK-重点"><a href="#安装Tomcat-JDK-重点" class="headerlink" title="安装Tomcat &amp; JDK(重点)"></a>安装Tomcat &amp; JDK(重点)</h1><p><strong>安装时候选择tomcat软件版本要与程序开发使用的版本一致。jdk版本要进行与tomcat保持一致。</strong></p>
-<p><strong>Tomcat和JDK之间的兼容性通常取决于Tomcat的版本和JDK的版本。以下是Tomcat和JDK之间的一些常见版本兼容性概述：</strong></p>
-<p><strong>Tomcat 7：</strong></p>
-<p>兼容JDK 1.6、JDK 1.7 和 JDK 1.8。Tomcat 7是基于Java EE 6规范构建的，而JDK 1.6、1.7和1.8都提供了对Java EE 6规范的良好支持。</p>
-<p><strong>Tomcat 8：</strong></p>
-<p>官方文档推荐使用JDK 1.7或JDK 1.8。Tomcat 8.0开始支持Servlet 3.1规范，并且与JDK 1.7和JDK 1.8兼容良好。</p>
-<p>Tomcat 8.5对JDK 1.8的支持更为完善，并且也支持一些JDK 9的特性（但并非完全兼容）。</p>
-<p><strong>Tomcat 9：</strong></p>
-<p>需要JDK 1.8或更高版本。Tomcat 9基于Java EE 8（现在是Jakarta EE 8）规范，并完全支持Servlet 4.0。虽然JDK 9和JDK 10在某些情况下也可以工作，但Tomcat 9官方推荐使用JDK 1.8或更新的LTS（长期支持）版本，如JDK 11或更高。</p>
-<p><strong>Tomcat 10：</strong></p>
-<p>需要JDK 11或更高版本。Tomcat 10是基于Jakarta EE 9规范构建的，这是Java EE规范迁移到Eclipse基金会后的新版本。Tomcat 10要求至少JDK 11，因为它使用了JDK 11中引入的新特性。</p>
-<p><strong>Tomcat 11：</strong></p>
-<p>需要JDK 11或更高版本。Tomcat 11与Tomcat 10类似，也是基于Jakarta EE规范构建的，并且需要JDK 11或更新的版本来运行。</p>
-<h2 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1.关闭防火墙</span><br><span class="line">[root@localhost ~]# systemctl stop firewalld</span><br><span class="line">[root@localhost ~]# systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line"></span><br><span class="line">  <span class="comment">#systemctl stop firewalld 只是临时停止服务。</span></span><br><span class="line">  <span class="comment">#systemctl disable firewalld 禁止服务开机启动，但不影响当前状态。 </span></span><br><span class="line"></span><br><span class="line">2.关闭 selinux</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line"></span><br><span class="line">3.yum安装必要工具</span><br><span class="line">[root@localhost ~]# yum -y install wget</span><br><span class="line">[root@localhost ~]# yum -y install tree</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="二、安装jdk"><a href="#二、安装jdk" class="headerlink" title="二、安装jdk"></a>二、安装jdk</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1、上传二进制包jdk-8u211-linux-x64.tar.gz</span><br><span class="line">wget ftp://10.36.105.250//notes/stage3/2.tomcat/package/jdk-8u211-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line">2、解压项目包</span><br><span class="line"><span class="comment"># tar xf jdk-8u211-linux-x64.tar.gz</span></span><br><span class="line"></span><br><span class="line">3、编写java环境</span><br><span class="line"><span class="comment"># mv jdk1.8.0_211/ /usr/local/java</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># vim /etc/profile.d/java.sh    //添加以下内容</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">JAVA_HOME=/usr/local/java</span><br><span class="line">PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> jAVA_HOME PATH</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321001.png" alt="321001"></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">4、<span class="built_in">source</span> 触发生效</span><br><span class="line"><span class="comment"># source /etc/profile.d/java.sh</span></span><br><span class="line"><span class="comment"># java -version     //进行测试</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321002.png" alt="321002"></p>
-<h2 id="三、安装Tomcat"><a href="#三、安装Tomcat" class="headerlink" title="三、安装Tomcat"></a>三、安装Tomcat</h2><h3 id="3-1安装步骤"><a href="#3-1安装步骤" class="headerlink" title="3.1安装步骤"></a>3.1安装步骤</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1、上传项目包apache-tomcat-8.0.53.tar.gz</span><br><span class="line">wget ftp://10.36.105.250//notes/stage3/2.tomcat/package/apache-tomcat-8.0.53.tar.gz</span><br><span class="line"></span><br><span class="line">2、解压</span><br><span class="line"><span class="comment"># tar xf apache-tomcat-8.0.53.tar.gz</span></span><br><span class="line"></span><br><span class="line">3、移动项目包到/usr/local</span><br><span class="line"><span class="comment"># mv apache-tomcat-8.0.53 /usr/local/tomcat</span></span><br><span class="line"></span><br><span class="line">4、启动和关闭tomcat</span><br><span class="line"><span class="comment"># /usr/local/tomcat/bin/startup.sh    //启动tomcat</span></span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line">Tomcat started.</span><br><span class="line"></span><br><span class="line">【在启动tomcat情况下查看端口运行情况】</span><br><span class="line"><span class="comment"># netstat -tnlp | grep java</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321003.png" alt="321003"></p>
-<p><strong>端口解释</strong></p>
-<p>8005：这个端口负责监听关闭Tomcat的请求 shutdown:向以上端口发送的关闭服务器的命令字符串。</p>
-<p>8009: 与其他http服务通信接口。比如apache</p>
-<p>8080: 建立http也就是客户端访问连接用。可以修改</p>
-<h3 id="3-2浏览器效果ip-8080"><a href="#3-2浏览器效果ip-8080" class="headerlink" title="3.2浏览器效果ip:8080"></a>3.2浏览器效果ip:8080</h3><blockquote>
-<p><a href="http://192.168.133.134:8080/">http://192.168.133.134:8080/</a></p>
-</blockquote>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321004.png" alt="321004"></p>
-<h3 id="3-3关闭tomcat"><a href="#3-3关闭tomcat" class="headerlink" title="3.3关闭tomcat"></a>3.3关闭tomcat</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /usr/local/tomcat/bin/shutdown.sh	</span></span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="四、配置tomcat托管至systemd"><a href="#四、配置tomcat托管至systemd" class="headerlink" title="四、配置tomcat托管至systemd"></a>四、配置tomcat托管至systemd</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/lib/systemd/system/tomcat.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Apache Tomcat Web Application Container</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">Environment=<span class="string">&quot;JAVA_HOME=/usr/local/java&quot;</span></span><br><span class="line">ExecStart=/usr/local/tomcat/bin/startup.sh</span><br><span class="line">ExecReload=/bin/kill -s HUP <span class="variable">$MAINPID</span></span><br><span class="line">ExecStop=/bin/kill -s QUIT <span class="variable">$MAINPID</span></span><br><span class="line">PrivateTmp=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# systemctl daemon-reload</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="五、重启tomcat-service并配置开机自启"><a href="#五、重启tomcat-service并配置开机自启" class="headerlink" title="五、重启tomcat.service并配置开机自启"></a>五、重启tomcat.service并配置开机自启</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# systemctl restart tomcat.service &amp;&amp; systemctl <span class="built_in">enable</span> tomcat.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/tomcat.service to /usr/lib/systemd/system/tomcat.service.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p><a href="http://192.168.133.134:8080/">http://192.168.133.134:8080/</a></p>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321004.png" alt="321004"></p>
-<h2 id="六、tomcat主目录介绍"><a href="#六、tomcat主目录介绍" class="headerlink" title="六、tomcat主目录介绍"></a>六、tomcat主目录介绍</h2><h3 id="6-1tomcat主目录介绍"><a href="#6-1tomcat主目录介绍" class="headerlink" title="6.1tomcat主目录介绍"></a>6.1tomcat主目录介绍</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost tomcat]# tree -L 1</span><br><span class="line">.</span><br><span class="line">├── bin    <span class="comment">#存放tomcat的管理脚本</span></span><br><span class="line">├── conf    <span class="comment">#tomcat的配置文件  // server.xml  tomcat 主配置文件</span></span><br><span class="line">├── lib    <span class="comment">#web应用调用的jar包存放路径</span></span><br><span class="line">├── LICENSE</span><br><span class="line">├── logs    <span class="comment">#tomcat日志存放目录，catalin.out日志为只要输出日志</span></span><br><span class="line">├── NOTICE</span><br><span class="line">├── RELEASE-NOTES</span><br><span class="line">├── RUNNING.txt</span><br><span class="line">├── temp    <span class="comment">#存放临时文件</span></span><br><span class="line">├── webapps    <span class="comment">#默认网站发布目录</span></span><br><span class="line">└── work    <span class="comment">#存放编译生产的.java与.class文件</span></span><br><span class="line"></span><br><span class="line">7 directories, 4 files</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="6-2tomcat配置文件目录"><a href="#6-2tomcat配置文件目录" class="headerlink" title="6.2tomcat配置文件目录"></a>6.2tomcat配置文件目录</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost conf]# tree -L 1</span><br><span class="line">.</span><br><span class="line">├── Catalina</span><br><span class="line">├── catalina.policy</span><br><span class="line">├── catalina.properties</span><br><span class="line">├── context.xml</span><br><span class="line">├── logging.properties</span><br><span class="line">├── server.xml    <span class="comment"># tomcat 主配置文件</span></span><br><span class="line">├── tomcat-users.xml    <span class="comment"># tomcat 管理用户配置文件</span></span><br><span class="line">├── tomcat-users.xsd</span><br><span class="line">└── web.xml</span><br><span class="line"></span><br><span class="line">1 directory, 8 files</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="6-3webapps目录介绍"><a href="#6-3webapps目录介绍" class="headerlink" title="6.3webapps目录介绍"></a>6.3webapps目录介绍</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@java-tomcat1 tomcat]# <span class="built_in">cd</span> webapps/</span><br><span class="line">[root@java-tomcat1 webapps]# tree -L 1</span><br><span class="line">.</span><br><span class="line">├── docs  <span class="comment">#tomcat的帮助文档</span></span><br><span class="line">├── examples  <span class="comment">#web应用实例</span></span><br><span class="line">├── host-manager  <span class="comment">#主机管理</span></span><br><span class="line">├── manager    <span class="comment">#登录管理</span></span><br><span class="line">└── ROOT    <span class="comment">#默认站点根目录</span></span><br><span class="line"></span><br><span class="line">5 directories, 0 files</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>第三阶段：大型网站高阶架构</category>
-        <category>2.Tomcat</category>
-      </categories>
-      <tags>
-        <tag>Tomcat</tag>
-        <tag>JDK</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>以jspgou为例部署传统javaweb项目(3.2.2)</title>
     <url>/2024/08/13/%E4%BB%A5jspgou%E4%B8%BA%E4%BE%8B%E9%83%A8%E7%BD%B2%E4%BC%A0%E7%BB%9Fjavaweb%E9%A1%B9%E7%9B%AE(3.2.2)/</url>
     <content><![CDATA[<h1 id="以jspgou为例部署传统javaweb项目"><a href="#以jspgou为例部署传统javaweb项目" class="headerlink" title="以jspgou为例部署传统javaweb项目"></a>以jspgou为例部署传统javaweb项目</h1><h2 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1.关闭防火墙</span><br><span class="line">[root@localhost ~]# systemctl stop firewalld</span><br><span class="line">[root@localhost ~]# systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line"></span><br><span class="line">  <span class="comment">#systemctl stop firewalld 只是临时停止服务。</span></span><br><span class="line">  <span class="comment">#systemctl disable firewalld 禁止服务开机启动，但不影响当前状态。 </span></span><br><span class="line"></span><br><span class="line">2.关闭 selinux</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line"></span><br><span class="line">3.yum安装必要工具</span><br><span class="line">[root@localhost ~]# yum -y install wget</span><br><span class="line">[root@localhost ~]# yum -y install unzip</span><br></pre></td></tr></table></figure>
@@ -486,6 +411,81 @@
         <tag>JDK</tag>
         <tag>mariadb</tag>
         <tag>jspgou</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安装Tomcat和JDK(3.2.1)</title>
+    <url>/2024/08/12/%E5%AE%89%E8%A3%85Tomcat%E5%92%8CJDK(3.2.1)/</url>
+    <content><![CDATA[<h1 id="安装Tomcat-JDK-重点"><a href="#安装Tomcat-JDK-重点" class="headerlink" title="安装Tomcat &amp; JDK(重点)"></a>安装Tomcat &amp; JDK(重点)</h1><p><strong>安装时候选择tomcat软件版本要与程序开发使用的版本一致。jdk版本要进行与tomcat保持一致。</strong></p>
+<p><strong>Tomcat和JDK之间的兼容性通常取决于Tomcat的版本和JDK的版本。以下是Tomcat和JDK之间的一些常见版本兼容性概述：</strong></p>
+<p><strong>Tomcat 7：</strong></p>
+<p>兼容JDK 1.6、JDK 1.7 和 JDK 1.8。Tomcat 7是基于Java EE 6规范构建的，而JDK 1.6、1.7和1.8都提供了对Java EE 6规范的良好支持。</p>
+<p><strong>Tomcat 8：</strong></p>
+<p>官方文档推荐使用JDK 1.7或JDK 1.8。Tomcat 8.0开始支持Servlet 3.1规范，并且与JDK 1.7和JDK 1.8兼容良好。</p>
+<p>Tomcat 8.5对JDK 1.8的支持更为完善，并且也支持一些JDK 9的特性（但并非完全兼容）。</p>
+<p><strong>Tomcat 9：</strong></p>
+<p>需要JDK 1.8或更高版本。Tomcat 9基于Java EE 8（现在是Jakarta EE 8）规范，并完全支持Servlet 4.0。虽然JDK 9和JDK 10在某些情况下也可以工作，但Tomcat 9官方推荐使用JDK 1.8或更新的LTS（长期支持）版本，如JDK 11或更高。</p>
+<p><strong>Tomcat 10：</strong></p>
+<p>需要JDK 11或更高版本。Tomcat 10是基于Jakarta EE 9规范构建的，这是Java EE规范迁移到Eclipse基金会后的新版本。Tomcat 10要求至少JDK 11，因为它使用了JDK 11中引入的新特性。</p>
+<p><strong>Tomcat 11：</strong></p>
+<p>需要JDK 11或更高版本。Tomcat 11与Tomcat 10类似，也是基于Jakarta EE规范构建的，并且需要JDK 11或更新的版本来运行。</p>
+<h2 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1.关闭防火墙</span><br><span class="line">[root@localhost ~]# systemctl stop firewalld</span><br><span class="line">[root@localhost ~]# systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line"></span><br><span class="line">  <span class="comment">#systemctl stop firewalld 只是临时停止服务。</span></span><br><span class="line">  <span class="comment">#systemctl disable firewalld 禁止服务开机启动，但不影响当前状态。 </span></span><br><span class="line"></span><br><span class="line">2.关闭 selinux</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line"></span><br><span class="line">3.yum安装必要工具</span><br><span class="line">[root@localhost ~]# yum -y install wget</span><br><span class="line">[root@localhost ~]# yum -y install tree</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、安装jdk"><a href="#二、安装jdk" class="headerlink" title="二、安装jdk"></a>二、安装jdk</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1、上传二进制包jdk-8u211-linux-x64.tar.gz</span><br><span class="line">wget ftp://10.36.105.250//notes/stage3/2.tomcat/package/jdk-8u211-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line">2、解压项目包</span><br><span class="line"><span class="comment"># tar xf jdk-8u211-linux-x64.tar.gz</span></span><br><span class="line"></span><br><span class="line">3、编写java环境</span><br><span class="line"><span class="comment"># mv jdk1.8.0_211/ /usr/local/java</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># vim /etc/profile.d/java.sh    //添加以下内容</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">JAVA_HOME=/usr/local/java</span><br><span class="line">PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> jAVA_HOME PATH</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321001.png" alt="321001"></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">4、<span class="built_in">source</span> 触发生效</span><br><span class="line"><span class="comment"># source /etc/profile.d/java.sh</span></span><br><span class="line"><span class="comment"># java -version     //进行测试</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321002.png" alt="321002"></p>
+<h2 id="三、安装Tomcat"><a href="#三、安装Tomcat" class="headerlink" title="三、安装Tomcat"></a>三、安装Tomcat</h2><h3 id="3-1安装步骤"><a href="#3-1安装步骤" class="headerlink" title="3.1安装步骤"></a>3.1安装步骤</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">1、上传项目包apache-tomcat-8.0.53.tar.gz</span><br><span class="line">wget ftp://10.36.105.250//notes/stage3/2.tomcat/package/apache-tomcat-8.0.53.tar.gz</span><br><span class="line"></span><br><span class="line">2、解压</span><br><span class="line"><span class="comment"># tar xf apache-tomcat-8.0.53.tar.gz</span></span><br><span class="line"></span><br><span class="line">3、移动项目包到/usr/local</span><br><span class="line"><span class="comment"># mv apache-tomcat-8.0.53 /usr/local/tomcat</span></span><br><span class="line"></span><br><span class="line">4、启动和关闭tomcat</span><br><span class="line"><span class="comment"># /usr/local/tomcat/bin/startup.sh    //启动tomcat</span></span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line">Tomcat started.</span><br><span class="line"></span><br><span class="line">【在启动tomcat情况下查看端口运行情况】</span><br><span class="line"><span class="comment"># netstat -tnlp | grep java</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321003.png" alt="321003"></p>
+<p><strong>端口解释</strong></p>
+<p>8005：这个端口负责监听关闭Tomcat的请求 shutdown:向以上端口发送的关闭服务器的命令字符串。</p>
+<p>8009: 与其他http服务通信接口。比如apache</p>
+<p>8080: 建立http也就是客户端访问连接用。可以修改</p>
+<h3 id="3-2浏览器效果ip-8080"><a href="#3-2浏览器效果ip-8080" class="headerlink" title="3.2浏览器效果ip:8080"></a>3.2浏览器效果ip:8080</h3><blockquote>
+<p><a href="http://192.168.133.134:8080/">http://192.168.133.134:8080/</a></p>
+</blockquote>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321004.png" alt="321004"></p>
+<h3 id="3-3关闭tomcat"><a href="#3-3关闭tomcat" class="headerlink" title="3.3关闭tomcat"></a>3.3关闭tomcat</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /usr/local/tomcat/bin/shutdown.sh	</span></span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、配置tomcat托管至systemd"><a href="#四、配置tomcat托管至systemd" class="headerlink" title="四、配置tomcat托管至systemd"></a>四、配置tomcat托管至systemd</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/lib/systemd/system/tomcat.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Apache Tomcat Web Application Container</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">Environment=<span class="string">&quot;JAVA_HOME=/usr/local/java&quot;</span></span><br><span class="line">ExecStart=/usr/local/tomcat/bin/startup.sh</span><br><span class="line">ExecReload=/bin/kill -s HUP <span class="variable">$MAINPID</span></span><br><span class="line">ExecStop=/bin/kill -s QUIT <span class="variable">$MAINPID</span></span><br><span class="line">PrivateTmp=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# systemctl daemon-reload</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、重启tomcat-service并配置开机自启"><a href="#五、重启tomcat-service并配置开机自启" class="headerlink" title="五、重启tomcat.service并配置开机自启"></a>五、重启tomcat.service并配置开机自启</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# systemctl restart tomcat.service &amp;&amp; systemctl <span class="built_in">enable</span> tomcat.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/tomcat.service to /usr/lib/systemd/system/tomcat.service.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><a href="http://192.168.133.134:8080/">http://192.168.133.134:8080/</a></p>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/321004.png" alt="321004"></p>
+<h2 id="六、tomcat主目录介绍"><a href="#六、tomcat主目录介绍" class="headerlink" title="六、tomcat主目录介绍"></a>六、tomcat主目录介绍</h2><h3 id="6-1tomcat主目录介绍"><a href="#6-1tomcat主目录介绍" class="headerlink" title="6.1tomcat主目录介绍"></a>6.1tomcat主目录介绍</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost tomcat]# tree -L 1</span><br><span class="line">.</span><br><span class="line">├── bin    <span class="comment">#存放tomcat的管理脚本</span></span><br><span class="line">├── conf    <span class="comment">#tomcat的配置文件  // server.xml  tomcat 主配置文件</span></span><br><span class="line">├── lib    <span class="comment">#web应用调用的jar包存放路径</span></span><br><span class="line">├── LICENSE</span><br><span class="line">├── logs    <span class="comment">#tomcat日志存放目录，catalin.out日志为只要输出日志</span></span><br><span class="line">├── NOTICE</span><br><span class="line">├── RELEASE-NOTES</span><br><span class="line">├── RUNNING.txt</span><br><span class="line">├── temp    <span class="comment">#存放临时文件</span></span><br><span class="line">├── webapps    <span class="comment">#默认网站发布目录</span></span><br><span class="line">└── work    <span class="comment">#存放编译生产的.java与.class文件</span></span><br><span class="line"></span><br><span class="line">7 directories, 4 files</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-2tomcat配置文件目录"><a href="#6-2tomcat配置文件目录" class="headerlink" title="6.2tomcat配置文件目录"></a>6.2tomcat配置文件目录</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost conf]# tree -L 1</span><br><span class="line">.</span><br><span class="line">├── Catalina</span><br><span class="line">├── catalina.policy</span><br><span class="line">├── catalina.properties</span><br><span class="line">├── context.xml</span><br><span class="line">├── logging.properties</span><br><span class="line">├── server.xml    <span class="comment"># tomcat 主配置文件</span></span><br><span class="line">├── tomcat-users.xml    <span class="comment"># tomcat 管理用户配置文件</span></span><br><span class="line">├── tomcat-users.xsd</span><br><span class="line">└── web.xml</span><br><span class="line"></span><br><span class="line">1 directory, 8 files</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-3webapps目录介绍"><a href="#6-3webapps目录介绍" class="headerlink" title="6.3webapps目录介绍"></a>6.3webapps目录介绍</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@java-tomcat1 tomcat]# <span class="built_in">cd</span> webapps/</span><br><span class="line">[root@java-tomcat1 webapps]# tree -L 1</span><br><span class="line">.</span><br><span class="line">├── docs  <span class="comment">#tomcat的帮助文档</span></span><br><span class="line">├── examples  <span class="comment">#web应用实例</span></span><br><span class="line">├── host-manager  <span class="comment">#主机管理</span></span><br><span class="line">├── manager    <span class="comment">#登录管理</span></span><br><span class="line">└── ROOT    <span class="comment">#默认站点根目录</span></span><br><span class="line"></span><br><span class="line">5 directories, 0 files</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>第三阶段：大型网站高阶架构</category>
+        <category>2.Tomcat</category>
+      </categories>
+      <tags>
+        <tag>Tomcat</tag>
+        <tag>JDK</tag>
       </tags>
   </entry>
 </search>
