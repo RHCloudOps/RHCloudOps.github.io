@@ -1,82 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Nginx面试题(3.1.0)</title>
-    <url>/2024/08/14/Nginx%E9%9D%A2%E8%AF%95%E9%A2%98(3.1.0)/</url>
-    <content><![CDATA[<h1 id="Nginx面试题"><a href="#Nginx面试题" class="headerlink" title="Nginx面试题"></a>Nginx面试题</h1><h2 id="1-Nginx-的工作原理是什么？"><a href="#1-Nginx-的工作原理是什么？" class="headerlink" title="1. Nginx 的工作原理是什么？"></a>1. Nginx 的工作原理是什么？</h2><p>Nginx 是一个高性能的 HTTP 和反向代理服务器，同时也可以作为邮件代理服务器。它的工作原理基于事件驱动和异步处理模型：</p>
-<ul>
-<li><strong>事件驱动</strong>：Nginx 使用事件驱动的架构来处理请求，这意味着它能够处理大量的并发连接而不会阻塞。</li>
-<li><strong>异步处理</strong>：Nginx 的每个工作进程可以同时处理多个请求，这种异步非阻塞的处理方式使得 Nginx 在处理高并发时表现优秀。</li>
-</ul>
-<h2 id="2-Nginx-和-Apache-有什么区别？"><a href="#2-Nginx-和-Apache-有什么区别？" class="headerlink" title="2. Nginx 和 Apache 有什么区别？"></a>2. Nginx 和 Apache 有什么区别？</h2><ul>
-<li><strong>架构</strong>：Nginx 使用事件驱动架构，支持异步处理；Apache 默认使用多进程或线程处理请求，可能在高并发场景下性能较差。</li>
-<li><strong>性能</strong>：Nginx 通常比 Apache 处理静态内容的性能更好，因为它的事件驱动架构可以更高效地处理大量的并发请求。</li>
-<li><strong>配置</strong>：Nginx 的配置文件语法相对简洁，而 Apache 的配置可能更复杂。</li>
-<li><strong>资源使用</strong>：Nginx 通常比 Apache 使用更少的内存和 CPU 资源。</li>
-</ul>
-<h2 id="3-什么是反向代理？Nginx-如何实现反向代理功能？"><a href="#3-什么是反向代理？Nginx-如何实现反向代理功能？" class="headerlink" title="3. 什么是反向代理？Nginx 如何实现反向代理功能？"></a>3. 什么是反向代理？Nginx 如何实现反向代理功能？</h2><ul>
-<li><strong>反向代理</strong>：反向代理是指代理服务器向客户端隐藏了实际的服务器。客户端请求经过反向代理服务器，然后由反向代理服务器转发到实际的后端服务器，再将响应返回给客户端。</li>
-<li><strong>Nginx 实现反向代理</strong>：在 Nginx 中，可以通过 <code>proxy_pass</code> 指令配置反向代理。例如：<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> /api/ &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://backend-server;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="4-如何实现负载均衡？"><a href="#4-如何实现负载均衡？" class="headerlink" title="4. 如何实现负载均衡？"></a>4. 如何实现负载均衡？</h2><p>Nginx 支持多种负载均衡算法，可以通过在 <code>upstream</code> 块中定义服务器组来实现负载均衡。例如：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="section">upstream</span> backend &#123;</span><br><span class="line">        <span class="attribute">server</span> backend1.example.com;</span><br><span class="line">        <span class="attribute">server</span> backend2.example.com;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> / &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://backend;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="5-轮询、权重、ip-hash、fair-和-url-hash-是-Nginx-负载均衡的哪些算法？"><a href="#5-轮询、权重、ip-hash、fair-和-url-hash-是-Nginx-负载均衡的哪些算法？" class="headerlink" title="5. 轮询、权重、ip_hash、fair 和 url_hash 是 Nginx 负载均衡的哪些算法？"></a>5. 轮询、权重、ip_hash、fair 和 url_hash 是 Nginx 负载均衡的哪些算法？</h2><ul>
-<li>**轮询 (Round Robin)**：默认负载均衡算法，依次将请求分配给每个服务器。</li>
-<li>**权重 (Weight)**：根据服务器的权重来分配请求，权重较高的服务器接收更多请求。</li>
-<li><strong>ip_hash</strong>：根据客户端的 IP 地址哈希值来分配请求，确保相同 IP 地址的请求会被发送到同一台服务器。</li>
-<li><strong>fair</strong>：基于请求的响应时间分配请求，将请求发送到响应时间较短的服务器。（需要安装 <code>nginx-upstream-fair</code> 模块）</li>
-<li><strong>url_hash</strong>：根据请求的 URL 哈希值来分配请求，确保相同 URL 的请求会被发送到同一台服务器。（需要安装 <code>nginx-upstream-hash</code> 模块）</li>
-</ul>
-<h2 id="6-如何配置-SSL-证书？"><a href="#6-如何配置-SSL-证书？" class="headerlink" title="6. 如何配置 SSL 证书？"></a>6. 如何配置 SSL 证书？</h2><p>配置 SSL 证书需要在 <code>server</code> 块中使用 <code>ssl_certificate</code> 和 <code>ssl_certificate_key</code> 指令：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">server_name</span> example.com;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/ssl/example.com.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/ssl/example.com.key;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 其他 SSL 配置项</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="7-如何实现限流和速率限制？"><a href="#7-如何实现限流和速率限制？" class="headerlink" title="7. 如何实现限流和速率限制？"></a>7. 如何实现限流和速率限制？</h2><p>可以通过 <code>limit_req</code> 和 <code>limit_conn</code> 模块来实现限流和速率限制：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">limit_req_zone</span> <span class="variable">$binary_remote_addr</span> zone=mylimit:<span class="number">10m</span> rate=1r/s;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> /api/ &#123;</span><br><span class="line">            <span class="attribute">limit_req</span> zone=mylimit burst=<span class="number">5</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">limit_conn_zone</span> <span class="variable">$binary_remote_addr</span> zone=addr:<span class="number">10m</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> /api/ &#123;</span><br><span class="line">            <span class="attribute">limit_conn</span> addr <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="8-如何查看-Nginx-版本？如何处理-Nginx-配置错误？"><a href="#8-如何查看-Nginx-版本？如何处理-Nginx-配置错误？" class="headerlink" title="8. 如何查看 Nginx 版本？如何处理 Nginx 配置错误？"></a>8. 如何查看 Nginx 版本？如何处理 Nginx 配置错误？</h2><ul>
-<li><p><strong>查看 Nginx 版本</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -v</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>处理配置错误</strong>：使用 <code>nginx -t</code> 检查配置文件的语法错误，并根据提示修正配置。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="9-Nginx-的状态码有哪些？"><a href="#9-Nginx-的状态码有哪些？" class="headerlink" title="9. Nginx 的状态码有哪些？"></a>9. Nginx 的状态码有哪些？</h2><p>Nginx 主要支持以下状态码：</p>
-<ul>
-<li><strong>1xx</strong>：信息性状态码（如 100 Continue）</li>
-<li><strong>2xx</strong>：成功状态码（如 200 OK, 204 No Content）</li>
-<li><strong>3xx</strong>：重定向状态码（如 301 Moved Permanently, 302 Found）</li>
-<li><strong>4xx</strong>：客户端错误状态码（如 404 Not Found, 403 Forbidden）</li>
-<li><strong>5xx</strong>：服务器错误状态码（如 500 Internal Server Error, 502 Bad Gateway）</li>
-</ul>
-<h2 id="10-Nginx-的目录结构有哪些？"><a href="#10-Nginx-的目录结构有哪些？" class="headerlink" title="10. Nginx 的目录结构有哪些？"></a>10. Nginx 的目录结构有哪些？</h2><p>Nginx 的典型目录结构包括：</p>
-<ul>
-<li>**<code>/etc/nginx/</code>**：配置文件目录</li>
-<li>**<code>/usr/share/nginx/</code>**：默认的 HTML 文件目录</li>
-<li>**<code>/var/log/nginx/</code>**：日志文件目录</li>
-<li>**<code>/var/cache/nginx/</code>**：缓存目录（如果配置了缓存）</li>
-</ul>
-<h2 id="11-Nginx-如何处理静态文件缓存？"><a href="#11-Nginx-如何处理静态文件缓存？" class="headerlink" title="11. Nginx 如何处理静态文件缓存？"></a>11. Nginx 如何处理静态文件缓存？</h2><p>可以使用 <code>expires</code> 指令配置静态文件的缓存策略。例如：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> /static/ &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www/html;</span><br><span class="line">    <span class="attribute">expires</span> <span class="number">30d</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这将使 <code>/static/</code> 目录下的文件在浏览器缓存中存储 30 天。</p>
-]]></content>
-      <categories>
-        <category>第三阶段：大型网站高阶架构</category>
-        <category>1.Nginx</category>
-      </categories>
-      <tags>
-        <tag>Nginx</tag>
-        <tag>面试题</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Tomcat+Nginx负载均衡(3.2.4)</title>
     <url>/2024/08/13/Tomcat+Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1(3.2.4)/</url>
     <content><![CDATA[<h1 id="Tomcat-Nginx负载均衡"><a href="#Tomcat-Nginx负载均衡" class="headerlink" title="Tomcat+Nginx负载均衡"></a>Tomcat+Nginx负载均衡</h1><h2 id="一、Nginx负载均衡的作用"><a href="#一、Nginx负载均衡的作用" class="headerlink" title="一、Nginx负载均衡的作用"></a>一、Nginx负载均衡的作用</h2><p>在单机上运行多个 Tomcat 实例，并将它们与 Nginx 配合使用进行负载均衡，可以带来以下好处：</p>
@@ -191,11 +115,87 @@
         <category>2.Tomcat</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>Tomcat</tag>
         <tag>JDK</tag>
         <tag>mariadb</tag>
         <tag>JavaWeb</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx面试题(3.1.0)</title>
+    <url>/2024/08/14/Nginx%E9%9D%A2%E8%AF%95%E9%A2%98(3.1.0)/</url>
+    <content><![CDATA[<h1 id="Nginx面试题"><a href="#Nginx面试题" class="headerlink" title="Nginx面试题"></a>Nginx面试题</h1><h2 id="1-Nginx-的工作原理是什么？"><a href="#1-Nginx-的工作原理是什么？" class="headerlink" title="1. Nginx 的工作原理是什么？"></a>1. Nginx 的工作原理是什么？</h2><p>Nginx 是一个高性能的 HTTP 和反向代理服务器，同时也可以作为邮件代理服务器。它的工作原理基于事件驱动和异步处理模型：</p>
+<ul>
+<li><strong>事件驱动</strong>：Nginx 使用事件驱动的架构来处理请求，这意味着它能够处理大量的并发连接而不会阻塞。</li>
+<li><strong>异步处理</strong>：Nginx 的每个工作进程可以同时处理多个请求，这种异步非阻塞的处理方式使得 Nginx 在处理高并发时表现优秀。</li>
+</ul>
+<h2 id="2-Nginx-和-Apache-有什么区别？"><a href="#2-Nginx-和-Apache-有什么区别？" class="headerlink" title="2. Nginx 和 Apache 有什么区别？"></a>2. Nginx 和 Apache 有什么区别？</h2><ul>
+<li><strong>架构</strong>：Nginx 使用事件驱动架构，支持异步处理；Apache 默认使用多进程或线程处理请求，可能在高并发场景下性能较差。</li>
+<li><strong>性能</strong>：Nginx 通常比 Apache 处理静态内容的性能更好，因为它的事件驱动架构可以更高效地处理大量的并发请求。</li>
+<li><strong>配置</strong>：Nginx 的配置文件语法相对简洁，而 Apache 的配置可能更复杂。</li>
+<li><strong>资源使用</strong>：Nginx 通常比 Apache 使用更少的内存和 CPU 资源。</li>
+</ul>
+<h2 id="3-什么是反向代理？Nginx-如何实现反向代理功能？"><a href="#3-什么是反向代理？Nginx-如何实现反向代理功能？" class="headerlink" title="3. 什么是反向代理？Nginx 如何实现反向代理功能？"></a>3. 什么是反向代理？Nginx 如何实现反向代理功能？</h2><ul>
+<li><strong>反向代理</strong>：反向代理是指代理服务器向客户端隐藏了实际的服务器。客户端请求经过反向代理服务器，然后由反向代理服务器转发到实际的后端服务器，再将响应返回给客户端。</li>
+<li><strong>Nginx 实现反向代理</strong>：在 Nginx 中，可以通过 <code>proxy_pass</code> 指令配置反向代理。例如：<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> /api/ &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://backend-server;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="4-如何实现负载均衡？"><a href="#4-如何实现负载均衡？" class="headerlink" title="4. 如何实现负载均衡？"></a>4. 如何实现负载均衡？</h2><p>Nginx 支持多种负载均衡算法，可以通过在 <code>upstream</code> 块中定义服务器组来实现负载均衡。例如：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="section">upstream</span> backend &#123;</span><br><span class="line">        <span class="attribute">server</span> backend1.example.com;</span><br><span class="line">        <span class="attribute">server</span> backend2.example.com;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> / &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://backend;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-轮询、权重、ip-hash、fair-和-url-hash-是-Nginx-负载均衡的哪些算法？"><a href="#5-轮询、权重、ip-hash、fair-和-url-hash-是-Nginx-负载均衡的哪些算法？" class="headerlink" title="5. 轮询、权重、ip_hash、fair 和 url_hash 是 Nginx 负载均衡的哪些算法？"></a>5. 轮询、权重、ip_hash、fair 和 url_hash 是 Nginx 负载均衡的哪些算法？</h2><ul>
+<li>**轮询 (Round Robin)**：默认负载均衡算法，依次将请求分配给每个服务器。</li>
+<li>**权重 (Weight)**：根据服务器的权重来分配请求，权重较高的服务器接收更多请求。</li>
+<li><strong>ip_hash</strong>：根据客户端的 IP 地址哈希值来分配请求，确保相同 IP 地址的请求会被发送到同一台服务器。</li>
+<li><strong>fair</strong>：基于请求的响应时间分配请求，将请求发送到响应时间较短的服务器。（需要安装 <code>nginx-upstream-fair</code> 模块）</li>
+<li><strong>url_hash</strong>：根据请求的 URL 哈希值来分配请求，确保相同 URL 的请求会被发送到同一台服务器。（需要安装 <code>nginx-upstream-hash</code> 模块）</li>
+</ul>
+<h2 id="6-如何配置-SSL-证书？"><a href="#6-如何配置-SSL-证书？" class="headerlink" title="6. 如何配置 SSL 证书？"></a>6. 如何配置 SSL 证书？</h2><p>配置 SSL 证书需要在 <code>server</code> 块中使用 <code>ssl_certificate</code> 和 <code>ssl_certificate_key</code> 指令：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">server_name</span> example.com;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/ssl/example.com.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/ssl/example.com.key;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 其他 SSL 配置项</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="7-如何实现限流和速率限制？"><a href="#7-如何实现限流和速率限制？" class="headerlink" title="7. 如何实现限流和速率限制？"></a>7. 如何实现限流和速率限制？</h2><p>可以通过 <code>limit_req</code> 和 <code>limit_conn</code> 模块来实现限流和速率限制：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">limit_req_zone</span> <span class="variable">$binary_remote_addr</span> zone=mylimit:<span class="number">10m</span> rate=1r/s;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> /api/ &#123;</span><br><span class="line">            <span class="attribute">limit_req</span> zone=mylimit burst=<span class="number">5</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">limit_conn_zone</span> <span class="variable">$binary_remote_addr</span> zone=addr:<span class="number">10m</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> /api/ &#123;</span><br><span class="line">            <span class="attribute">limit_conn</span> addr <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="8-如何查看-Nginx-版本？如何处理-Nginx-配置错误？"><a href="#8-如何查看-Nginx-版本？如何处理-Nginx-配置错误？" class="headerlink" title="8. 如何查看 Nginx 版本？如何处理 Nginx 配置错误？"></a>8. 如何查看 Nginx 版本？如何处理 Nginx 配置错误？</h2><ul>
+<li><p><strong>查看 Nginx 版本</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -v</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>处理配置错误</strong>：使用 <code>nginx -t</code> 检查配置文件的语法错误，并根据提示修正配置。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="9-Nginx-的状态码有哪些？"><a href="#9-Nginx-的状态码有哪些？" class="headerlink" title="9. Nginx 的状态码有哪些？"></a>9. Nginx 的状态码有哪些？</h2><p>Nginx 主要支持以下状态码：</p>
+<ul>
+<li><strong>1xx</strong>：信息性状态码（如 100 Continue）</li>
+<li><strong>2xx</strong>：成功状态码（如 200 OK, 204 No Content）</li>
+<li><strong>3xx</strong>：重定向状态码（如 301 Moved Permanently, 302 Found）</li>
+<li><strong>4xx</strong>：客户端错误状态码（如 404 Not Found, 403 Forbidden）</li>
+<li><strong>5xx</strong>：服务器错误状态码（如 500 Internal Server Error, 502 Bad Gateway）</li>
+</ul>
+<h2 id="10-Nginx-的目录结构有哪些？"><a href="#10-Nginx-的目录结构有哪些？" class="headerlink" title="10. Nginx 的目录结构有哪些？"></a>10. Nginx 的目录结构有哪些？</h2><p>Nginx 的典型目录结构包括：</p>
+<ul>
+<li>**<code>/etc/nginx/</code>**：配置文件目录</li>
+<li>**<code>/usr/share/nginx/</code>**：默认的 HTML 文件目录</li>
+<li>**<code>/var/log/nginx/</code>**：日志文件目录</li>
+<li>**<code>/var/cache/nginx/</code>**：缓存目录（如果配置了缓存）</li>
+</ul>
+<h2 id="11-Nginx-如何处理静态文件缓存？"><a href="#11-Nginx-如何处理静态文件缓存？" class="headerlink" title="11. Nginx 如何处理静态文件缓存？"></a>11. Nginx 如何处理静态文件缓存？</h2><p>可以使用 <code>expires</code> 指令配置静态文件的缓存策略。例如：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> /static/ &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www/html;</span><br><span class="line">    <span class="attribute">expires</span> <span class="number">30d</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这将使 <code>/static/</code> 目录下的文件在浏览器缓存中存储 30 天。</p>
+]]></content>
+      <categories>
+        <category>第三阶段：大型网站高阶架构</category>
+        <category>1.Nginx</category>
+      </categories>
+      <tags>
+        <tag>Nginx</tag>
+        <tag>面试题</tag>
       </tags>
   </entry>
   <entry>
@@ -243,8 +243,8 @@
         <category>2.Tomcat</category>
       </categories>
       <tags>
-        <tag>面试题</tag>
         <tag>Tomcat</tag>
+        <tag>面试题</tag>
       </tags>
   </entry>
   <entry>
