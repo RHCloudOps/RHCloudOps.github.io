@@ -1,97 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Tomcat单机多实例(3.2.3)</title>
-    <url>/2024/08/13/Tomcat%E5%8D%95%E6%9C%BA%E5%A4%9A%E5%AE%9E%E4%BE%8B(3.2.3)/</url>
-    <content><![CDATA[<h1 id="Tomcat-单机多实例"><a href="#Tomcat-单机多实例" class="headerlink" title="Tomcat 单机多实例"></a>Tomcat 单机多实例</h1><h2 id="一、多实例的作用："><a href="#一、多实例的作用：" class="headerlink" title="一、多实例的作用："></a>一、多实例的作用：</h2><p><strong>单实例并发上限：175（生产环境测试结果）官方测试并发上限200</strong></p>
-<ul>
-<li>多实例运行不同的应用（类似虚拟主机）</li>
-<li>多实例运行相同的应用（实现负载均衡，支持高并发处理，session问题）</li>
-</ul>
-<h2 id="二、tomcat单机多实例配置大纲"><a href="#二、tomcat单机多实例配置大纲" class="headerlink" title="二、tomcat单机多实例配置大纲"></a>二、tomcat单机多实例配置大纲</h2><p>IP地址：Connector port连接器端口——（Server port服务器端口）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.133.134:8081-(8091)</span><br><span class="line">192.168.133.134:8082-(8092)</span><br><span class="line">192.168.133.134:8083-(8093)</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="三、环境准备"><a href="#三、环境准备" class="headerlink" title="三、环境准备"></a>三、环境准备</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1.关闭防火墙</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line"></span><br><span class="line">  <span class="comment">#systemctl stop firewalld 只是临时停止服务。</span></span><br><span class="line">  <span class="comment">#systemctl disable firewalld 禁止服务开机启动，但不影响当前状态。 </span></span><br><span class="line"></span><br><span class="line">2.关闭 selinux</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line"></span><br><span class="line">3.yum安装必要工具</span><br><span class="line">[root@localhost tomcat]# yum -y install tree</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="必须完成的配置"><a href="#必须完成的配置" class="headerlink" title="必须完成的配置"></a>必须完成的配置</h3><p><strong>1.Apache-Tomcat-8.0.53</strong> </p>
-<p><strong>2.JDK1.8.0_211-b12</strong></p>
-<p><strong>3.MariaDB-5.5.68</strong></p>
-<p><strong>4.JAVA的Web应用</strong></p>
-<blockquote>
-<p>这里以上一篇文档配置的jspgou商城应用作为演示！！！</p>
-</blockquote>
-<p><strong>5.&#x2F;webapps&#x2F;ROOT</strong></p>
-<p>拷贝原来单实例&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;webapps&#x2F;ROOT&#x2F;到&#x2F;webapps&#x2F;ROOT</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# <span class="built_in">mkdir</span> /webapps</span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> -r /usr/local/tomcat/webapps/ROOT/ /webapps/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>6.关闭之前的单实例</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# /usr/local/tomcat/bin/shutdown.sh</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="四、配置多实例目录"><a href="#四、配置多实例目录" class="headerlink" title="四、配置多实例目录"></a>四、配置多实例目录</h2><h3 id="1-创建目录instance1-instance2-instance3"><a href="#1-创建目录instance1-instance2-instance3" class="headerlink" title="1.创建目录instance1 instance2 instance3"></a>1.创建目录instance1 instance2 instance3</h3><p><strong>以单实例为基础配置多实例目录：分别创建目录instance1 instance2 instance3，拷贝原来的conf,logs,temp,work到3个目录下</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# <span class="built_in">mkdir</span> /usr/local/tomcat/instance&#123;1..3&#125;</span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> -r /usr/local/tomcat/&#123;conf,logs,temp,work&#125;   /usr/local/tomcat/instance1/</span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> -r /usr/local/tomcat/&#123;conf,logs,temp,work&#125;   /usr/local/tomcat/instance2/</span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> -r /usr/local/tomcat/&#123;conf,logs,temp,work&#125;   /usr/local/tomcat/instance3/   </span><br><span class="line">[root@localhost ~]# tree -d -L 2 /usr/local/tomcat/</span><br><span class="line">/usr/local/tomcat/</span><br><span class="line">├── bin</span><br><span class="line">├── conf</span><br><span class="line">│   └── Catalina</span><br><span class="line">├── instance1</span><br><span class="line">│   ├── conf</span><br><span class="line">│   ├── logs</span><br><span class="line">│   ├── temp</span><br><span class="line">│   └── work</span><br><span class="line">├── instance2</span><br><span class="line">│   ├── conf</span><br><span class="line">│   ├── logs</span><br><span class="line">│   ├── temp</span><br><span class="line">│   └── work</span><br><span class="line">├── instance3</span><br><span class="line">│   ├── conf</span><br><span class="line">│   ├── logs</span><br><span class="line">│   ├── temp</span><br><span class="line">│   └── work</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2-配置实例server-xml"><a href="#2-配置实例server-xml" class="headerlink" title="2.配置实例server.xml"></a>2.配置实例server.xml</h3><h4 id="2-1实例1配置修改"><a href="#2-1实例1配置修改" class="headerlink" title="2.1实例1配置修改"></a>2.1实例1配置修改</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance1/conf/server.xml</span><br><span class="line">22 &lt;Server port=<span class="string">&quot;8091&quot;</span> shutdown=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span><br><span class="line">//Server port修改为8091</span><br><span class="line"></span><br><span class="line">69     &lt;Connector port=<span class="string">&quot;8081&quot;</span> protocol=<span class="string">&quot;HTTP/1.1&quot;</span></span><br><span class="line">70                connectionTimeout=<span class="string">&quot;20000&quot;</span></span><br><span class="line">71                redirectPort=<span class="string">&quot;8443&quot;</span> /&gt;</span><br><span class="line">//Connector port修改为8081</span><br><span class="line"></span><br><span class="line">91     &lt;!--&lt;Connector port=<span class="string">&quot;8009&quot;</span> protocol=<span class="string">&quot;AJP/1.3&quot;</span> redirectPort=<span class="string">&quot;8443    &quot;</span> /&gt;--&gt;</span><br><span class="line">//将8009端口这一行注释掉</span><br><span class="line"></span><br><span class="line">123       &lt;Host name=<span class="string">&quot;localhost&quot;</span>  appBase=<span class="string">&quot;/webapps&quot;</span> //修改网站基准目录为/webapps</span><br><span class="line">124             unpackWARs=<span class="string">&quot;true&quot;</span> autoDeploy=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="2-2实例2配置修改"><a href="#2-2实例2配置修改" class="headerlink" title="2.2实例2配置修改"></a>2.2实例2配置修改</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance2/conf/server.xml</span><br><span class="line">22 &lt;Server port=<span class="string">&quot;8092&quot;</span> shutdown=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span><br><span class="line">//Server port修改为8092</span><br><span class="line"></span><br><span class="line">69     &lt;Connector port=<span class="string">&quot;8082&quot;</span> protocol=<span class="string">&quot;HTTP/1.1&quot;</span></span><br><span class="line">70                connectionTimeout=<span class="string">&quot;20000&quot;</span></span><br><span class="line">71                redirectPort=<span class="string">&quot;8443&quot;</span> /&gt;</span><br><span class="line">//Connector port修改为8082</span><br><span class="line"></span><br><span class="line">91     &lt;!--&lt;Connector port=<span class="string">&quot;8009&quot;</span> protocol=<span class="string">&quot;AJP/1.3&quot;</span> redirectPort=<span class="string">&quot;8443    &quot;</span> /&gt;--&gt;</span><br><span class="line">//将8009端口这一行注释掉</span><br><span class="line"></span><br><span class="line">123       &lt;Host name=<span class="string">&quot;localhost&quot;</span>  appBase=<span class="string">&quot;/webapps&quot;</span> //修改网站基准目录为/webapps</span><br><span class="line">124             unpackWARs=<span class="string">&quot;true&quot;</span> autoDeploy=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="2-3实例3配置修改"><a href="#2-3实例3配置修改" class="headerlink" title="2.3实例3配置修改"></a>2.3实例3配置修改</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance3/conf/server.xml</span><br><span class="line">22 &lt;Server port=<span class="string">&quot;8093&quot;</span> shutdown=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span><br><span class="line">//Server port修改为8093</span><br><span class="line"></span><br><span class="line">69     &lt;Connector port=<span class="string">&quot;8083&quot;</span> protocol=<span class="string">&quot;HTTP/1.1&quot;</span></span><br><span class="line">70                connectionTimeout=<span class="string">&quot;20000&quot;</span></span><br><span class="line">71                redirectPort=<span class="string">&quot;8443&quot;</span> /&gt;</span><br><span class="line">//Connector port修改为8083</span><br><span class="line"></span><br><span class="line">91     &lt;!--&lt;Connector port=<span class="string">&quot;8009&quot;</span> protocol=<span class="string">&quot;AJP/1.3&quot;</span> redirectPort=<span class="string">&quot;8443    &quot;</span> /&gt;--&gt;</span><br><span class="line">//将8009端口这一行注释掉</span><br><span class="line"></span><br><span class="line">123       &lt;Host name=<span class="string">&quot;localhost&quot;</span>  appBase=<span class="string">&quot;/webapps&quot;</span> //修改网站基准目录为/webapps</span><br><span class="line">124             unpackWARs=<span class="string">&quot;true&quot;</span> autoDeploy=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="3-编写启动脚本"><a href="#3-编写启动脚本" class="headerlink" title="3.编写启动脚本"></a>3.编写启动脚本</h3><h4 id="3-1实例1的启动脚本"><a href="#3-1实例1的启动脚本" class="headerlink" title="3.1实例1的启动脚本"></a>3.1实例1的启动脚本</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance1/ins1.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#instans1</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_HOME=<span class="string">&quot;/usr/local/tomcat&quot;</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_BASE=<span class="string">&quot;/usr/local/tomcat/instance1&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line">stop)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh;;</span><br><span class="line">restart)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh</span><br><span class="line">    <span class="built_in">sleep</span> 3</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line"><span class="keyword">esac</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">chmod</span> a+x   /usr/local/tomcat/instance1/ins1.sh</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="3-2实例2的启动脚本"><a href="#3-2实例2的启动脚本" class="headerlink" title="3.2实例2的启动脚本"></a>3.2实例2的启动脚本</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance2/ins2.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#instans2</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_HOME=<span class="string">&quot;/usr/local/tomcat&quot;</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_BASE=<span class="string">&quot;/usr/local/tomcat/instance2&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line">stop)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh;;</span><br><span class="line">restart)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh</span><br><span class="line">    <span class="built_in">sleep</span> 3</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line"><span class="keyword">esac</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">chmod</span> a+x   /usr/local/tomcat/instance2/ins2.sh</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="3-3实例3的启动脚本"><a href="#3-3实例3的启动脚本" class="headerlink" title="3.3实例3的启动脚本"></a>3.3实例3的启动脚本</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance3/ins3.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#instans3</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_HOME=<span class="string">&quot;/usr/local/tomcat&quot;</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_BASE=<span class="string">&quot;/usr/local/tomcat/instance3&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line">stop)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh;;</span><br><span class="line">restart)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh</span><br><span class="line">    <span class="built_in">sleep</span> 3</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line"><span class="keyword">esac</span> </span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">chmod</span> a+x   /usr/local/tomcat/instance3/ins3.sh</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="3-4启动测试"><a href="#3-4启动测试" class="headerlink" title="3.4启动测试"></a>3.4启动测试</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# /usr/local/tomcat/instance1/ins1.sh start</span><br><span class="line">[root@localhost ~]# /usr/local/tomcat/instance2/ins2.sh start</span><br><span class="line">[root@localhost ~]# /usr/local/tomcat/instance3/ins3.sh start</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# ss -tnlp |grep :80 |column -t</span><br><span class="line">LISTEN  0  128  *:80                     *:*     <span class="built_in">users</span>:((&quot;nginx&quot;,pid=<span class="number">16077</span>,fd=<span class="number">6</span>),(&quot;nginx&quot;,pid=<span class="number">16076</span>,fd=<span class="number">6</span>))</span><br><span class="line">LISTEN  0  100  [::]:8081                [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13253</span>,fd=<span class="number">47</span>))</span><br><span class="line">LISTEN  0  100  [::]:8082                [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13829</span>,fd=<span class="number">47</span>))</span><br><span class="line">LISTEN  0  100  [::]:8083                [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13916</span>,fd=<span class="number">47</span>))</span><br><span class="line">LISTEN  0  1    [::ffff:127.0.0.1]:8091  [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13253</span>,fd=<span class="number">56</span>))</span><br><span class="line">LISTEN  0  1    [::ffff:127.0.0.1]:8092  [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13829</span>,fd=<span class="number">56</span>))</span><br><span class="line">LISTEN  0  1    [::ffff:127.0.0.1]:8093  [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13916</span>,fd=<span class="number">56</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="五、配置成功验证"><a href="#五、配置成功验证" class="headerlink" title="五、配置成功验证"></a>五、配置成功验证</h2><p><strong>在浏览器输入以下地址，如能正常显示，即表示部署成功</strong></p>
-<blockquote>
-<p><a href="http://192.168.133.134:8081/">http://192.168.133.134:8081</a></p>
-</blockquote>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/323001.png" alt="323001"></p>
-<blockquote>
-<p><a href="http://192.168.133.134:8082/">http://192.168.133.134:8082</a></p>
-</blockquote>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/323002.png" alt="323002"></p>
-<blockquote>
-<p><a href="http://192.168.133.134:8083/">http://192.168.133.134:8083</a></p>
-</blockquote>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/323003.png" alt="323003"></p>
-]]></content>
-      <categories>
-        <category>第三阶段：大型网站高阶架构</category>
-        <category>2.Tomcat</category>
-      </categories>
-      <tags>
-        <tag>Tomcat</tag>
-        <tag>JDK</tag>
-        <tag>mariadb</tag>
-        <tag>JavaWeb</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Nginx面试题(3.1.0)</title>
     <url>/2024/08/14/Nginx%E9%9D%A2%E8%AF%95%E9%A2%98(3.1.0)/</url>
     <content><![CDATA[<h1 id="Nginx面试题"><a href="#Nginx面试题" class="headerlink" title="Nginx面试题"></a>Nginx面试题</h1><h2 id="1-Nginx-的工作原理是什么？"><a href="#1-Nginx-的工作原理是什么？" class="headerlink" title="1. Nginx 的工作原理是什么？"></a>1. Nginx 的工作原理是什么？</h2><p>Nginx 是一个高性能的 HTTP 和反向代理服务器，同时也可以作为邮件代理服务器。它的工作原理基于事件驱动和异步处理模型：</p>
@@ -165,6 +74,92 @@
       <tags>
         <tag>Nginx</tag>
         <tag>面试题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Tomcat面试题(3.2.0)</title>
+    <url>/2024/08/12/Tomcat%E9%9D%A2%E8%AF%95%E9%A2%98(3.2.0)/</url>
+    <content><![CDATA[<h1 id="Tomcat面试题"><a href="#Tomcat面试题" class="headerlink" title="Tomcat面试题"></a>Tomcat面试题</h1><h2 id="1-有没有用过web容器？用过什么web容器？"><a href="#1-有没有用过web容器？用过什么web容器？" class="headerlink" title="1.有没有用过web容器？用过什么web容器？"></a>1.有没有用过web容器？用过什么web容器？</h2><p>答：用过，tomcat</p>
+<h2 id="2-你上家公司有没有用tomcat？版本是多少？"><a href="#2-你上家公司有没有用tomcat？版本是多少？" class="headerlink" title="2.你上家公司有没有用tomcat？版本是多少？"></a>2.你上家公司有没有用tomcat？版本是多少？</h2><p>答：用过，8.5（企业中用的最多的版本就是8.5.45，8.5稳定且修复的大量bug，稳定大于一切）</p>
+<h2 id="3-Tomcat的默认端口号是什么？如何修改它？"><a href="#3-Tomcat的默认端口号是什么？如何修改它？" class="headerlink" title="3. Tomcat的默认端口号是什么？如何修改它？"></a>3. <strong>Tomcat的默认端口号是什么？如何修改它？</strong></h2><p>Tomcat 的默认端口号是 8080。要修改它，可以编辑 <code>conf/server.xml</code> 文件，找到 <code>&lt;Connector port=&quot;8080&quot; /&gt;</code> 标签，将 <code>8080</code> 修改为需要的端口号。</p>
+<ul>
+<li><strong>操作步骤</strong>：<ol>
+<li>打开 <code>server.xml</code> 文件。</li>
+<li>找到 <code>Connector</code> 元素，将 <code>port</code> 属性值修改为你希望的端口号。</li>
+<li>保存并重新启动 Tomcat。</li>
+</ol>
+</li>
+</ul>
+<h2 id="4-什么是web容器（web中间件）"><a href="#4-什么是web容器（web中间件）" class="headerlink" title="4.什么是web容器（web中间件）"></a>4.什么是web容器（web中间件）</h2><p>答：<br>web容器是一个可以部署和运行web应用的软件环境。常见的web容器有Tomcat（最广泛使用的应用服务器,专门用来部署Java Web应用）、Jetty（另一个功能强大的轻量级Java应用服务器）、WebLogic（Oracle提供的专业Java EE应用服务器）、JBoss（开源的Java EE全功能应用服务器）和WebSphere（IBM的Java EE应用服务器）。</p>
+<h2 id="5-web容器的主要作用有"><a href="#5-web容器的主要作用有" class="headerlink" title="5.web容器的主要作用有"></a>5.web容器的主要作用有</h2><h3 id="5-1封装JVM"><a href="#5-1封装JVM" class="headerlink" title="5.1封装JVM"></a>5.1封装JVM</h3><p>​	web容器提供一个JVM环境，只需要专注于编写business logic，而不用关心JVM的细节。</p>
+<h3 id="5-2处理HTTP请求"><a href="#5-2处理HTTP请求" class="headerlink" title="5.2处理HTTP请求"></a>5.2处理HTTP请求</h3><p>​	web容器监听指定端口的HTTP请求，将请求路由到对应的web应用中。</p>
+<h3 id="5-3管理web应用生命周期"><a href="#5-3管理web应用生命周期" class="headerlink" title="5.3管理web应用生命周期"></a>5.3管理web应用生命周期</h3><p>​	web容器可以部署、启动、停止和卸载web应用，管理其整个生命周期。</p>
+<h3 id="5-4提供类加载器"><a href="#5-4提供类加载器" class="headerlink" title="5.4提供类加载器"></a>5.4提供类加载器</h3><p>​	web容器提供类加载器，为web应用管理字节码，避免與其他应用冲突。</p>
+<h3 id="5-5管理线程池"><a href="#5-5管理线程池" class="headerlink" title="5.5管理线程池"></a>5.5管理线程池</h3><p>​	web容器提供线程池来优化资源利用率，处理大量的并发请求。<br>提供其他中间件接口</p>
+<h2 id="6-如何在Tomcat中部署一个Web应用？"><a href="#6-如何在Tomcat中部署一个Web应用？" class="headerlink" title="6. 如何在Tomcat中部署一个Web应用？"></a>6. <strong>如何在Tomcat中部署一个Web应用？</strong></h2><p>在 Tomcat 中，部署 Web 应用的常见方法包括：</p>
+<ol>
+<li><strong>直接复制 WAR 文件</strong>：将 WAR 文件复制到 Tomcat 的 <code>webapps</code> 目录，Tomcat 会自动解压并部署。</li>
+<li><strong>使用 Manager Web 应用程序</strong>：通过 Tomcat 提供的 Manager 应用进行在线部署。</li>
+<li><strong>XML 配置文件部署</strong>：在 <code>conf/Catalina/localhost</code> 目录下创建一个与应用名称相同的 XML 文件，指定 WAR 文件或解压目录的路径。</li>
+</ol>
+<h2 id="7-nginx-apache-tomcat的区别？"><a href="#7-nginx-apache-tomcat的区别？" class="headerlink" title="7.nginx apache  tomcat的区别？"></a>7.nginx apache  tomcat的区别？</h2><p>答：<br>Nginx&#x2F;Apache 作为网页服务器，主要提供静态资源<br>Tomcat作为应用服务器，主要处理动态请求，运行 Java 程序<br>Tomcat会生成HTML内容返回给 Nginx&#x2F;Apache 返回给用户<br>Nginx&#x2F;Apache 和 Tomcat 对应用来说是一个整体，都属于应用、软件</p>
+<h2 id="8-什么是Tomcat的Context？"><a href="#8-什么是Tomcat的Context？" class="headerlink" title="8. 什么是Tomcat的Context？"></a>8. <strong>什么是Tomcat的Context？</strong></h2><p>Tomcat 的 Context 是指每个 Web 应用在服务器中的运行实例。通过 Context，可以配置应用的访问路径、资源、环境参数等。</p>
+<ul>
+<li><strong>配置位置</strong>：可以在 <code>conf/context.xml</code> 或 <code>conf/Catalina/localhost/yourapp.xml</code> 中配置。</li>
+<li><strong>使用</strong>：Context 元素允许开发者独立配置每个 Web 应用的上下文路径、数据库连接池等参数。</li>
+</ul>
+<h2 id="9-如何设置Tomcat的日志级别？"><a href="#9-如何设置Tomcat的日志级别？" class="headerlink" title="9. 如何设置Tomcat的日志级别？"></a>9. <strong>如何设置Tomcat的日志级别？</strong></h2><p>Tomcat 使用 Java 的日志框架，可以通过编辑 <code>conf/logging.properties</code> 文件设置日志级别。常见的日志级别包括 <code>SEVERE</code>、<code>WARNING</code>、<code>INFO</code>、<code>FINE</code> 等。</p>
+<ul>
+<li><p><strong>修改步骤</strong>：</p>
+<ol>
+<li><p>打开 <code>logging.properties</code> 文件。</p>
+</li>
+<li><p>修改 <code>org.apache.catalina</code> 等相关 logger 的级别。</p>
+</li>
+<li><p>重启 Tomcat 以应用更改。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="10-Tomcat如何管理Session？"><a href="#10-Tomcat如何管理Session？" class="headerlink" title="10. Tomcat如何管理Session？"></a>10. <strong>Tomcat如何管理Session？</strong></h2><p>Tomcat 通过 <code>HttpSession</code> 对象管理用户的会话状态。Session ID 通常通过 cookie 或 URL 重写方式在客户端和服务器间传递。Tomcat 也可以通过配置 <code>context.xml</code> 中的 <code>&lt;Manager&gt;</code> 元素来定制 Session 的持久化和复制策略。</p>
+<ul>
+<li><strong>持久化和复制</strong>：在集群环境中，Session 可以被持久化到数据库或通过集群间复制实现高可用性。</li>
+</ul>
+<h2 id="11-Tomcat性能优化"><a href="#11-Tomcat性能优化" class="headerlink" title="11.Tomcat性能优化"></a>11.Tomcat性能优化</h2><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/320001.png" alt="320001"></p>
+<h3 id="11-1常规优化"><a href="#11-1常规优化" class="headerlink" title="11.1常规优化"></a>11.1常规优化</h3><ul>
+<li><strong>调整堆内存大小</strong>：设置JVM的初始堆大小(-Xms)和最大堆大小(-Xmx)，以及年轻代和永久区的大小。这些参数可以根据应用的内存需求和服务器的硬件配置进行调整，以提高性能和避免内存溢出。</li>
+<li><strong>开启GC日志</strong>：通过设置JVM参数来开启垃圾回收的详细日志记录，这有助于监控和分析垃圾回收的行为，从而进行调优。</li>
+<li><strong>DNS缓存优化</strong>：设置DNS缓存的TTL（Time To Live）值为0，可以减少DNS查询的次数，提高网络请求的效率。</li>
+</ul>
+<p><strong>面试回答示例</strong>：</p>
+<ul>
+<li>面试官问：”你如何对Tomcat的内存进行优化？”<br>回答：”我会根据应用的内存需求和服务器配置，合理设置JVM的堆内存参数，包括初始堆大小(-Xms)和最大堆大小(-Xmx)，以及年轻代和永久区的大小(-XX:NewSize, -XX:NewMaxSize)。此外，我还会开启GC日志，通过分析日志来进一步优化垃圾回收策略。”</li>
+</ul>
+<h3 id="11-2并发优化"><a href="#11-2并发优化" class="headerlink" title="11.2并发优化"></a>11.2并发优化</h3><ul>
+<li><strong>调整线程参数</strong>：在server.xml中设置最大线程数量(maxThreads)、最小空闲线程数(minsparethreads)、最大空闲线程数(maxsparethreads)等参数，以优化Tomcat处理并发请求的能力。</li>
+<li><strong>关闭DNS查询</strong>：设置enablelookups为false，关闭自动DNS查询，减少服务器资源消耗。</li>
+</ul>
+<p><strong>面试回答示例</strong>：</p>
+<ul>
+<li>面试官问：”Tomcat的并发处理能力如何优化？”<br>回答：”我会在server.xml配置文件中调整线程池参数，比如设置最大线程数和最小&#x2F;最大空闲线程数，以适应不同的并发场景。同时，我会关闭自动DNS查询，以减少不必要的资源消耗和提高响应速度。”</li>
+</ul>
+<h3 id="11-3安全优化"><a href="#11-3安全优化" class="headerlink" title="11.3安全优化"></a>11.3安全优化</h3><ul>
+<li><strong>修改默认端口</strong>：更改Tomcat的默认端口，包括关闭端口和指令端口，以避免未授权访问。</li>
+<li><strong>降权启动</strong>：避免使用root用户启动Tomcat，而是使用普通用户权限，以减少安全风险。</li>
+<li><strong>隐藏版本号</strong>：修改Tomcat的版本信息，避免敏感信息泄露。</li>
+</ul>
+<p><strong>面试回答示例</strong>：</p>
+<ul>
+<li>面试官问：”你如何提高Tomcat的安全性？”<br>回答：”我会从多个方面进行安全优化。首先，我会更改Tomcat的默认端口，避免使用容易被攻击的端口。其次，我会以普通用户权限启动Tomcat，避免使用root权限带来的安全风险。最后，我会隐藏Tomcat的版本信息，减少信息泄露的风险。”</li>
+</ul>
+]]></content>
+      <categories>
+        <category>第三阶段：大型网站高阶架构</category>
+        <category>2.Tomcat</category>
+      </categories>
+      <tags>
+        <tag>面试题</tag>
+        <tag>Tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -282,11 +277,11 @@
         <category>2.Tomcat</category>
       </categories>
       <tags>
+        <tag>Nginx</tag>
         <tag>Tomcat</tag>
         <tag>JDK</tag>
         <tag>mariadb</tag>
         <tag>JavaWeb</tag>
-        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -365,81 +360,84 @@
       </tags>
   </entry>
   <entry>
-    <title>Tomcat面试题(3.2.0)</title>
-    <url>/2024/08/12/Tomcat%E9%9D%A2%E8%AF%95%E9%A2%98(3.2.0)/</url>
-    <content><![CDATA[<h1 id="Tomcat面试题"><a href="#Tomcat面试题" class="headerlink" title="Tomcat面试题"></a>Tomcat面试题</h1><h2 id="1-有没有用过web容器？用过什么web容器？"><a href="#1-有没有用过web容器？用过什么web容器？" class="headerlink" title="1.有没有用过web容器？用过什么web容器？"></a>1.有没有用过web容器？用过什么web容器？</h2><p>答：用过，tomcat</p>
-<h2 id="2-你上家公司有没有用tomcat？版本是多少？"><a href="#2-你上家公司有没有用tomcat？版本是多少？" class="headerlink" title="2.你上家公司有没有用tomcat？版本是多少？"></a>2.你上家公司有没有用tomcat？版本是多少？</h2><p>答：用过，8.5（企业中用的最多的版本就是8.5.45，8.5稳定且修复的大量bug，稳定大于一切）</p>
-<h2 id="3-Tomcat的默认端口号是什么？如何修改它？"><a href="#3-Tomcat的默认端口号是什么？如何修改它？" class="headerlink" title="3. Tomcat的默认端口号是什么？如何修改它？"></a>3. <strong>Tomcat的默认端口号是什么？如何修改它？</strong></h2><p>Tomcat 的默认端口号是 8080。要修改它，可以编辑 <code>conf/server.xml</code> 文件，找到 <code>&lt;Connector port=&quot;8080&quot; /&gt;</code> 标签，将 <code>8080</code> 修改为需要的端口号。</p>
+    <title>Tomcat单机多实例(3.2.3)</title>
+    <url>/2024/08/13/Tomcat%E5%8D%95%E6%9C%BA%E5%A4%9A%E5%AE%9E%E4%BE%8B(3.2.3)/</url>
+    <content><![CDATA[<h1 id="Tomcat-单机多实例"><a href="#Tomcat-单机多实例" class="headerlink" title="Tomcat 单机多实例"></a>Tomcat 单机多实例</h1><h2 id="一、多实例的作用："><a href="#一、多实例的作用：" class="headerlink" title="一、多实例的作用："></a>一、多实例的作用：</h2><p><strong>单实例并发上限：175（生产环境测试结果）官方测试并发上限200</strong></p>
 <ul>
-<li><strong>操作步骤</strong>：<ol>
-<li>打开 <code>server.xml</code> 文件。</li>
-<li>找到 <code>Connector</code> 元素，将 <code>port</code> 属性值修改为你希望的端口号。</li>
-<li>保存并重新启动 Tomcat。</li>
-</ol>
-</li>
+<li>多实例运行不同的应用（类似虚拟主机）</li>
+<li>多实例运行相同的应用（实现负载均衡，支持高并发处理，session问题）</li>
 </ul>
-<h2 id="4-什么是web容器（web中间件）"><a href="#4-什么是web容器（web中间件）" class="headerlink" title="4.什么是web容器（web中间件）"></a>4.什么是web容器（web中间件）</h2><p>答：<br>web容器是一个可以部署和运行web应用的软件环境。常见的web容器有Tomcat（最广泛使用的应用服务器,专门用来部署Java Web应用）、Jetty（另一个功能强大的轻量级Java应用服务器）、WebLogic（Oracle提供的专业Java EE应用服务器）、JBoss（开源的Java EE全功能应用服务器）和WebSphere（IBM的Java EE应用服务器）。</p>
-<h2 id="5-web容器的主要作用有"><a href="#5-web容器的主要作用有" class="headerlink" title="5.web容器的主要作用有"></a>5.web容器的主要作用有</h2><h3 id="5-1封装JVM"><a href="#5-1封装JVM" class="headerlink" title="5.1封装JVM"></a>5.1封装JVM</h3><p>​	web容器提供一个JVM环境，只需要专注于编写business logic，而不用关心JVM的细节。</p>
-<h3 id="5-2处理HTTP请求"><a href="#5-2处理HTTP请求" class="headerlink" title="5.2处理HTTP请求"></a>5.2处理HTTP请求</h3><p>​	web容器监听指定端口的HTTP请求，将请求路由到对应的web应用中。</p>
-<h3 id="5-3管理web应用生命周期"><a href="#5-3管理web应用生命周期" class="headerlink" title="5.3管理web应用生命周期"></a>5.3管理web应用生命周期</h3><p>​	web容器可以部署、启动、停止和卸载web应用，管理其整个生命周期。</p>
-<h3 id="5-4提供类加载器"><a href="#5-4提供类加载器" class="headerlink" title="5.4提供类加载器"></a>5.4提供类加载器</h3><p>​	web容器提供类加载器，为web应用管理字节码，避免與其他应用冲突。</p>
-<h3 id="5-5管理线程池"><a href="#5-5管理线程池" class="headerlink" title="5.5管理线程池"></a>5.5管理线程池</h3><p>​	web容器提供线程池来优化资源利用率，处理大量的并发请求。<br>提供其他中间件接口</p>
-<h2 id="6-如何在Tomcat中部署一个Web应用？"><a href="#6-如何在Tomcat中部署一个Web应用？" class="headerlink" title="6. 如何在Tomcat中部署一个Web应用？"></a>6. <strong>如何在Tomcat中部署一个Web应用？</strong></h2><p>在 Tomcat 中，部署 Web 应用的常见方法包括：</p>
-<ol>
-<li><strong>直接复制 WAR 文件</strong>：将 WAR 文件复制到 Tomcat 的 <code>webapps</code> 目录，Tomcat 会自动解压并部署。</li>
-<li><strong>使用 Manager Web 应用程序</strong>：通过 Tomcat 提供的 Manager 应用进行在线部署。</li>
-<li><strong>XML 配置文件部署</strong>：在 <code>conf/Catalina/localhost</code> 目录下创建一个与应用名称相同的 XML 文件，指定 WAR 文件或解压目录的路径。</li>
-</ol>
-<h2 id="7-nginx-apache-tomcat的区别？"><a href="#7-nginx-apache-tomcat的区别？" class="headerlink" title="7.nginx apache  tomcat的区别？"></a>7.nginx apache  tomcat的区别？</h2><p>答：<br>Nginx&#x2F;Apache 作为网页服务器，主要提供静态资源<br>Tomcat作为应用服务器，主要处理动态请求，运行 Java 程序<br>Tomcat会生成HTML内容返回给 Nginx&#x2F;Apache 返回给用户<br>Nginx&#x2F;Apache 和 Tomcat 对应用来说是一个整体，都属于应用、软件</p>
-<h2 id="8-什么是Tomcat的Context？"><a href="#8-什么是Tomcat的Context？" class="headerlink" title="8. 什么是Tomcat的Context？"></a>8. <strong>什么是Tomcat的Context？</strong></h2><p>Tomcat 的 Context 是指每个 Web 应用在服务器中的运行实例。通过 Context，可以配置应用的访问路径、资源、环境参数等。</p>
-<ul>
-<li><strong>配置位置</strong>：可以在 <code>conf/context.xml</code> 或 <code>conf/Catalina/localhost/yourapp.xml</code> 中配置。</li>
-<li><strong>使用</strong>：Context 元素允许开发者独立配置每个 Web 应用的上下文路径、数据库连接池等参数。</li>
-</ul>
-<h2 id="9-如何设置Tomcat的日志级别？"><a href="#9-如何设置Tomcat的日志级别？" class="headerlink" title="9. 如何设置Tomcat的日志级别？"></a>9. <strong>如何设置Tomcat的日志级别？</strong></h2><p>Tomcat 使用 Java 的日志框架，可以通过编辑 <code>conf/logging.properties</code> 文件设置日志级别。常见的日志级别包括 <code>SEVERE</code>、<code>WARNING</code>、<code>INFO</code>、<code>FINE</code> 等。</p>
-<ul>
-<li><p><strong>修改步骤</strong>：</p>
-<ol>
-<li><p>打开 <code>logging.properties</code> 文件。</p>
-</li>
-<li><p>修改 <code>org.apache.catalina</code> 等相关 logger 的级别。</p>
-</li>
-<li><p>重启 Tomcat 以应用更改。</p>
-</li>
-</ol>
-</li>
-</ul>
-<h2 id="10-Tomcat如何管理Session？"><a href="#10-Tomcat如何管理Session？" class="headerlink" title="10. Tomcat如何管理Session？"></a>10. <strong>Tomcat如何管理Session？</strong></h2><p>Tomcat 通过 <code>HttpSession</code> 对象管理用户的会话状态。Session ID 通常通过 cookie 或 URL 重写方式在客户端和服务器间传递。Tomcat 也可以通过配置 <code>context.xml</code> 中的 <code>&lt;Manager&gt;</code> 元素来定制 Session 的持久化和复制策略。</p>
-<ul>
-<li><strong>持久化和复制</strong>：在集群环境中，Session 可以被持久化到数据库或通过集群间复制实现高可用性。</li>
-</ul>
-<h2 id="11-Tomcat性能优化"><a href="#11-Tomcat性能优化" class="headerlink" title="11.Tomcat性能优化"></a>11.Tomcat性能优化</h2><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/320001.png" alt="320001"></p>
-<h3 id="11-1常规优化"><a href="#11-1常规优化" class="headerlink" title="11.1常规优化"></a>11.1常规优化</h3><ul>
-<li><strong>调整堆内存大小</strong>：设置JVM的初始堆大小(-Xms)和最大堆大小(-Xmx)，以及年轻代和永久区的大小。这些参数可以根据应用的内存需求和服务器的硬件配置进行调整，以提高性能和避免内存溢出。</li>
-<li><strong>开启GC日志</strong>：通过设置JVM参数来开启垃圾回收的详细日志记录，这有助于监控和分析垃圾回收的行为，从而进行调优。</li>
-<li><strong>DNS缓存优化</strong>：设置DNS缓存的TTL（Time To Live）值为0，可以减少DNS查询的次数，提高网络请求的效率。</li>
-</ul>
-<p><strong>面试回答示例</strong>：</p>
-<ul>
-<li>面试官问：”你如何对Tomcat的内存进行优化？”<br>回答：”我会根据应用的内存需求和服务器配置，合理设置JVM的堆内存参数，包括初始堆大小(-Xms)和最大堆大小(-Xmx)，以及年轻代和永久区的大小(-XX:NewSize, -XX:NewMaxSize)。此外，我还会开启GC日志，通过分析日志来进一步优化垃圾回收策略。”</li>
-</ul>
-<h3 id="11-2并发优化"><a href="#11-2并发优化" class="headerlink" title="11.2并发优化"></a>11.2并发优化</h3><ul>
-<li><strong>调整线程参数</strong>：在server.xml中设置最大线程数量(maxThreads)、最小空闲线程数(minsparethreads)、最大空闲线程数(maxsparethreads)等参数，以优化Tomcat处理并发请求的能力。</li>
-<li><strong>关闭DNS查询</strong>：设置enablelookups为false，关闭自动DNS查询，减少服务器资源消耗。</li>
-</ul>
-<p><strong>面试回答示例</strong>：</p>
-<ul>
-<li>面试官问：”Tomcat的并发处理能力如何优化？”<br>回答：”我会在server.xml配置文件中调整线程池参数，比如设置最大线程数和最小&#x2F;最大空闲线程数，以适应不同的并发场景。同时，我会关闭自动DNS查询，以减少不必要的资源消耗和提高响应速度。”</li>
-</ul>
-<h3 id="11-3安全优化"><a href="#11-3安全优化" class="headerlink" title="11.3安全优化"></a>11.3安全优化</h3><ul>
-<li><strong>修改默认端口</strong>：更改Tomcat的默认端口，包括关闭端口和指令端口，以避免未授权访问。</li>
-<li><strong>降权启动</strong>：避免使用root用户启动Tomcat，而是使用普通用户权限，以减少安全风险。</li>
-<li><strong>隐藏版本号</strong>：修改Tomcat的版本信息，避免敏感信息泄露。</li>
-</ul>
-<p><strong>面试回答示例</strong>：</p>
-<ul>
-<li>面试官问：”你如何提高Tomcat的安全性？”<br>回答：”我会从多个方面进行安全优化。首先，我会更改Tomcat的默认端口，避免使用容易被攻击的端口。其次，我会以普通用户权限启动Tomcat，避免使用root权限带来的安全风险。最后，我会隐藏Tomcat的版本信息，减少信息泄露的风险。”</li>
-</ul>
+<h2 id="二、tomcat单机多实例配置大纲"><a href="#二、tomcat单机多实例配置大纲" class="headerlink" title="二、tomcat单机多实例配置大纲"></a>二、tomcat单机多实例配置大纲</h2><p>IP地址：Connector port连接器端口——（Server port服务器端口）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.133.134:8081-(8091)</span><br><span class="line">192.168.133.134:8082-(8092)</span><br><span class="line">192.168.133.134:8083-(8093)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、环境准备"><a href="#三、环境准备" class="headerlink" title="三、环境准备"></a>三、环境准备</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1.关闭防火墙</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line"></span><br><span class="line">  <span class="comment">#systemctl stop firewalld 只是临时停止服务。</span></span><br><span class="line">  <span class="comment">#systemctl disable firewalld 禁止服务开机启动，但不影响当前状态。 </span></span><br><span class="line"></span><br><span class="line">2.关闭 selinux</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line"></span><br><span class="line">3.yum安装必要工具</span><br><span class="line">[root@localhost tomcat]# yum -y install tree</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="必须完成的配置"><a href="#必须完成的配置" class="headerlink" title="必须完成的配置"></a>必须完成的配置</h3><p><strong>1.Apache-Tomcat-8.0.53</strong> </p>
+<p><strong>2.JDK1.8.0_211-b12</strong></p>
+<p><strong>3.MariaDB-5.5.68</strong></p>
+<p><strong>4.JAVA的Web应用</strong></p>
+<blockquote>
+<p>这里以上一篇文档配置的jspgou商城应用作为演示！！！</p>
+</blockquote>
+<p><strong>5.&#x2F;webapps&#x2F;ROOT</strong></p>
+<p>拷贝原来单实例&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;webapps&#x2F;ROOT&#x2F;到&#x2F;webapps&#x2F;ROOT</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# <span class="built_in">mkdir</span> /webapps</span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> -r /usr/local/tomcat/webapps/ROOT/ /webapps/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>6.关闭之前的单实例</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# /usr/local/tomcat/bin/shutdown.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、配置多实例目录"><a href="#四、配置多实例目录" class="headerlink" title="四、配置多实例目录"></a>四、配置多实例目录</h2><h3 id="1-创建目录instance1-instance2-instance3"><a href="#1-创建目录instance1-instance2-instance3" class="headerlink" title="1.创建目录instance1 instance2 instance3"></a>1.创建目录instance1 instance2 instance3</h3><p><strong>以单实例为基础配置多实例目录：分别创建目录instance1 instance2 instance3，拷贝原来的conf,logs,temp,work到3个目录下</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# <span class="built_in">mkdir</span> /usr/local/tomcat/instance&#123;1..3&#125;</span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> -r /usr/local/tomcat/&#123;conf,logs,temp,work&#125;   /usr/local/tomcat/instance1/</span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> -r /usr/local/tomcat/&#123;conf,logs,temp,work&#125;   /usr/local/tomcat/instance2/</span><br><span class="line">[root@localhost ~]# <span class="built_in">cp</span> -r /usr/local/tomcat/&#123;conf,logs,temp,work&#125;   /usr/local/tomcat/instance3/   </span><br><span class="line">[root@localhost ~]# tree -d -L 2 /usr/local/tomcat/</span><br><span class="line">/usr/local/tomcat/</span><br><span class="line">├── bin</span><br><span class="line">├── conf</span><br><span class="line">│   └── Catalina</span><br><span class="line">├── instance1</span><br><span class="line">│   ├── conf</span><br><span class="line">│   ├── logs</span><br><span class="line">│   ├── temp</span><br><span class="line">│   └── work</span><br><span class="line">├── instance2</span><br><span class="line">│   ├── conf</span><br><span class="line">│   ├── logs</span><br><span class="line">│   ├── temp</span><br><span class="line">│   └── work</span><br><span class="line">├── instance3</span><br><span class="line">│   ├── conf</span><br><span class="line">│   ├── logs</span><br><span class="line">│   ├── temp</span><br><span class="line">│   └── work</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-配置实例server-xml"><a href="#2-配置实例server-xml" class="headerlink" title="2.配置实例server.xml"></a>2.配置实例server.xml</h3><h4 id="2-1实例1配置修改"><a href="#2-1实例1配置修改" class="headerlink" title="2.1实例1配置修改"></a>2.1实例1配置修改</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance1/conf/server.xml</span><br><span class="line">22 &lt;Server port=<span class="string">&quot;8091&quot;</span> shutdown=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span><br><span class="line">//Server port修改为8091</span><br><span class="line"></span><br><span class="line">69     &lt;Connector port=<span class="string">&quot;8081&quot;</span> protocol=<span class="string">&quot;HTTP/1.1&quot;</span></span><br><span class="line">70                connectionTimeout=<span class="string">&quot;20000&quot;</span></span><br><span class="line">71                redirectPort=<span class="string">&quot;8443&quot;</span> /&gt;</span><br><span class="line">//Connector port修改为8081</span><br><span class="line"></span><br><span class="line">91     &lt;!--&lt;Connector port=<span class="string">&quot;8009&quot;</span> protocol=<span class="string">&quot;AJP/1.3&quot;</span> redirectPort=<span class="string">&quot;8443    &quot;</span> /&gt;--&gt;</span><br><span class="line">//将8009端口这一行注释掉</span><br><span class="line"></span><br><span class="line">123       &lt;Host name=<span class="string">&quot;localhost&quot;</span>  appBase=<span class="string">&quot;/webapps&quot;</span> //修改网站基准目录为/webapps</span><br><span class="line">124             unpackWARs=<span class="string">&quot;true&quot;</span> autoDeploy=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-2实例2配置修改"><a href="#2-2实例2配置修改" class="headerlink" title="2.2实例2配置修改"></a>2.2实例2配置修改</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance2/conf/server.xml</span><br><span class="line">22 &lt;Server port=<span class="string">&quot;8092&quot;</span> shutdown=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span><br><span class="line">//Server port修改为8092</span><br><span class="line"></span><br><span class="line">69     &lt;Connector port=<span class="string">&quot;8082&quot;</span> protocol=<span class="string">&quot;HTTP/1.1&quot;</span></span><br><span class="line">70                connectionTimeout=<span class="string">&quot;20000&quot;</span></span><br><span class="line">71                redirectPort=<span class="string">&quot;8443&quot;</span> /&gt;</span><br><span class="line">//Connector port修改为8082</span><br><span class="line"></span><br><span class="line">91     &lt;!--&lt;Connector port=<span class="string">&quot;8009&quot;</span> protocol=<span class="string">&quot;AJP/1.3&quot;</span> redirectPort=<span class="string">&quot;8443    &quot;</span> /&gt;--&gt;</span><br><span class="line">//将8009端口这一行注释掉</span><br><span class="line"></span><br><span class="line">123       &lt;Host name=<span class="string">&quot;localhost&quot;</span>  appBase=<span class="string">&quot;/webapps&quot;</span> //修改网站基准目录为/webapps</span><br><span class="line">124             unpackWARs=<span class="string">&quot;true&quot;</span> autoDeploy=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-3实例3配置修改"><a href="#2-3实例3配置修改" class="headerlink" title="2.3实例3配置修改"></a>2.3实例3配置修改</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance3/conf/server.xml</span><br><span class="line">22 &lt;Server port=<span class="string">&quot;8093&quot;</span> shutdown=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span><br><span class="line">//Server port修改为8093</span><br><span class="line"></span><br><span class="line">69     &lt;Connector port=<span class="string">&quot;8083&quot;</span> protocol=<span class="string">&quot;HTTP/1.1&quot;</span></span><br><span class="line">70                connectionTimeout=<span class="string">&quot;20000&quot;</span></span><br><span class="line">71                redirectPort=<span class="string">&quot;8443&quot;</span> /&gt;</span><br><span class="line">//Connector port修改为8083</span><br><span class="line"></span><br><span class="line">91     &lt;!--&lt;Connector port=<span class="string">&quot;8009&quot;</span> protocol=<span class="string">&quot;AJP/1.3&quot;</span> redirectPort=<span class="string">&quot;8443    &quot;</span> /&gt;--&gt;</span><br><span class="line">//将8009端口这一行注释掉</span><br><span class="line"></span><br><span class="line">123       &lt;Host name=<span class="string">&quot;localhost&quot;</span>  appBase=<span class="string">&quot;/webapps&quot;</span> //修改网站基准目录为/webapps</span><br><span class="line">124             unpackWARs=<span class="string">&quot;true&quot;</span> autoDeploy=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-编写启动脚本"><a href="#3-编写启动脚本" class="headerlink" title="3.编写启动脚本"></a>3.编写启动脚本</h3><h4 id="3-1实例1的启动脚本"><a href="#3-1实例1的启动脚本" class="headerlink" title="3.1实例1的启动脚本"></a>3.1实例1的启动脚本</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance1/ins1.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#instans1</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_HOME=<span class="string">&quot;/usr/local/tomcat&quot;</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_BASE=<span class="string">&quot;/usr/local/tomcat/instance1&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line">stop)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh;;</span><br><span class="line">restart)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh</span><br><span class="line">    <span class="built_in">sleep</span> 3</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line"><span class="keyword">esac</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">chmod</span> a+x   /usr/local/tomcat/instance1/ins1.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-2实例2的启动脚本"><a href="#3-2实例2的启动脚本" class="headerlink" title="3.2实例2的启动脚本"></a>3.2实例2的启动脚本</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance2/ins2.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#instans2</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_HOME=<span class="string">&quot;/usr/local/tomcat&quot;</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_BASE=<span class="string">&quot;/usr/local/tomcat/instance2&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line">stop)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh;;</span><br><span class="line">restart)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh</span><br><span class="line">    <span class="built_in">sleep</span> 3</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line"><span class="keyword">esac</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">chmod</span> a+x   /usr/local/tomcat/instance2/ins2.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-3实例3的启动脚本"><a href="#3-3实例3的启动脚本" class="headerlink" title="3.3实例3的启动脚本"></a>3.3实例3的启动脚本</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /usr/local/tomcat/instance3/ins3.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#instans3</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_HOME=<span class="string">&quot;/usr/local/tomcat&quot;</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_BASE=<span class="string">&quot;/usr/local/tomcat/instance3&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line">stop)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh;;</span><br><span class="line">restart)</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh</span><br><span class="line">    <span class="built_in">sleep</span> 3</span><br><span class="line">    <span class="variable">$CATALINA_HOME</span>/bin/startup.sh;;</span><br><span class="line"><span class="keyword">esac</span> </span><br><span class="line"></span><br><span class="line">[root@localhost ~]# <span class="built_in">chmod</span> a+x   /usr/local/tomcat/instance3/ins3.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-4启动测试"><a href="#3-4启动测试" class="headerlink" title="3.4启动测试"></a>3.4启动测试</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# /usr/local/tomcat/instance1/ins1.sh start</span><br><span class="line">[root@localhost ~]# /usr/local/tomcat/instance2/ins2.sh start</span><br><span class="line">[root@localhost ~]# /usr/local/tomcat/instance3/ins3.sh start</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# ss -tnlp |grep :80 |column -t</span><br><span class="line">LISTEN  0  128  *:80                     *:*     <span class="built_in">users</span>:((&quot;nginx&quot;,pid=<span class="number">16077</span>,fd=<span class="number">6</span>),(&quot;nginx&quot;,pid=<span class="number">16076</span>,fd=<span class="number">6</span>))</span><br><span class="line">LISTEN  0  100  [::]:8081                [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13253</span>,fd=<span class="number">47</span>))</span><br><span class="line">LISTEN  0  100  [::]:8082                [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13829</span>,fd=<span class="number">47</span>))</span><br><span class="line">LISTEN  0  100  [::]:8083                [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13916</span>,fd=<span class="number">47</span>))</span><br><span class="line">LISTEN  0  1    [::ffff:127.0.0.1]:8091  [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13253</span>,fd=<span class="number">56</span>))</span><br><span class="line">LISTEN  0  1    [::ffff:127.0.0.1]:8092  [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13829</span>,fd=<span class="number">56</span>))</span><br><span class="line">LISTEN  0  1    [::ffff:127.0.0.1]:8093  [::]:*  <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">13916</span>,fd=<span class="number">56</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、配置成功验证"><a href="#五、配置成功验证" class="headerlink" title="五、配置成功验证"></a>五、配置成功验证</h2><p><strong>在浏览器输入以下地址，如能正常显示，即表示部署成功</strong></p>
+<blockquote>
+<p><a href="http://192.168.133.134:8081/">http://192.168.133.134:8081</a></p>
+</blockquote>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/323001.png" alt="323001"></p>
+<blockquote>
+<p><a href="http://192.168.133.134:8082/">http://192.168.133.134:8082</a></p>
+</blockquote>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/323002.png" alt="323002"></p>
+<blockquote>
+<p><a href="http://192.168.133.134:8083/">http://192.168.133.134:8083</a></p>
+</blockquote>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/323003.png" alt="323003"></p>
 ]]></content>
       <categories>
         <category>第三阶段：大型网站高阶架构</category>
@@ -447,7 +445,9 @@
       </categories>
       <tags>
         <tag>Tomcat</tag>
-        <tag>面试题</tag>
+        <tag>JDK</tag>
+        <tag>mariadb</tag>
+        <tag>JavaWeb</tag>
       </tags>
   </entry>
   <entry>
