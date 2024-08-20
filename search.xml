@@ -527,7 +527,7 @@
   </entry>
   <entry>
     <title>Redis编译安装脚本system版(3.4)</title>
-    <url>/2024/08/21/Redis%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%ACsystem%E7%89%88/</url>
+    <url>/2024/08/20/Redis%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%ACsystem%E7%89%88/</url>
     <content><![CDATA[<h1 id="Redis编译安装脚本system版"><a href="#Redis编译安装脚本system版" class="headerlink" title="Redis编译安装脚本system版"></a>Redis编译安装脚本system版</h1><h2 id="一、脚本名称"><a href="#一、脚本名称" class="headerlink" title="一、脚本名称:"></a>一、脚本名称:</h2><p><code>install_redis_system.sh</code></p>
 <h2 id="二、脚本描述"><a href="#二、脚本描述" class="headerlink" title="二、脚本描述:"></a>二、脚本描述:</h2><p><code>install_redis_system.sh</code> 是一个 Bash 脚本，用于自动化安装和配置 Redis 数据库服务器。该脚本支持多种自定义选项，允许用户通过命令行参数来调整安装行为。此外，脚本还包括了创建专用的 Redis 用户和服务单元文件，以便更好地管理和控制 Redis 服务。</p>
 <h2 id="三、主要功能"><a href="#三、主要功能" class="headerlink" title="三、主要功能:"></a>三、主要功能:</h2><ul>
@@ -581,7 +581,7 @@
   </entry>
   <entry>
     <title>Redis编译安装脚本mini版(3.4)</title>
-    <url>/2024/08/21/Redis%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%ACmini%E7%89%88/</url>
+    <url>/2024/08/20/Redis%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%ACmini%E7%89%88/</url>
     <content><![CDATA[<h1 id="Redis编译安装脚本mini版"><a href="#Redis编译安装脚本mini版" class="headerlink" title="Redis编译安装脚本mini版"></a>Redis编译安装脚本mini版</h1><h2 id="一、脚本名称："><a href="#一、脚本名称：" class="headerlink" title="一、脚本名称："></a>一、脚本名称：</h2><p><code>install_redis_mini.sh</code></p>
 <h2 id="二、脚本描述："><a href="#二、脚本描述：" class="headerlink" title="二、脚本描述："></a>二、脚本描述：</h2><p><code>install_redis_mini.sh</code> 是一个 Bash 脚本，用于自动化安装和配置 Redis 数据库服务器。该脚本允许用户通过命令行参数自定义安装行为，包括选择从远程下载 Redis 源代码还是从本地文件系统使用已有的源代码包、指定安装目录、选择是否启用 AOF 持久化等。</p>
 <h2 id="三、主要功能："><a href="#三、主要功能：" class="headerlink" title="三、主要功能："></a>三、主要功能：</h2><ul>
