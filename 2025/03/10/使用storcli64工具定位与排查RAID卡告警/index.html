@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用storcli64工具定位与排查RAID卡告警 | RHCloudOps博客</title><meta name="author" content="OpsTechie-xiao"><meta name="copyright" content="OpsTechie-xiao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="使用storcli64工具定位与排查RAID卡告警 一、核心操作流程1.上传RAID卡管理工具在Ansible管理机中找到RAID卡工具 storcli64，上传至目标主机：   12cd &#x2F;home&#x2F;ansiblescp .&#x2F;storcli64 ***.***.***.***:&#x2F;home&#x2F;ansible  # 将工具复制到目标主机的&#x2F;home&#x2F;ansible目录  scp 命令：用于跨主机安全传">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用storcli64工具定位与排查RAID卡告警">
+<meta property="og:url" content="http://rhcloudops.github.iorhcloudops.github.io/2025/03/10/%E4%BD%BF%E7%94%A8storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E4%B8%8E%E6%8E%92%E6%9F%A5RAID%E5%8D%A1%E5%91%8A%E8%AD%A6/index.html">
+<meta property="og:site_name" content="RHCloudOps博客">
+<meta property="og:description" content="使用storcli64工具定位与排查RAID卡告警 一、核心操作流程1.上传RAID卡管理工具在Ansible管理机中找到RAID卡工具 storcli64，上传至目标主机：   12cd &#x2F;home&#x2F;ansiblescp .&#x2F;storcli64 ***.***.***.***:&#x2F;home&#x2F;ansible  # 将工具复制到目标主机的&#x2F;home&#x2F;ansible目录  scp 命令：用于跨主机安全传">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-RAID-storcli64.jpg">
+<meta property="article:published_time" content="2025-03-10T12:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-18T16:34:23.858Z">
+<meta property="article:author" content="OpsTechie-xiao">
+<meta property="article:tag" content="硬件运维">
+<meta property="article:tag" content="RAID">
+<meta property="article:tag" content="storcli64">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-RAID-storcli64.jpg"><link rel="shortcut icon" href="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/SmallLcons.png"><link rel="canonical" href="http://rhcloudops.github.iorhcloudops.github.io/2025/03/10/%E4%BD%BF%E7%94%A8storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E4%B8%8E%E6%8E%92%E6%9F%A5RAID%E5%8D%A1%E5%91%8A%E8%AD%A6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用storcli64工具定位与排查RAID卡告警',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-19 00:34:23'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/AvatarLogo.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-RAID-storcli64.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="RHCloudOps博客"><span class="site-name">RHCloudOps博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用storcli64工具定位与排查RAID卡告警</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-10T12:00:00.000Z" title="发表于 2025-03-10 20:00:00">2025-03-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-18T16:34:23.858Z" title="更新于 2025-03-19 00:34:23">2025-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%A1%AC%E4%BB%B6%E8%BF%90%E7%BB%B4/">硬件运维</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%A1%AC%E4%BB%B6%E8%BF%90%E7%BB%B4/RAID/">RAID</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">782</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用storcli64工具定位与排查RAID卡告警"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="使用storcli64工具定位与排查RAID卡告警"><a href="#使用storcli64工具定位与排查RAID卡告警" class="headerlink" title="使用storcli64工具定位与排查RAID卡告警"></a>使用storcli64工具定位与排查RAID卡告警</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-RAID-storcli64.jpg" alt="Hardware-RAID-storcli64"></p>
+<h3 id="一、核心操作流程"><a href="#一、核心操作流程" class="headerlink" title="一、核心操作流程"></a><strong>一、核心操作流程</strong></h3><h4 id="1-上传RAID卡管理工具"><a href="#1-上传RAID卡管理工具" class="headerlink" title="1.上传RAID卡管理工具"></a>1.上传RAID卡管理工具</h4><p>在Ansible管理机中找到RAID卡工具 <code>storcli64</code>，上传至目标主机：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible</span><br><span class="line">scp ./storcli64 ***.***.***.***:/home/ansible  <span class="comment"># 将工具复制到目标主机的/home/ansible目录</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>scp</code> 命令</strong>：用于跨主机安全传输文件。  </li>
+<li><strong>目标路径</strong>：确保目标主机有写入权限（如 <code>/home/ansible</code>）。</li>
+</ul>
+<hr>
+<h4 id="2-检查RAID卡状态"><a href="#2-检查RAID卡状态" class="headerlink" title="2.检查RAID卡状态"></a>2.检查RAID卡状态</h4><p>使用 <code>storcli64</code> 查看RAID卡（控制器 <code>/c0</code>）的详细信息：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 show all  <span class="comment"># 显示RAID卡所有信息（物理盘、逻辑卷、状态等）</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>关键输出字段解析</strong>：  </p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>EID:Slt</strong></td>
+<td>物理盘位置（Enclosure ID:Slot）。</td>
+</tr>
+<tr>
+<td><strong>DID</strong></td>
+<td>磁盘唯一标识符。</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>磁盘状态：<code>Onln</code>（正常在线）、<code>Offln</code>（离线异常）。</td>
+</tr>
+<tr>
+<td><strong>DG</strong></td>
+<td>磁盘所属磁盘组（RAID组）。</td>
+</tr>
+<tr>
+<td><strong>Model</strong></td>
+<td>磁盘型号（如 <code>HGST HUS726T6TALE6L4</code>）。</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>故障判断</strong>：  </p>
+<ul>
+<li><p>若 <code>State</code> 显示 <code>Offln</code>（如 <code>0:1      11 Offln  2 ...</code>），表示该磁盘已离线，需进一步处理。 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0:1      11 Offln  2   5.456 TB SATA HDD N   N  512B HUS726060ALE610      U  - </span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>操作建议</strong>：  </p>
+<ol>
+<li>通过服务器管理口（如iLO&#x2F;iDRAC）确认物理硬盘故障指示灯状态。  </li>
+<li>记录故障磁盘的 <code>EID:Slt</code>（如 <code>0:1</code>），准备更换。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="3-确认RAID卡型号"><a href="#3-确认RAID卡型号" class="headerlink" title="3.确认RAID卡型号"></a>3.确认RAID卡型号</h4><p>通过 <code>lspci</code> 查看RAID卡硬件型号：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lspci | grep -i lsi  <span class="comment"># 过滤显示LSI品牌的RAID控制器</span></span><br><span class="line">3b:00.0 RAID bus controller: LSI Logic / Symbios Logic MegaRAID SAS-3 3108 [Invader] (rev 02)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>关键信息</strong>：  <ul>
+<li><strong>型号</strong>：<code>MegaRAID SAS-3 3108 [Invader]</code>  </li>
+<li><strong>兼容性</strong>：确认工具 <code>storcli64</code> 支持该型号（LSI RAID卡通用）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="二、关键命令解析"><a href="#二、关键命令解析" class="headerlink" title="二、关键命令解析"></a><strong>二、关键命令解析</strong></h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>scp &lt;本地文件&gt; &lt;用户@IP:路径&gt;</code></td>
+<td>跨主机安全复制文件（需SSH权限）。</td>
+</tr>
+<tr>
+<td><code>storcli64 /c0 show all</code></td>
+<td>显示RAID控制器 <code>/c0</code> 的详细信息，包括物理盘、逻辑卷状态。</td>
+</tr>
+<tr>
+<td><code>lspci | grep -i lsi</code></td>
+<td>列出所有PCI设备，过滤显示LSI品牌硬件（如RAID卡）。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="三、故障处理建议"><a href="#三、故障处理建议" class="headerlink" title="三、故障处理建议"></a><strong>三、故障处理建议</strong></h3><h4 id="1-离线磁盘处理"><a href="#1-离线磁盘处理" class="headerlink" title="1.离线磁盘处理"></a>1.离线磁盘处理</h4><ul>
+<li><strong>物理更换</strong>：<br>根据 <code>EID:Slt</code> 定位故障硬盘（如 <code>0:1</code> 表示 Enclosure 0, Slot 1），断电后更换新硬盘。  </li>
+<li><strong>重新加入阵列</strong>：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0/e0/s1 <span class="built_in">set</span> online  <span class="comment"># 将Enclosure 0, Slot 1的磁盘重新上线</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>重建RAID</strong>（如需）：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0/dg2 start rebuild  <span class="comment"># 对磁盘组2启动重建</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-日志清理（可选）"><a href="#2-日志清理（可选）" class="headerlink" title="2.日志清理（可选）"></a>2.日志清理（可选）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 delete logs  <span class="comment"># 清除RAID卡历史日志</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="四、注意事项"><a href="#四、注意事项" class="headerlink" title="四、注意事项"></a><strong>四、注意事项</strong></h3><h4 id="1-权限问题："><a href="#1-权限问题：" class="headerlink" title="1.权限问题："></a>1.权限问题：</h4><ul>
+<li><code>storcli64</code> 需以 <code>root</code> 权限运行，否则可能无法获取完整信息。  </li>
+<li>若工具无执行权限，运行 <code>chmod +x /home/ansible/storcli64</code>。</li>
+</ul>
+<h4 id="2-数据备份："><a href="#2-数据备份：" class="headerlink" title="2.数据备份："></a>2.数据备份：</h4><ul>
+<li>更换磁盘前，确认RAID冗余级别（如RAID 5&#x2F;6&#x2F;10），确保数据安全。</li>
+</ul>
+<h4 id="3-固件升级："><a href="#3-固件升级：" class="headerlink" title="3.固件升级："></a>3.固件升级：</h4><ul>
+<li>若频繁出现磁盘离线，检查RAID卡固件版本，必要时升级：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/ansible/storcli64 download firmware file=&lt;固件文件&gt;  <span class="comment"># 需从官网获取固件</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a><strong>五、总结</strong></h3><ul>
+<li><strong>核心步骤</strong>：上传工具 → 检查磁盘状态 → 定位故障 → 物理更换 → 重建阵列。  </li>
+<li><strong>工具依赖</strong>：<code>storcli64</code> 是管理LSI RAID卡的核心工具，需与硬件型号匹配。  </li>
+<li><strong>自动化扩展</strong>：可通过Ansible批量执行 <code>storcli64</code> 命令，实现多主机RAID状态监控。</li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%A1%AC%E4%BB%B6%E8%BF%90%E7%BB%B4/">硬件运维</a><a class="post-meta__tags" href="/tags/RAID/">RAID</a><a class="post-meta__tags" href="/tags/storcli64/">storcli64</a></div><div class="post_share"><div class="social-share" data-image="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-RAID-storcli64.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/wx.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/wx.jpg" alt="WeChat微信"/></a><div class="post-qr-code-desc">WeChat微信</div></li><li class="reward-item"><a href="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/zfb.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/zfb.jpg" alt="Alipay支付宝"/></a><div class="post-qr-code-desc">Alipay支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2025/03/11/AIX%E7%B3%BB%E7%BB%9F%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7errpt%E8%AF%A6%E8%A7%A3/" title="AIX系统错误日志工具errpt详解"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/IBM-AIX-errpt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">AIX系统错误日志工具errpt详解</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2025/03/12/Linux%E4%B8%BB%E6%9C%BA%E7%BD%91%E5%8D%A1%EF%BC%88Bond%EF%BC%89%E7%8A%B6%E6%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="Linux主机网卡（Bond）状态异常处理"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-NetworkCard-bond.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-12</div><div class="title">Linux主机网卡（Bond）状态异常处理</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/AvatarLogo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">OpsTechie-xiao</div><div class="author-info__description">RHCloudOps博客，专注云计算运维</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RHCloudOps"><i class="fab fa-github"></i><span>欢迎来到我的小家</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RHCloudOps" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:2802865911@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/SocialQQ.png" target="_blank" title="QQ"><i class="fab fa-qq" style="color: #12b7f5;"></i></a><a class="social-icon" href="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/SocialWX.png" target="_blank" title="WeChat"><i class="fab fa-weixin" style="color: #07c160;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><center>🐱‍🚀博客域名：<br><b><font color="#5ea6e5">rhcloudops.cn</font></b></center></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E4%B8%8E%E6%8E%92%E6%9F%A5RAID%E5%8D%A1%E5%91%8A%E8%AD%A6"><span class="toc-text">使用storcli64工具定位与排查RAID卡告警</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">一、核心操作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8A%E4%BC%A0RAID%E5%8D%A1%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-text">1.上传RAID卡管理工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%A3%80%E6%9F%A5RAID%E5%8D%A1%E7%8A%B6%E6%80%81"><span class="toc-text">2.检查RAID卡状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%A1%AE%E8%AE%A4RAID%E5%8D%A1%E5%9E%8B%E5%8F%B7"><span class="toc-text">3.确认RAID卡型号</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%85%B3%E9%94%AE%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90"><span class="toc-text">二、关键命令解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%BB%BA%E8%AE%AE"><span class="toc-text">三、故障处理建议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%A6%BB%E7%BA%BF%E7%A3%81%E7%9B%98%E5%A4%84%E7%90%86"><span class="toc-text">1.离线磁盘处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%97%A5%E5%BF%97%E6%B8%85%E7%90%86%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">2.日志清理（可选）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">四、注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-text">1.权限问题：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%EF%BC%9A"><span class="toc-text">2.数据备份：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%9B%BA%E4%BB%B6%E5%8D%87%E7%BA%A7%EF%BC%9A"><span class="toc-text">3.固件升级：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">五、总结</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/03/13/var%EF%BF%BD%EF%BF%BD%EF%BF%BDU%7F(%EF%BF%BD%EF%BF%BD%EF%BF%BD95%25/" title="var文件目录使用率超过95%"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/FileSystem-var-95%.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="var文件目录使用率超过95%"/></a><div class="content"><a class="title" href="/2025/03/13/var%EF%BF%BD%EF%BF%BD%EF%BF%BDU%7F(%EF%BF%BD%EF%BF%BD%EF%BF%BD95%25/" title="var文件目录使用率超过95%">var文件目录使用率超过95%</a><time datetime="2025-03-13T12:00:00.000Z" title="发表于 2025-03-13 20:00:00">2025-03-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/12/Linux%E4%B8%BB%E6%9C%BA%E7%BD%91%E5%8D%A1%EF%BC%88Bond%EF%BC%89%E7%8A%B6%E6%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="Linux主机网卡（Bond）状态异常处理"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-NetworkCard-bond.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux主机网卡（Bond）状态异常处理"/></a><div class="content"><a class="title" href="/2025/03/12/Linux%E4%B8%BB%E6%9C%BA%E7%BD%91%E5%8D%A1%EF%BC%88Bond%EF%BC%89%E7%8A%B6%E6%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="Linux主机网卡（Bond）状态异常处理">Linux主机网卡（Bond）状态异常处理</a><time datetime="2025-03-12T13:00:00.000Z" title="发表于 2025-03-12 21:00:00">2025-03-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/11/AIX%E7%B3%BB%E7%BB%9F%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7errpt%E8%AF%A6%E8%A7%A3/" title="AIX系统错误日志工具errpt详解"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/IBM-AIX-errpt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AIX系统错误日志工具errpt详解"/></a><div class="content"><a class="title" href="/2025/03/11/AIX%E7%B3%BB%E7%BB%9F%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7errpt%E8%AF%A6%E8%A7%A3/" title="AIX系统错误日志工具errpt详解">AIX系统错误日志工具errpt详解</a><time datetime="2025-03-11T12:30:00.000Z" title="发表于 2025-03-11 20:30:00">2025-03-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/10/%E4%BD%BF%E7%94%A8storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E4%B8%8E%E6%8E%92%E6%9F%A5RAID%E5%8D%A1%E5%91%8A%E8%AD%A6/" title="使用storcli64工具定位与排查RAID卡告警"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-RAID-storcli64.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用storcli64工具定位与排查RAID卡告警"/></a><div class="content"><a class="title" href="/2025/03/10/%E4%BD%BF%E7%94%A8storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E4%B8%8E%E6%8E%92%E6%9F%A5RAID%E5%8D%A1%E5%91%8A%E8%AD%A6/" title="使用storcli64工具定位与排查RAID卡告警">使用storcli64工具定位与排查RAID卡告警</a><time datetime="2025-03-10T12:00:00.000Z" title="发表于 2025-03-10 20:00:00">2025-03-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By OpsTechie-xiao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="/js/tw_cn.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+
+  const initWaline = (Fn) => {
+    const waline = Fn(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://rhcloudops-waline-1jx4.vercel.app/',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+  }
+
+  const loadWaline = async () => {
+    if (initFn) initWaline(initFn)
+    else {
+      await getCSS('https://cdn.jsdelivr.net/npm/@waline/client@3.1.2/dist/waline.min.css')
+      const { init } = await import('https://cdn.jsdelivr.net/npm/@waline/client@3.1.2/dist/waline.min.js')
+      initFn = init || Waline.init
+      initWaline(initFn)
+      window.walineFn = initFn
+    }
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

@@ -1,79 +1,499 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Nginx面试题(3.1.0)</title>
-    <url>/2024/08/14/Nginx%E9%9D%A2%E8%AF%95%E9%A2%98(3.1.0)/</url>
-    <content><![CDATA[<h1 id="Nginx面试题"><a href="#Nginx面试题" class="headerlink" title="Nginx面试题"></a>Nginx面试题</h1><h2 id="1-Nginx-的工作原理是什么？"><a href="#1-Nginx-的工作原理是什么？" class="headerlink" title="1. Nginx 的工作原理是什么？"></a>1. Nginx 的工作原理是什么？</h2><p>Nginx 是一个高性能的 HTTP 和反向代理服务器，同时也可以作为邮件代理服务器。它的工作原理基于事件驱动和异步处理模型：</p>
+    <title>AIX系统错误日志工具errpt详解</title>
+    <url>/2025/03/11/AIX%E7%B3%BB%E7%BB%9F%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7errpt%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="AIX系统错误日志工具errpt详解"><a href="#AIX系统错误日志工具errpt详解" class="headerlink" title="AIX系统错误日志工具errpt详解"></a>AIX系统错误日志工具errpt详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/IBM-AIX-errpt.jpg" alt="IBM-AIX-errpt"></p>
+<h3 id="一、errpt-工具核心功能"><a href="#一、errpt-工具核心功能" class="headerlink" title="一、errpt 工具核心功能"></a><strong>一、<code>errpt</code> 工具核心功能</strong></h3><p><code>errpt</code>（Error Report Tool）是 AIX 系统中用于分析硬件、软件及操作系统错误的工具，功能包括：</p>
 <ul>
-<li><strong>事件驱动</strong>：Nginx 使用事件驱动的架构来处理请求，这意味着它能够处理大量的并发连接而不会阻塞。</li>
-<li><strong>异步处理</strong>：Nginx 的每个工作进程可以同时处理多个请求，这种异步非阻塞的处理方式使得 Nginx 在处理高并发时表现优秀。</li>
+<li><strong>错误分类</strong>：区分硬件（<code>H</code>）、软件（<code>S</code>）、操作系统（<code>O</code>）等错误类型。</li>
+<li><strong>严重性分级</strong>：标记为 <code>Critical</code>（严重）、<code>Major</code>（主要）、<code>Minor</code>（次要）等。</li>
+<li><strong>时间记录</strong>：精确记录错误发生时间，便于追溯。</li>
 </ul>
-<h2 id="2-Nginx-和-Apache-有什么区别？"><a href="#2-Nginx-和-Apache-有什么区别？" class="headerlink" title="2. Nginx 和 Apache 有什么区别？"></a>2. Nginx 和 Apache 有什么区别？</h2><ul>
-<li><strong>架构</strong>：Nginx 使用事件驱动架构，支持异步处理；Apache 默认使用多进程或线程处理请求，可能在高并发场景下性能较差。</li>
-<li><strong>性能</strong>：Nginx 通常比 Apache 处理静态内容的性能更好，因为它的事件驱动架构可以更高效地处理大量的并发请求。</li>
-<li><strong>配置</strong>：Nginx 的配置文件语法相对简洁，而 Apache 的配置可能更复杂。</li>
-<li><strong>资源使用</strong>：Nginx 通常比 Apache 使用更少的内存和 CPU 资源。</li>
+<hr>
+<h3 id="二、常用命令及参数解析"><a href="#二、常用命令及参数解析" class="headerlink" title="二、常用命令及参数解析"></a><strong>二、常用命令及参数解析</strong></h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>errpt</code></td>
+<td>列出所有错误日志（简略格式）</td>
+<td><code>errpt</code></td>
+</tr>
+<tr>
+<td><code>errpt -a</code></td>
+<td>显示错误详细信息（包括修复建议）</td>
+<td><code>errpt -a</code></td>
+</tr>
+<tr>
+<td><code>errpt -d H</code></td>
+<td>过滤显示硬件错误</td>
+<td><code>errpt -d H</code></td>
+</tr>
+<tr>
+<td><code>errpt -d S</code></td>
+<td>过滤显示软件错误</td>
+<td><code>errpt -d S</code></td>
+</tr>
+<tr>
+<td><code>errpt -j &lt;ID&gt;</code></td>
+<td>根据错误标识符查看详情</td>
+<td><code>errpt -j BFE4C025</code></td>
+</tr>
+<tr>
+<td><code>errpt -T PERM</code></td>
+<td>显示永久性错误（需人工干预）</td>
+<td><code>errpt -T PERM</code></td>
+</tr>
+<tr>
+<td><code>errpt -s &lt;时间&gt;</code></td>
+<td>按时间过滤错误（格式：<code>MMDDHHMMYY</code>）</td>
+<td><code>errpt -s 0301000025</code>（2025年3月1日）</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="三、故障案例分析流程"><a href="#三、故障案例分析流程" class="headerlink" title="三、故障案例分析流程"></a><strong>三、故障案例分析流程</strong></h3><h4 id="案例背景"><a href="#案例背景" class="headerlink" title="案例背景"></a><strong>案例背景</strong></h4><p>错误日志中频繁出现 <code>sysplanar0</code>（系统主板）相关错误，标识符为 <code>BFE4C025</code>，类型为 <code>PERM</code>（永久性错误）。</p>
+<hr>
+<h4 id="诊断步骤"><a href="#诊断步骤" class="headerlink" title="诊断步骤"></a><strong>诊断步骤</strong></h4><ol>
+<li><p><strong>初步查看错误列表</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">errpt | <span class="built_in">head</span> -10   <span class="comment"># 列出最近10条错误日志</span></span><br></pre></td></tr></table></figure>
+<p><strong>输出关键字段</strong>：</p>
+<ul>
+<li><code>IDENTIFIER</code>：错误唯一标识（如 <code>BFE4C025</code>）。</li>
+<li><code>T</code>：错误类型（<code>P</code> 表示永久性错误，<code>T</code> 表示临时错误）。</li>
+<li><code>DESCRIPTION</code>：错误描述（如 <code>UNDETERMINED ERROR</code>）。</li>
 </ul>
-<h2 id="3-什么是反向代理？Nginx-如何实现反向代理功能？"><a href="#3-什么是反向代理？Nginx-如何实现反向代理功能？" class="headerlink" title="3. 什么是反向代理？Nginx 如何实现反向代理功能？"></a>3. 什么是反向代理？Nginx 如何实现反向代理功能？</h2><ul>
-<li><strong>反向代理</strong>：反向代理是指代理服务器向客户端隐藏了实际的服务器。客户端请求经过反向代理服务器，然后由反向代理服务器转发到实际的后端服务器，再将响应返回给客户端。</li>
-<li><strong>Nginx 实现反向代理</strong>：在 Nginx 中，可以通过 <code>proxy_pass</code> 指令配置反向代理。例如：<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> /api/ &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://backend-server;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="4-如何实现负载均衡？"><a href="#4-如何实现负载均衡？" class="headerlink" title="4. 如何实现负载均衡？"></a>4. 如何实现负载均衡？</h2><p>Nginx 支持多种负载均衡算法，可以通过在 <code>upstream</code> 块中定义服务器组来实现负载均衡。例如：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="section">upstream</span> backend &#123;</span><br><span class="line">        <span class="attribute">server</span> backend1.example.com;</span><br><span class="line">        <span class="attribute">server</span> backend2.example.com;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> / &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://backend;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="5-轮询、权重、ip-hash、fair-和-url-hash-是-Nginx-负载均衡的哪些算法？"><a href="#5-轮询、权重、ip-hash、fair-和-url-hash-是-Nginx-负载均衡的哪些算法？" class="headerlink" title="5. 轮询、权重、ip_hash、fair 和 url_hash 是 Nginx 负载均衡的哪些算法？"></a>5. 轮询、权重、ip_hash、fair 和 url_hash 是 Nginx 负载均衡的哪些算法？</h2><ul>
-<li>**轮询 (Round Robin)**：默认负载均衡算法，依次将请求分配给每个服务器。</li>
-<li>**权重 (Weight)**：根据服务器的权重来分配请求，权重较高的服务器接收更多请求。</li>
-<li><strong>ip_hash</strong>：根据客户端的 IP 地址哈希值来分配请求，确保相同 IP 地址的请求会被发送到同一台服务器。</li>
-<li><strong>fair</strong>：基于请求的响应时间分配请求，将请求发送到响应时间较短的服务器。（需要安装 <code>nginx-upstream-fair</code> 模块）</li>
-<li><strong>url_hash</strong>：根据请求的 URL 哈希值来分配请求，确保相同 URL 的请求会被发送到同一台服务器。（需要安装 <code>nginx-upstream-hash</code> 模块）</li>
-</ul>
-<h2 id="6-如何配置-SSL-证书？"><a href="#6-如何配置-SSL-证书？" class="headerlink" title="6. 如何配置 SSL 证书？"></a>6. 如何配置 SSL 证书？</h2><p>配置 SSL 证书需要在 <code>server</code> 块中使用 <code>ssl_certificate</code> 和 <code>ssl_certificate_key</code> 指令：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">server_name</span> example.com;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/ssl/example.com.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/ssl/example.com.key;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 其他 SSL 配置项</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="7-如何实现限流和速率限制？"><a href="#7-如何实现限流和速率限制？" class="headerlink" title="7. 如何实现限流和速率限制？"></a>7. 如何实现限流和速率限制？</h2><p>可以通过 <code>limit_req</code> 和 <code>limit_conn</code> 模块来实现限流和速率限制：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">limit_req_zone</span> <span class="variable">$binary_remote_addr</span> zone=mylimit:<span class="number">10m</span> rate=1r/s;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> /api/ &#123;</span><br><span class="line">            <span class="attribute">limit_req</span> zone=mylimit burst=<span class="number">5</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">limit_conn_zone</span> <span class="variable">$binary_remote_addr</span> zone=addr:<span class="number">10m</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="section">location</span> /api/ &#123;</span><br><span class="line">            <span class="attribute">limit_conn</span> addr <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="8-如何查看-Nginx-版本？如何处理-Nginx-配置错误？"><a href="#8-如何查看-Nginx-版本？如何处理-Nginx-配置错误？" class="headerlink" title="8. 如何查看 Nginx 版本？如何处理 Nginx 配置错误？"></a>8. 如何查看 Nginx 版本？如何处理 Nginx 配置错误？</h2><ul>
-<li><p><strong>查看 Nginx 版本</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -v</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>处理配置错误</strong>：使用 <code>nginx -t</code> 检查配置文件的语法错误，并根据提示修正配置。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="9-Nginx-的状态码有哪些？"><a href="#9-Nginx-的状态码有哪些？" class="headerlink" title="9. Nginx 的状态码有哪些？"></a>9. Nginx 的状态码有哪些？</h2><p>Nginx 主要支持以下状态码：</p>
+<li><p><strong>查看错误详情</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">errpt -aj BFE4C025   <span class="comment"># 显示标识符为 BFE4C025 的详细日志</span></span><br></pre></td></tr></table></figure>
+<p><strong>关键信息提取</strong>：</p>
 <ul>
-<li><strong>1xx</strong>：信息性状态码（如 100 Continue）</li>
-<li><strong>2xx</strong>：成功状态码（如 200 OK, 204 No Content）</li>
-<li><strong>3xx</strong>：重定向状态码（如 301 Moved Permanently, 302 Found）</li>
-<li><strong>4xx</strong>：客户端错误状态码（如 404 Not Found, 403 Forbidden）</li>
-<li><strong>5xx</strong>：服务器错误状态码（如 500 Internal Server Error, 502 Bad Gateway）</li>
+<li><strong>SRC（Service Request Code）</strong>：<code>B175F138</code><br>表示主板子系统预测性错误，需通过 IBM 文档或技术支持解码具体含义。</li>
+<li><strong>维护建议</strong>：<code>Maintenance Procedure: FSPSP83</code><br>指向 IBM 提供的维护流程，通常涉及主板组件更换或固件升级。</li>
+<li><strong>附加字段（Additional Words）</strong>：十六进制状态信息（如 <code>2BBD1F10</code>），需用 IBM 工具（如 <code>snap</code>）解析。</li>
 </ul>
-<h2 id="10-Nginx-的目录结构有哪些？"><a href="#10-Nginx-的目录结构有哪些？" class="headerlink" title="10. Nginx 的目录结构有哪些？"></a>10. Nginx 的目录结构有哪些？</h2><p>Nginx 的典型目录结构包括：</p>
-<ul>
-<li>**<code>/etc/nginx/</code>**：配置文件目录</li>
-<li>**<code>/usr/share/nginx/</code>**：默认的 HTML 文件目录</li>
-<li>**<code>/var/log/nginx/</code>**：日志文件目录</li>
-<li>**<code>/var/cache/nginx/</code>**：缓存目录（如果配置了缓存）</li>
+</li>
+</ol>
+<hr>
+<h3 id="四、错误定位与处理建议"><a href="#四、错误定位与处理建议" class="headerlink" title="四、错误定位与处理建议"></a><strong>四、错误定位与处理建议</strong></h3><h4 id="1-核心错误位置"><a href="#1-核心错误位置" class="headerlink" title="1. 核心错误位置"></a><strong>1. 核心错误位置</strong></h4><ul>
+<li><strong>资源名称</strong>：<code>sysplanar0</code>（系统主板）  </li>
+<li><strong>资源类型</strong>：<code>sysplanar_rspc</code>（符合 CHRP 规范的主板）<br>可能涉及电源、总线或芯片组故障。</li>
 </ul>
-<h2 id="11-Nginx-如何处理静态文件缓存？"><a href="#11-Nginx-如何处理静态文件缓存？" class="headerlink" title="11. Nginx 如何处理静态文件缓存？"></a>11. Nginx 如何处理静态文件缓存？</h2><p>可以使用 <code>expires</code> 指令配置静态文件的缓存策略。例如：</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">location</span> /static/ &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www/html;</span><br><span class="line">    <span class="attribute">expires</span> <span class="number">30d</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这将使 <code>/static/</code> 目录下的文件在浏览器缓存中存储 30 天。</p>
+<h4 id="2-错误类型与操作"><a href="#2-错误类型与操作" class="headerlink" title="2. 错误类型与操作"></a><strong>2. 错误类型与操作</strong></h4><ul>
+<li><strong>类型</strong>：<code>PERM</code>（永久性错误）<br>需立即处理，无法自愈，可能导致系统功能降级。</li>
+<li><strong>建议操作</strong>：  <ul>
+<li><strong>运行系统诊断</strong>：<code>diag</code> 命令启动硬件诊断工具。  </li>
+<li><strong>联系 IBM 支持</strong>：根据 <code>SRC</code> 和 <code>Maintenance Procedure</code> 代码获取维护指导。  </li>
+<li><strong>检查硬件状态</strong>：  <ul>
+<li>电源模块电压稳定性。  </li>
+<li>主板芯片组连接与固件版本。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="五、关键术语解释"><a href="#五、关键术语解释" class="headerlink" title="五、关键术语解释"></a><strong>五、关键术语解释</strong></h3><table>
+<thead>
+<tr>
+<th>术语</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SRC</strong></td>
+<td>Service Request Code，IBM 硬件错误标识符，需官方文档解码。</td>
+</tr>
+<tr>
+<td><strong>FRU</strong></td>
+<td>Field Replaceable Unit，可更换硬件单元（如电源、内存条）。</td>
+</tr>
+<tr>
+<td><strong>CHRP</strong></td>
+<td>Common Hardware Reference Platform，IBM 硬件标准规范。</td>
+</tr>
+</tbody></table>
+<hr>
 ]]></content>
       <categories>
-        <category>第三阶段：大型网站高阶架构</category>
-        <category>1.Nginx</category>
+        <category>IBM</category>
+        <category>AIX</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
-        <tag>面试题</tag>
+        <tag>IBM</tag>
+        <tag>AIX</tag>
+        <tag>errpt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>var文件目录使用率超过95%</title>
+    <url>/2025/03/13/var%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E4%BD%BF%E7%94%A8%E7%8E%87%E8%B6%85%E8%BF%8795%25/</url>
+    <content><![CDATA[<h1 id="var文件目录使用率超过95"><a href="#var文件目录使用率超过95" class="headerlink" title="var文件目录使用率超过95%"></a>var文件目录使用率超过95%</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/FileSystem-var-95%.jpg" alt="FileSystem-var-95%"></p>
+<h3 id="一、诊断空间占用"><a href="#一、诊断空间占用" class="headerlink" title="一、诊断空间占用"></a><strong>一、诊断空间占用</strong></h3><h4 id="1-定位大文件-目录"><a href="#1-定位大文件-目录" class="headerlink" title="1. 定位大文件&#x2F;目录"></a>1. 定位大文件&#x2F;目录</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /var/log</span><br><span class="line"><span class="built_in">du</span> -sm * 2&gt;/dev/null | <span class="built_in">sort</span> -rn | <span class="built_in">head</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>命令解析</strong>：<ul>
+<li><code>du -sm *</code>：统计当前目录下所有文件和目录的大小（以 <strong>MB</strong> 为单位）。</li>
+<li><code>2&gt;/dev/null</code>：忽略无权限访问的目录报错。</li>
+<li><code>sort -rn</code>：按数值逆序排序（从大到小）。</li>
+<li><code>head</code>：显示前 10 个结果。</li>
+</ul>
+</li>
+<li><strong>输出示例</strong>：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2273    Bigdata     # 目录占用 2273MB</span><br><span class="line">1211    cron        # 目录占用 1211MB</span><br><span class="line">514     secure      # 文件占用 514MB</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-查看日志归档文件"><a href="#2-查看日志归档文件" class="headerlink" title="2. 查看日志归档文件"></a>2. 查看日志归档文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ll | grep messages-202</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：列出所有以 <code>messages-202</code> 开头的归档日志文件（按日期压缩的旧日志）。</li>
+<li><strong>发现</strong>：存在大量 <code>.xz</code> 压缩的旧日志文件（每个约 <strong>8.8~9MB</strong>，共 99 条记录）。</li>
+</ul>
+<hr>
+<h3 id="二、清理策略"><a href="#二、清理策略" class="headerlink" title="二、清理策略"></a><strong>二、清理策略</strong></h3><h4 id="1-清理旧日志文件"><a href="#1-清理旧日志文件" class="headerlink" title="1. 清理旧日志文件"></a>1. 清理旧日志文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">rm</span> -f messages-202412*</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：删除 <strong>2024年12月</strong> 的所有归档日志文件。</li>
+<li><strong>依据</strong>：<ul>
+<li>通过 <code>history | grep messages-2024</code> 发现此前已清理过 <code>2024年10月</code> 的日志。</li>
+<li>旧日志无实时分析需求，可安全删除。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-验证清理结果"><a href="#2-验证清理结果" class="headerlink" title="2. 验证清理结果"></a>2. 验证清理结果</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">du</span> -sm * 2&gt;/dev/null | <span class="built_in">sort</span> -rn | <span class="built_in">head</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>输出变化</strong>：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2518    Bigdata</span><br><span class="line">1275    cron</span><br><span class="line">514     secure</span><br><span class="line">136     messages    # 原为 160MB，释放部分空间</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+<li><strong>空间释放效果</strong>：<code>/var</code> 使用率仍为 **96%**，需进一步清理。</li>
+</ul>
+<hr>
+<h3 id="三、关键命令解析"><a href="#三、关键命令解析" class="headerlink" title="三、关键命令解析"></a><strong>三、关键命令解析</strong></h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>du -sm *</code></td>
+<td>统计文件&#x2F;目录大小（MB），<code>-s</code> 表示汇总，<code>-m</code> 以 MB 为单位。</td>
+</tr>
+<tr>
+<td><code>sort -rn</code></td>
+<td>按数值逆序排序，<code>-r</code> 反向，<code>-n</code> 按数值。</td>
+</tr>
+<tr>
+<td><code>ll | grep messages-202</code></td>
+<td>过滤出日期格式的归档日志文件。</td>
+</tr>
+<tr>
+<td><code>rm -f messages-202412*</code></td>
+<td>强制删除匹配文件，<code>-f</code> 忽略不存在的文件。</td>
+</tr>
+<tr>
+<td><code>df -h /var</code></td>
+<td>查看 <code>/var</code> 分区的磁盘使用情况，<code>-h</code> 以易读格式显示。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="四、问题总结与建议"><a href="#四、问题总结与建议" class="headerlink" title="四、问题总结与建议"></a><strong>四、问题总结与建议</strong></h3><h4 id="1-空间未显著释放原因"><a href="#1-空间未显著释放原因" class="headerlink" title="1. 空间未显著释放原因"></a>1. 空间未显著释放原因</h4><ul>
+<li><strong>主要占用</strong>：<code>Bigdata</code>（2.5GB）和 <code>cron</code>（1.2GB）目录是最大占用源，但未清理。</li>
+<li><strong>次要占用</strong>：<code>secure</code>（514MB）、<code>sa</code>（198MB）等文件仍占用空间。</li>
+</ul>
+<h4 id="2-后续操作建议"><a href="#2-后续操作建议" class="headerlink" title="2. 后续操作建议"></a>2. 后续操作建议</h4><ul>
+<li><strong>清理大目录</strong>：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 谨慎操作！确认目录内容是否可清理</span></span><br><span class="line"><span class="built_in">rm</span> -rf /var/log/Bigdata/*    <span class="comment"># 示例：清空 Bigdata 目录</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>日志轮转配置</strong>：<ul>
+<li>使用 <code>logrotate</code> 工具配置自动清理策略，避免日志无限增长。</li>
+<li>示例配置（<code>/etc/logrotate.conf</code>）：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/var/log/messages &#123;</span><br><span class="line">    daily</span><br><span class="line">    rotate 30     # 保留 30 天</span><br><span class="line">    compress       # 压缩旧日志</span><br><span class="line">    missingok</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><strong>定时监控</strong>：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定期检查大文件</span></span><br><span class="line">find /var/log -<span class="built_in">type</span> f -size +100M -<span class="built_in">exec</span> <span class="built_in">ls</span> -lh &#123;&#125; \;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-风险提示"><a href="#3-风险提示" class="headerlink" title="3. 风险提示"></a>3. 风险提示</h4><ul>
+<li><strong>置空操作</strong>：<code>&gt; filename</code> 会清空文件内容，需确认文件是否正在被进程使用。</li>
+<li><strong>权限问题</strong>：清理系统日志需 <code>root</code> 权限，避免误删关键文件。</li>
+</ul>
+<hr>
+<h3 id="五、附录：常用磁盘管理命令"><a href="#五、附录：常用磁盘管理命令" class="headerlink" title="五、附录：常用磁盘管理命令"></a><strong>五、附录：常用磁盘管理命令</strong></h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>df -h</code></td>
+<td>查看磁盘分区使用情况</td>
+</tr>
+<tr>
+<td><code>du -sh &lt;dir&gt;</code></td>
+<td>统计目录总大小</td>
+</tr>
+<tr>
+<td><code>find /var -xdev -type f -size +100M</code></td>
+<td>查找大于 100MB 的文件</td>
+</tr>
+<tr>
+<td><code>journalctl --vacuum-size=200M</code></td>
+<td>清理 Systemd 日志（保留 200MB）</td>
+</tr>
+</tbody></table>
+<p>通过以上操作可系统性解决日志膨胀问题，建议结合自动化工具（如 <code>logrotate</code>）长期维护。</p>
+]]></content>
+      <categories>
+        <category>Linux文件系统</category>
+        <category>/var</category>
+      </categories>
+      <tags>
+        <tag>Linux文件系统</tag>
+        <tag>/var</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux主机网卡（Bond）状态异常处理</title>
+    <url>/2025/03/12/Linux%E4%B8%BB%E6%9C%BA%E7%BD%91%E5%8D%A1%EF%BC%88Bond%EF%BC%89%E7%8A%B6%E6%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="Linux主机网卡（Bond）状态异常处理"><a href="#Linux主机网卡（Bond）状态异常处理" class="headerlink" title="Linux主机网卡（Bond）状态异常处理"></a>Linux主机网卡（Bond）状态异常处理</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-NetworkCard-bond.jpg" alt="Hardware-NetworkCard-bond"></p>
+<h3 id="一、问题定位与关键命令解析"><a href="#一、问题定位与关键命令解析" class="headerlink" title="一、问题定位与关键命令解析"></a><strong>一、问题定位与关键命令解析</strong></h3><p>当Linux主机的Bond网卡出现非<code>up</code>状态时，可通过以下命令快速定位问题：</p>
+<h4 id="1-统计非up状态的从属接口数量"><a href="#1-统计非up状态的从属接口数量" class="headerlink" title="1. 统计非up状态的从属接口数量"></a><strong>1. 统计非<code>up</code>状态的从属接口数量</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span> | awk <span class="string">&#x27;/Status/&#123;print $NF&#125;&#x27;</span> | grep -vc up</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>输出示例</strong>：<code>1</code>  </li>
+<li><strong>说明</strong>：  <ul>
+<li><code>cat /proc/net/bonding/bond*</code>：读取所有Bond接口的配置信息。  </li>
+<li><code>grep -A 1 &#39;Slave Interface&#39;</code>：匹配包含<code>Slave Interface</code>的行，并输出该行及下一行（<code>-A 1</code>）。  </li>
+<li><code>awk &#39;/Status/&#123;print $NF&#125;&#39;</code>：提取状态字段（<code>Status</code>行的最后一个值，即<code>up</code>或<code>down</code>）。  </li>
+<li><code>grep -vc up</code>：统计非<code>up</code>状态的数量（<code>-v</code>反向匹配，<code>-c</code>计数）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-列出所有从属接口状态"><a href="#2-列出所有从属接口状态" class="headerlink" title="2. 列出所有从属接口状态"></a><strong>2. 列出所有从属接口状态</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span> | awk <span class="string">&#x27;/Status/&#123;print $NF&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>输出示例</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">up</span><br><span class="line">down</span><br><span class="line">up</span><br><span class="line">up</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：直接显示每个从属接口的状态，便于快速查看具体哪些接口异常。</li>
+</ul>
+<hr>
+<h4 id="3-查看详细从属接口信息"><a href="#3-查看详细从属接口信息" class="headerlink" title="3. 查看详细从属接口信息"></a><strong>3. 查看详细从属接口信息</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>输出示例</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Slave Interface: net6</span><br><span class="line">MII Status: up</span><br><span class="line">--</span><br><span class="line">Slave Interface: net4</span><br><span class="line">MII Status: down</span><br></pre></td></tr></table></figure></li>
+<li><strong>说明</strong>：  <ul>
+<li><code>Slave Interface</code>：从属网卡名称（如<code>net4</code>）。  </li>
+<li><code>MII Status</code>：物理链路状态（<code>up</code>表示正常，<code>down</code>表示链路断开）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="4-查看完整Bond接口配置"><a href="#4-查看完整Bond接口配置" class="headerlink" title="4. 查看完整Bond接口配置"></a><strong>4. 查看完整Bond接口配置</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond*</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>输出关键字段解析</strong>：  <table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Bonding Mode</strong></td>
+<td>Bond模式（如<code>802.3ad</code>动态链路聚合、<code>active-backup</code>主备模式）。</td>
+</tr>
+<tr>
+<td><strong>MII Status</strong></td>
+<td>Bond接口整体状态（<code>up</code>表示可用）。</td>
+</tr>
+<tr>
+<td><strong>Slave Interface</strong></td>
+<td>从属网卡名称及状态（重点关注<code>MII Status</code>）。</td>
+</tr>
+<tr>
+<td><strong>Link Failure Count</strong></td>
+<td>链路故障次数（非零值表示发生过故障）。</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h3 id="二、故障案例分析"><a href="#二、故障案例分析" class="headerlink" title="二、故障案例分析"></a><strong>二、故障案例分析</strong></h3><h4 id="示例场景"><a href="#示例场景" class="headerlink" title="示例场景"></a><strong>示例场景</strong></h4><p>从命令输出中观察到<code>net4</code>接口的<code>MII Status</code>为<code>down</code>，且<code>Link Failure Count</code>为<code>1</code>，说明该网卡链路已断开。</p>
+<h4 id="可能原因"><a href="#可能原因" class="headerlink" title="可能原因"></a><strong>可能原因</strong></h4><ol>
+<li><strong>物理连接问题</strong>：网线松动、交换机端口故障。  </li>
+<li><strong>网卡驱动异常</strong>：驱动未加载或版本不兼容。  </li>
+<li><strong>配置错误</strong>：Bond模式与交换机配置不匹配（如<code>802.3ad</code>需要交换机启用LACP）。  </li>
+<li><strong>硬件故障</strong>：网卡或主板接口损坏。</li>
+</ol>
+<hr>
+<h3 id="三、故障处理步骤"><a href="#三、故障处理步骤" class="headerlink" title="三、故障处理步骤"></a><strong>三、故障处理步骤</strong></h3><h4 id="1-检查物理连接"><a href="#1-检查物理连接" class="headerlink" title="1. 检查物理连接"></a><strong>1. 检查物理连接</strong></h4><ul>
+<li>确认<code>net4</code>对应的网线连接正常。  </li>
+<li>检查交换机端口状态，确保端口处于<code>up</code>状态。</li>
+</ul>
+<h4 id="2-重启网络接口"><a href="#2-重启网络接口" class="headerlink" title="2. 重启网络接口"></a><strong>2. 重启网络接口</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifdown net4 &amp;&amp; ifup net4   <span class="comment"># 禁用并重新启用网卡</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-查看内核日志"><a href="#3-查看内核日志" class="headerlink" title="3. 查看内核日志"></a><strong>3. 查看内核日志</strong></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dmesg | grep net4          <span class="comment"># 检查网卡驱动或硬件错误信息</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-验证交换机配置"><a href="#4-验证交换机配置" class="headerlink" title="4. 验证交换机配置"></a><strong>4. 验证交换机配置</strong></h4><ul>
+<li><strong>802.3ad模式</strong>：确保交换机启用LACP并配置正确的聚合组。  </li>
+<li><strong>active-backup模式</strong>：无需特殊配置，但需确保备用接口正常。</li>
+</ul>
+<h4 id="5-更换硬件（如必要）"><a href="#5-更换硬件（如必要）" class="headerlink" title="5. 更换硬件（如必要）"></a><strong>5. 更换硬件（如必要）</strong></h4><p>若确认硬件故障，更换网卡或主板接口。</p>
+<hr>
+<h3 id="四、Bond模式说明"><a href="#四、Bond模式说明" class="headerlink" title="四、Bond模式说明"></a><strong>四、Bond模式说明</strong></h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>802.3ad（动态链路聚合）</strong></td>
+<td>多网卡负载均衡，需交换机支持LACP。</td>
+<td>高带宽需求、冗余要求高的场景。</td>
+</tr>
+<tr>
+<td><strong>active-backup（主备模式）</strong></td>
+<td>仅主接口工作，备用接口在主接口故障时切换。</td>
+<td>高可用性要求，对带宽需求不高。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="五、关键配置文件"><a href="#五、关键配置文件" class="headerlink" title="五、关键配置文件"></a><strong>五、关键配置文件</strong></h3><ul>
+<li><strong>Bond接口配置</strong>：<code>/etc/sysconfig/network-scripts/ifcfg-bondX</code>  </li>
+<li><strong>从属接口配置</strong>：<code>/etc/sysconfig/network-scripts/ifcfg-netX</code></li>
+</ul>
+<hr>
+<h3 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a><strong>六、总结</strong></h3><ul>
+<li><strong>核心命令</strong>：通过<code>/proc/net/bonding/bond*</code>快速定位状态异常的从属接口。  </li>
+<li><strong>处理流程</strong>：物理检查 → 重启接口 → 日志分析 → 配置验证 → 硬件更换。  </li>
+<li><strong>预防措施</strong>：定期监控Bond状态，确保交换机与主机配置一致。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>硬件运维</category>
+        <category>网卡</category>
+      </categories>
+      <tags>
+        <tag>硬件运维</tag>
+        <tag>网卡</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用storcli64工具定位与排查RAID卡告警</title>
+    <url>/2025/03/10/%E4%BD%BF%E7%94%A8storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E4%B8%8E%E6%8E%92%E6%9F%A5RAID%E5%8D%A1%E5%91%8A%E8%AD%A6/</url>
+    <content><![CDATA[<h1 id="使用storcli64工具定位与排查RAID卡告警"><a href="#使用storcli64工具定位与排查RAID卡告警" class="headerlink" title="使用storcli64工具定位与排查RAID卡告警"></a>使用storcli64工具定位与排查RAID卡告警</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-RAID-storcli64.jpg" alt="Hardware-RAID-storcli64"></p>
+<h3 id="一、核心操作流程"><a href="#一、核心操作流程" class="headerlink" title="一、核心操作流程"></a><strong>一、核心操作流程</strong></h3><h4 id="1-上传RAID卡管理工具"><a href="#1-上传RAID卡管理工具" class="headerlink" title="1.上传RAID卡管理工具"></a>1.上传RAID卡管理工具</h4><p>在Ansible管理机中找到RAID卡工具 <code>storcli64</code>，上传至目标主机：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible</span><br><span class="line">scp ./storcli64 ***.***.***.***:/home/ansible  <span class="comment"># 将工具复制到目标主机的/home/ansible目录</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>scp</code> 命令</strong>：用于跨主机安全传输文件。  </li>
+<li><strong>目标路径</strong>：确保目标主机有写入权限（如 <code>/home/ansible</code>）。</li>
+</ul>
+<hr>
+<h4 id="2-检查RAID卡状态"><a href="#2-检查RAID卡状态" class="headerlink" title="2.检查RAID卡状态"></a>2.检查RAID卡状态</h4><p>使用 <code>storcli64</code> 查看RAID卡（控制器 <code>/c0</code>）的详细信息：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 show all  <span class="comment"># 显示RAID卡所有信息（物理盘、逻辑卷、状态等）</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>关键输出字段解析</strong>：  </p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>EID:Slt</strong></td>
+<td>物理盘位置（Enclosure ID:Slot）。</td>
+</tr>
+<tr>
+<td><strong>DID</strong></td>
+<td>磁盘唯一标识符。</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>磁盘状态：<code>Onln</code>（正常在线）、<code>Offln</code>（离线异常）。</td>
+</tr>
+<tr>
+<td><strong>DG</strong></td>
+<td>磁盘所属磁盘组（RAID组）。</td>
+</tr>
+<tr>
+<td><strong>Model</strong></td>
+<td>磁盘型号（如 <code>HGST HUS726T6TALE6L4</code>）。</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>故障判断</strong>：  </p>
+<ul>
+<li><p>若 <code>State</code> 显示 <code>Offln</code>（如 <code>0:1      11 Offln  2 ...</code>），表示该磁盘已离线，需进一步处理。 </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">0:1      11 Offln  2   5.456 TB SATA HDD N   N  512B HUS726060ALE610      U  - </span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>操作建议</strong>：  </p>
+<ol>
+<li>通过服务器管理口（如iLO&#x2F;iDRAC）确认物理硬盘故障指示灯状态。  </li>
+<li>记录故障磁盘的 <code>EID:Slt</code>（如 <code>0:1</code>），准备更换。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="3-确认RAID卡型号"><a href="#3-确认RAID卡型号" class="headerlink" title="3.确认RAID卡型号"></a>3.确认RAID卡型号</h4><p>通过 <code>lspci</code> 查看RAID卡硬件型号：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lspci | grep -i lsi  <span class="comment"># 过滤显示LSI品牌的RAID控制器</span></span><br><span class="line">3b:00.0 RAID bus controller: LSI Logic / Symbios Logic MegaRAID SAS-3 3108 [Invader] (rev 02)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>关键信息</strong>：  <ul>
+<li><strong>型号</strong>：<code>MegaRAID SAS-3 3108 [Invader]</code>  </li>
+<li><strong>兼容性</strong>：确认工具 <code>storcli64</code> 支持该型号（LSI RAID卡通用）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="二、关键命令解析"><a href="#二、关键命令解析" class="headerlink" title="二、关键命令解析"></a><strong>二、关键命令解析</strong></h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>scp &lt;本地文件&gt; &lt;用户@IP:路径&gt;</code></td>
+<td>跨主机安全复制文件（需SSH权限）。</td>
+</tr>
+<tr>
+<td><code>storcli64 /c0 show all</code></td>
+<td>显示RAID控制器 <code>/c0</code> 的详细信息，包括物理盘、逻辑卷状态。</td>
+</tr>
+<tr>
+<td><code>lspci | grep -i lsi</code></td>
+<td>列出所有PCI设备，过滤显示LSI品牌硬件（如RAID卡）。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="三、故障处理建议"><a href="#三、故障处理建议" class="headerlink" title="三、故障处理建议"></a><strong>三、故障处理建议</strong></h3><h4 id="1-离线磁盘处理"><a href="#1-离线磁盘处理" class="headerlink" title="1.离线磁盘处理"></a>1.离线磁盘处理</h4><ul>
+<li><strong>物理更换</strong>：<br>根据 <code>EID:Slt</code> 定位故障硬盘（如 <code>0:1</code> 表示 Enclosure 0, Slot 1），断电后更换新硬盘。  </li>
+<li><strong>重新加入阵列</strong>：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0/e0/s1 <span class="built_in">set</span> online  <span class="comment"># 将Enclosure 0, Slot 1的磁盘重新上线</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>重建RAID</strong>（如需）：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0/dg2 start rebuild  <span class="comment"># 对磁盘组2启动重建</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-日志清理（可选）"><a href="#2-日志清理（可选）" class="headerlink" title="2.日志清理（可选）"></a>2.日志清理（可选）</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 delete logs  <span class="comment"># 清除RAID卡历史日志</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="四、注意事项"><a href="#四、注意事项" class="headerlink" title="四、注意事项"></a><strong>四、注意事项</strong></h3><h4 id="1-权限问题："><a href="#1-权限问题：" class="headerlink" title="1.权限问题："></a>1.权限问题：</h4><ul>
+<li><code>storcli64</code> 需以 <code>root</code> 权限运行，否则可能无法获取完整信息。  </li>
+<li>若工具无执行权限，运行 <code>chmod +x /home/ansible/storcli64</code>。</li>
+</ul>
+<h4 id="2-数据备份："><a href="#2-数据备份：" class="headerlink" title="2.数据备份："></a>2.数据备份：</h4><ul>
+<li>更换磁盘前，确认RAID冗余级别（如RAID 5&#x2F;6&#x2F;10），确保数据安全。</li>
+</ul>
+<h4 id="3-固件升级："><a href="#3-固件升级：" class="headerlink" title="3.固件升级："></a>3.固件升级：</h4><ul>
+<li>若频繁出现磁盘离线，检查RAID卡固件版本，必要时升级：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 download firmware file=&lt;固件文件&gt;  <span class="comment"># 需从官网获取固件</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a><strong>五、总结</strong></h3><ul>
+<li><strong>核心步骤</strong>：上传工具 → 检查磁盘状态 → 定位故障 → 物理更换 → 重建阵列。  </li>
+<li><strong>工具依赖</strong>：<code>storcli64</code> 是管理LSI RAID卡的核心工具，需与硬件型号匹配。  </li>
+<li><strong>自动化扩展</strong>：可通过Ansible批量执行 <code>storcli64</code> 命令，实现多主机RAID状态监控。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>硬件运维</category>
+        <category>RAID</category>
+      </categories>
+      <tags>
+        <tag>硬件运维</tag>
+        <tag>RAID</tag>
+        <tag>storcli64</tag>
       </tags>
   </entry>
 </search>
