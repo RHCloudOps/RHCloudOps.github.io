@@ -523,7 +523,8 @@
   <entry>
     <title>sas3ircu &amp; storcli64工具定位故障硬盘位置</title>
     <url>/2025/03/15/sas3ircu%20&amp;%20storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98%E4%BD%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到&#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到&#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircu.jpg" alt="Hardware-Disk-sas3ircu"></p>
+<h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到&#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到&#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>作用</strong>：  <ul>
 <li><code>cd /home/ansible/</code>：进入服务器管理工具目录。  </li>
@@ -735,7 +736,8 @@
   <entry>
     <title>日志messages中有IO和文件系统报错</title>
     <url>/2025/03/16/%E6%97%A5%E5%BF%97messages%E4%B8%AD%E6%9C%89IO%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%8A%A5%E9%94%99/</url>
-    <content><![CDATA[<h1 id="日志messages中有IO和文件系统报错"><a href="#日志messages中有IO和文件系统报错" class="headerlink" title="日志messages中有IO和文件系统报错"></a>日志messages中有IO和文件系统报错</h1><h3 id="一、-检查日志中的I-O和文件系统报错"><a href="#一、-检查日志中的I-O和文件系统报错" class="headerlink" title="一、 检查日志中的I&#x2F;O和文件系统报错"></a><strong>一、 检查日志中的I&#x2F;O和文件系统报错</strong></h3><p><strong>命令含义</strong>：  </p>
+    <content><![CDATA[<h1 id="日志messages中有IO和文件系统报错"><a href="#日志messages中有IO和文件系统报错" class="headerlink" title="日志messages中有IO和文件系统报错"></a>日志messages中有IO和文件系统报错</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-messages-XFSIOEXT4.jpg" alt="Linux-messages-XFSIOEXT4"></p>
+<h3 id="一、-检查日志中的I-O和文件系统报错"><a href="#一、-检查日志中的I-O和文件系统报错" class="headerlink" title="一、 检查日志中的I&#x2F;O和文件系统报错"></a><strong>一、 检查日志中的I&#x2F;O和文件系统报错</strong></h3><p><strong>命令含义</strong>：  </p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /var/log/messages | grep <span class="string">&#x27;kernel&#x27;</span> | egrep -i <span class="string">&#x27;error|fail|readonly|abort|offline|fatal&#x27;</span> | egrep -i <span class="string">&#x27;ext.-fs|I/O|xfs-fs&#x27;</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><p><strong>作用</strong>：从系统日志 <code>/var/log/messages</code> 中筛选出与内核（<code>kernel</code>）相关的错误信息，进一步过滤出包含 <strong>I&#x2F;O错误、文件系统异常（ext4、XFS）</strong> 的关键字条目（如 <code>error</code>, <code>fail</code>, <code>readonly</code> 等）。  </p>
