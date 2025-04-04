@@ -926,4 +926,644 @@
         <tag>文件系统</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Linux man命令手册使用指南</title>
+    <url>/2025/03/20/Linux%20man%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="Linux-man命令手册使用指南"><a href="#Linux-man命令手册使用指南" class="headerlink" title="Linux man命令手册使用指南"></a>Linux man命令手册使用指南</h1><h2 id="一、Linux-的man命令手册页"><a href="#一、Linux-的man命令手册页" class="headerlink" title="一、Linux 的man命令手册页"></a>一、Linux 的man命令手册页</h2><blockquote>
+<p><a href="https://man7.org/linux/man-pages/index.html">https://man7.org/linux/man-pages/index.html</a></p>
+</blockquote>
+<h2 id="二、man命令使用方法"><a href="#二、man命令使用方法" class="headerlink" title="二、man命令使用方法"></a>二、man命令使用方法</h2><h3 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h3><h4 id="1-1-查看命令手册"><a href="#1-1-查看命令手册" class="headerlink" title="1.1 查看命令手册"></a>1.1 查看命令手册</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man [章节] &lt;命令名&gt;</span><br><span class="line"><span class="comment"># 示例：查看 ls 命令的手册</span></span><br><span class="line">man <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-查看指定章节的手册"><a href="#1-2-查看指定章节的手册" class="headerlink" title="1.2 查看指定章节的手册"></a>1.2 查看指定章节的手册</h4><p>某些关键词（如<code>passwd</code>）可能存在于多个章节：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man 1 passwd   <span class="comment"># 查看 passwd 命令的手册（用户命令）</span></span><br><span class="line">man 5 passwd   <span class="comment"># 查看 passwd 文件格式的手册（配置文件）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2-常用操作快捷键"><a href="#2-常用操作快捷键" class="headerlink" title="2. 常用操作快捷键"></a>2. 常用操作快捷键</h3><ul>
+<li><strong>导航</strong>：<ul>
+<li><code>↑</code>&#x2F;<code>↓</code>：逐行滚动。</li>
+<li><code>Page Up</code>&#x2F;<code>Page Down</code>：翻页。</li>
+<li><code>Home</code>&#x2F;<code>End</code>：跳转至开头&#x2F;结尾。</li>
+</ul>
+</li>
+<li><strong>搜索</strong>：<ul>
+<li><code>/关键字</code>：向前搜索（如 <code>/--help</code>）。</li>
+<li><code>n</code>：跳转到下一个匹配项。</li>
+<li><code>N</code>：跳转到上一个匹配项。</li>
+</ul>
+</li>
+<li><strong>退出</strong>：<ul>
+<li><code>q</code>：退出手册。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-常用命令选项"><a href="#3-常用命令选项" class="headerlink" title="3. 常用命令选项"></a>3. 常用命令选项</h3><h4 id="3-1-搜索相关手册"><a href="#3-1-搜索相关手册" class="headerlink" title="3.1 搜索相关手册"></a>3.1 搜索相关手册</h4><ul>
+<li><p>**<code>-k</code> 或 <code>--apropos</code>**：按关键字搜索手册（类似<code>apropos</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -k network    <span class="comment"># 查找所有包含 &quot;network&quot; 的手册页</span></span><br><span class="line">apropos network   <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>**<code>-f</code> 或 <code>--whatis</code>**：显示命令的简短描述（类似<code>whatis</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -f passwd     <span class="comment"># 列出 passwd 的所有相关手册章节</span></span><br><span class="line">whatis passwd     <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-2其他选项"><a href="#3-2其他选项" class="headerlink" title="3.2其他选项"></a>3.2其他选项</h4><ul>
+<li><p>**<code>-a</code>**：显示所有匹配章节的手册（按<code>q</code>后继续下一章节）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -a passwd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>**<code>-w</code>**：显示手册页的路径：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -w <span class="built_in">ls</span>         <span class="comment"># 输出 /usr/share/man/man1/ls.1.gz</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="4-手册章节说明"><a href="#4-手册章节说明" class="headerlink" title="4. 手册章节说明"></a>4. 手册章节说明</h3><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>用户命令（可执行程序或 shell 命令）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>系统调用（由内核提供的函数）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>C 库函数（<code>printf</code>、<code>malloc</code> 等）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>设备文件（<code>/dev</code> 下的设备）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>配置文件（系统配置文件格式）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>游戏和娱乐</td>
+</tr>
+<tr>
+<td>7</td>
+<td>杂项（宏包、惯例等）</td>
+</tr>
+<tr>
+<td>8</td>
+<td>管理命令（仅 root 可执行的命令）</td>
+</tr>
+<tr>
+<td>9</td>
+<td>内核相关文档</td>
+</tr>
+</tbody></table>
+<h2 id="三、Linux彩色man-page设置方法"><a href="#三、Linux彩色man-page设置方法" class="headerlink" title="三、Linux彩色man page设置方法"></a>三、Linux彩色man page设置方法</h2><h3 id="1-在-bashrc文件中添加less的相关设置参数"><a href="#1-在-bashrc文件中添加less的相关设置参数" class="headerlink" title="1. 在 .bashrc文件中添加less的相关设置参数"></a>1. 在 .bashrc文件中添加less的相关设置参数</h3><p>Linux下<code>man page</code>的显示默认是通过<code>less</code>来完成的，故在<code>.bashrc</code>文件中添加<code>less</code>的相关设置参数即可使<code>man page</code>变成彩色的:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># colourful man page</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_mb=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_md=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_me=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_us=$<span class="string">&#x27;\E[01;32m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_ue=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_so=$<span class="string">&#x27;\E[01;33;44m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_se=$<span class="string">&#x27;\E[0m&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>更改完<code>.bashrc</code>文件后要用<code>source .bashrc</code>命令重新载入一下配置，之后重启终端才会生效，以上配置显示效果如下：</p>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
+<h3 id="2-less的相关设置参数的含义"><a href="#2-less的相关设置参数的含义" class="headerlink" title="2. less的相关设置参数的含义"></a>2. less的相关设置参数的含义</h3><p>其中<code>LESS_TERMCAP_xx</code>的含义如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><code>termcap</code></th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>mb</code></td>
+<td align="center">start blink 开始闪烁</td>
+</tr>
+<tr>
+<td align="center"><code>md</code></td>
+<td align="center">start bold 开始加粗</td>
+</tr>
+<tr>
+<td align="center"><code>me</code></td>
+<td align="center">turn off bold, blink and underline 关闭粗体、闪烁和下划线</td>
+</tr>
+<tr>
+<td align="center"><code>us</code></td>
+<td align="center">start underline 开始下划线</td>
+</tr>
+<tr>
+<td align="center"><code>ue</code></td>
+<td align="center">stop underline 停止下划线</td>
+</tr>
+<tr>
+<td align="center"><code>so</code></td>
+<td align="center">start standout 开始脱颖而出</td>
+</tr>
+<tr>
+<td align="center"><code>se</code></td>
+<td align="center">stop standout 停止突出</td>
+</tr>
+</tbody></table>
+<h2 id="四、man手册常用命令速查表"><a href="#四、man手册常用命令速查表" class="headerlink" title="四、man手册常用命令速查表"></a>四、man手册常用命令速查表</h2><h3 id="1-用户命令（User-Commands）"><a href="#1-用户命令（User-Commands）" class="headerlink" title="1. 用户命令（User Commands）"></a>1. 用户命令（User Commands）</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能描述</th>
+<th>常用参数示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>文件操作</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ls</code></td>
+<td>列出目录内容</td>
+<td><code>-l</code>（长格式） <code>-a</code>（显示隐藏） <code>-h</code>（人类可读大小）</td>
+</tr>
+<tr>
+<td><code>cd</code></td>
+<td>切换目录</td>
+<td><code>cd ~</code>（家目录） <code>cd -</code>（返回上一目录）</td>
+</tr>
+<tr>
+<td><code>pwd</code></td>
+<td>显示当前工作目录路径</td>
+<td>无参数</td>
+</tr>
+<tr>
+<td><code>cp</code></td>
+<td>复制文件&#x2F;目录</td>
+<td><code>-r</code>（递归复制目录） <code>-i</code>（交互确认） <code>-p</code>（保留属性）</td>
+</tr>
+<tr>
+<td><code>mv</code></td>
+<td>移动&#x2F;重命名文件</td>
+<td><code>-n</code>（不覆盖） <code>-v</code>（显示过程）</td>
+</tr>
+<tr>
+<td><code>rm</code></td>
+<td>删除文件</td>
+<td><code>-r</code>（递归删除） <code>-f</code>（强制） <code>-i</code>（交互确认）</td>
+</tr>
+<tr>
+<td><code>find</code></td>
+<td>高级文件搜索</td>
+<td><code>-name &quot;*.log&quot;</code> <code>-type f</code>（文件） <code>-mtime +7</code>（7天前修改） <code>-exec rm &#123;&#125; \;</code></td>
+</tr>
+<tr>
+<td><strong>文本处理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>grep</code></td>
+<td>文本搜索</td>
+<td><code>-i</code>（忽略大小写） <code>-r</code>（递归搜索） <code>-v</code>（反向匹配） <code>-E</code>（扩展正则）</td>
+</tr>
+<tr>
+<td><code>awk</code></td>
+<td>文本分析处理</td>
+<td><code>awk &#39;&#123;print $1&#125;&#39;</code>（打印首列） <code>-F:</code>（指定分隔符）</td>
+</tr>
+<tr>
+<td><code>sed</code></td>
+<td>流编辑器</td>
+<td><code>sed &#39;s/old/new/g&#39;</code>（全局替换） <code>-i</code>（直接修改文件）</td>
+</tr>
+<tr>
+<td><code>vim</code></td>
+<td>高级文本编辑器</td>
+<td><code>:wq</code>（保存退出） <code>:set nu</code>（显示行号） <code>:%s/old/new/g</code>（全局替换）</td>
+</tr>
+<tr>
+<td><strong>系统监控</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ps</code></td>
+<td>进程查看</td>
+<td><code>aux</code>（BSD格式） <code>-ef</code>（标准格式） <code>--sort=-%cpu</code>（CPU排序）</td>
+</tr>
+<tr>
+<td><code>top</code></td>
+<td>动态进程监控</td>
+<td><code>-b</code>（批处理模式） <code>-n 1</code>（运行1次） <code>-p PID</code>（监控指定进程）</td>
+</tr>
+<tr>
+<td><code>free</code></td>
+<td>内存使用情况</td>
+<td><code>-m</code>（MB显示） <code>-h</code>（人类可读） <code>-s 5</code>（每5秒刷新）</td>
+</tr>
+<tr>
+<td><code>df</code></td>
+<td>磁盘空间统计</td>
+<td><code>-h</code>（人类可读） <code>-T</code>（显示文件系统类型） <code>-i</code>（inode使用）</td>
+</tr>
+<tr>
+<td><code>du</code></td>
+<td>文件&#x2F;目录大小计算</td>
+<td><code>-sh</code>（汇总显示） <code>--max-depth=1</code>（限制层级） <code>-ah</code>（全部文件+人类可读）</td>
+</tr>
+<tr>
+<td><strong>网络工具</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>wget</code></td>
+<td>文件下载</td>
+<td><code>-c</code>（断点续传） <code>-O filename</code>（重命名） <code>--limit-rate=200k</code>（限速）</td>
+</tr>
+<tr>
+<td><code>curl</code></td>
+<td>数据传输</td>
+<td><code>-o file</code>（保存文件） <code>-X POST</code>（指定方法） <code>-d &quot;key=value&quot;</code>（POST数据）</td>
+</tr>
+<tr>
+<td><code>ssh</code></td>
+<td>远程登录</td>
+<td><code>-p 22</code>（指定端口） <code>-i key.pem</code>（密钥登录） <code>-L 8080:localhost:80</code>（端口转发）</td>
+</tr>
+<tr>
+<td><code>scp</code></td>
+<td>安全文件传输</td>
+<td><code>-r</code>（递归复制） <code>-P 22</code>（指定端口） <code>-C</code>（压缩传输）</td>
+</tr>
+<tr>
+<td><code>rsync</code></td>
+<td>高效文件同步</td>
+<td><code>-avz</code>（归档+压缩+verbose） <code>--delete</code>（同步删除） <code>--exclude=&quot;*.tmp&quot;</code>（排除）</td>
+</tr>
+<tr>
+<td><strong>权限管理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>chmod</code></td>
+<td>修改文件权限</td>
+<td><code>755</code> <code>u+x</code>（用户添加执行） <code>-R</code>（递归操作）</td>
+</tr>
+<tr>
+<td><code>chown</code></td>
+<td>修改文件所有者</td>
+<td><code>user:group file</code> <code>-R</code>（递归操作） <code>--reference=file1 file2</code>（参照权限）</td>
+</tr>
+<tr>
+<td><strong>包管理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>yum</code></td>
+<td>RPM包管理</td>
+<td><code>install httpd</code> <code>remove package</code> <code>update</code> <code>search keyword</code> <code>groupinstall</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="2-系统调用（System-Calls）"><a href="#2-系统调用（System-Calls）" class="headerlink" title="2. 系统调用（System Calls）"></a>2. 系统调用（System Calls）</h3><table>
+<thead>
+<tr>
+<th>系统调用</th>
+<th>功能描述</th>
+<th>典型使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>文件操作</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>open</code></td>
+<td>打开&#x2F;创建文件</td>
+<td><code>O_RDONLY</code>（只读） <code>O_CREAT</code>（创建） <code>O_WRONLY</code>（只写）</td>
+</tr>
+<tr>
+<td><code>read</code></td>
+<td>读取文件内容</td>
+<td>配合文件描述符使用</td>
+</tr>
+<tr>
+<td><code>write</code></td>
+<td>写入文件内容</td>
+<td>需指定写入位置和大小</td>
+</tr>
+<tr>
+<td><code>close</code></td>
+<td>关闭文件描述符</td>
+<td>释放系统资源</td>
+</tr>
+<tr>
+<td><code>stat</code></td>
+<td>获取文件状态</td>
+<td>检查文件大小&#x2F;权限&#x2F;时间戳</td>
+</tr>
+<tr>
+<td><strong>进程控制</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>fork</code></td>
+<td>创建子进程</td>
+<td>Shell命令执行基础</td>
+</tr>
+<tr>
+<td><code>execve</code></td>
+<td>执行新程序</td>
+<td>替换当前进程映像</td>
+</tr>
+<tr>
+<td><code>exit</code></td>
+<td>终止进程</td>
+<td>返回状态码（0&#x3D;成功）</td>
+</tr>
+<tr>
+<td><code>wait</code></td>
+<td>等待子进程结束</td>
+<td>获取子进程退出状态</td>
+</tr>
+<tr>
+<td><code>kill</code></td>
+<td>发送信号给进程</td>
+<td><code>SIGKILL</code>（强制终止） <code>SIGTERM</code>（优雅终止）</td>
+</tr>
+<tr>
+<td><strong>内存管理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>brk</code>&#x2F;<code>sbrk</code></td>
+<td>调整堆内存大小</td>
+<td>动态内存分配基础</td>
+</tr>
+<tr>
+<td><code>mmap</code></td>
+<td>内存映射文件</td>
+<td>高效大文件读写</td>
+</tr>
+<tr>
+<td><code>munmap</code></td>
+<td>解除内存映射</td>
+<td>释放映射区域</td>
+</tr>
+<tr>
+<td><strong>网络通信</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>socket</code></td>
+<td>创建网络套接字</td>
+<td><code>AF_INET</code>（IPv4） <code>SOCK_STREAM</code>（TCP）</td>
+</tr>
+<tr>
+<td><code>bind</code></td>
+<td>绑定IP和端口</td>
+<td>服务端必备</td>
+</tr>
+<tr>
+<td><code>listen</code></td>
+<td>监听连接请求</td>
+<td>设置最大连接队列</td>
+</tr>
+<tr>
+<td><code>accept</code></td>
+<td>接受客户端连接</td>
+<td>返回新套接字描述符</td>
+</tr>
+<tr>
+<td><code>connect</code></td>
+<td>建立远程连接</td>
+<td>客户端使用</td>
+</tr>
+<tr>
+<td><code>send</code>&#x2F;<code>recv</code></td>
+<td>发送&#x2F;接收网络数据</td>
+<td>带控制标志（如<code>MSG_WAITALL</code>）</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="4-特殊文件（Special-Files）"><a href="#4-特殊文件（Special-Files）" class="headerlink" title="4. 特殊文件（Special Files）"></a>4. 特殊文件（Special Files）</h3><table>
+<thead>
+<tr>
+<th>设备文件</th>
+<th>功能描述</th>
+<th>典型用法示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/dev/null</code></td>
+<td>数据黑洞（丢弃所有写入）</td>
+<td><code>command &gt; /dev/null 2&gt;&amp;1</code>（屏蔽输出）</td>
+</tr>
+<tr>
+<td><code>/dev/zero</code></td>
+<td>无限零字节源</td>
+<td><code>dd if=/dev/zero of=file bs=1M count=100</code>（生成空文件）</td>
+</tr>
+<tr>
+<td><code>/dev/random</code></td>
+<td>阻塞式随机数生成器</td>
+<td>需要高熵源的场景（如密钥生成）</td>
+</tr>
+<tr>
+<td><code>/dev/urandom</code></td>
+<td>非阻塞随机数生成器</td>
+<td>一般加密场景</td>
+</tr>
+<tr>
+<td><code>/dev/sda</code></td>
+<td>第一块SATA硬盘</td>
+<td><code>fdisk /dev/sda</code>（分区操作）</td>
+</tr>
+<tr>
+<td><code>/dev/tty</code></td>
+<td>当前终端设备</td>
+<td>交互式输入输出</td>
+</tr>
+<tr>
+<td><code>/dev/loop</code></td>
+<td>回环设备</td>
+<td><code>mount -o loop image.iso /mnt</code>（挂载ISO）</td>
+</tr>
+<tr>
+<td><code>/dev/console</code></td>
+<td>系统控制台</td>
+<td>内核消息输出</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="5-配置文件格式（File-Formats）"><a href="#5-配置文件格式（File-Formats）" class="headerlink" title="5. 配置文件格式（File Formats）"></a>5. 配置文件格式（File Formats）</h3><table>
+<thead>
+<tr>
+<th>配置文件</th>
+<th>功能描述</th>
+<th>关键字段&#x2F;结构说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/etc/passwd</code></td>
+<td>用户账户信息</td>
+<td><code>username:x:UID:GID:描述:家目录:登录Shell</code></td>
+</tr>
+<tr>
+<td><code>/etc/shadow</code></td>
+<td>加密密码存储</td>
+<td><code>username:加密密码:最后修改:最小天数:最大天数:警告期:失效期:保留</code></td>
+</tr>
+<tr>
+<td><code>/etc/group</code></td>
+<td>用户组信息</td>
+<td><code>groupname:x:GID:成员列表</code></td>
+</tr>
+<tr>
+<td><code>/etc/fstab</code></td>
+<td>文件系统挂载表</td>
+<td><code>设备/UUID 挂载点 文件系统类型 挂载选项 dump标志 fsck顺序</code></td>
+</tr>
+<tr>
+<td><code>/etc/hosts</code></td>
+<td>本地主机名解析</td>
+<td><code>IP地址 主机名 别名</code></td>
+</tr>
+<tr>
+<td><code>/etc/resolv.conf</code></td>
+<td>DNS解析配置</td>
+<td><code>nameserver 8.8.8.8</code> <code>search domain.com</code></td>
+</tr>
+<tr>
+<td><code>/etc/crontab</code></td>
+<td>系统级定时任务</td>
+<td><code>分钟 小时 日 月 周 用户 命令</code></td>
+</tr>
+<tr>
+<td><code>/etc/ssh/sshd_config</code></td>
+<td>SSH服务端配置</td>
+<td><code>Port 22</code> <code>PermitRootLogin no</code> <code>PasswordAuthentication yes</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="8-系统管理命令（System-Administration）"><a href="#8-系统管理命令（System-Administration）" class="headerlink" title="8. 系统管理命令（System Administration）"></a>8. 系统管理命令（System Administration）</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能描述</th>
+<th>常用参数示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>服务管理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>systemctl</code></td>
+<td>控制systemd服务</td>
+<td><code>start/stop/restart 服务名</code> <code>enable/disable</code>（开机启停） <code>status</code>（查看状态）</td>
+</tr>
+<tr>
+<td><code>journalctl</code></td>
+<td>查询systemd日志</td>
+<td><code>-u nginx</code>（按服务筛选） <code>-f</code>（实时跟踪） <code>--since &quot;2023-01-01&quot;</code>（时间筛选）</td>
+</tr>
+<tr>
+<td><strong>磁盘管理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>fdisk</code></td>
+<td>磁盘分区工具</td>
+<td><code>-l</code>（列出分区表） <code>/dev/sda</code>（操作指定磁盘）</td>
+</tr>
+<tr>
+<td><code>mkfs</code></td>
+<td>创建文件系统</td>
+<td><code>-t ext4 /dev/sda1</code>（格式化分区）</td>
+</tr>
+<tr>
+<td><code>mount</code></td>
+<td>挂载文件系统</td>
+<td><code>-t nfs</code>（指定类型） <code>-o ro</code>（只读挂载）</td>
+</tr>
+<tr>
+<td><strong>用户管理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>useradd</code></td>
+<td>创建用户</td>
+<td><code>-m</code>（创建家目录） <code>-s /bin/bash</code>（指定Shell） <code>-G wheel</code>（附加组）</td>
+</tr>
+<tr>
+<td><code>passwd</code></td>
+<td>修改密码</td>
+<td><code>passwd username</code>（修改指定用户） <code>-l</code>（锁定账户）</td>
+</tr>
+<tr>
+<td><strong>网络管理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>firewall-cmd</code></td>
+<td>firewalld防火墙管理</td>
+<td><code>--add-port=80/tcp</code> <code>--permanent</code> <code>--reload</code></td>
+</tr>
+<tr>
+<td><code>tcpdump</code></td>
+<td>网络抓包工具</td>
+<td><code>-i eth0</code>（指定网卡） <code>port 80</code>（过滤端口） <code>-w file.pcap</code>（保存到文件）</td>
+</tr>
+<tr>
+<td><strong>软件管理</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>rpm</code></td>
+<td>RPM包操作</td>
+<td><code>-ivh package.rpm</code>（安装） <code>-e package</code>（卸载） <code>-qa</code>（查询所有）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、常见问题处理"><a href="#五、常见问题处理" class="headerlink" title="五、常见问题处理"></a><strong>五、常见问题处理</strong></h2><h3 id="1-man-pages手册页未安装"><a href="#1-man-pages手册页未安装" class="headerlink" title="1. man pages手册页未安装"></a>1. man pages手册页未安装</h3><p>某些命令的手册可能需要单独安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 man-pages（系统调用/库函数手册）</span></span><br><span class="line"><span class="built_in">sudo</span> yum -y install man-pages</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-man-pages手册页设置中文"><a href="#2-man-pages手册页设置中文" class="headerlink" title="2. man pages手册页设置中文"></a>2. man pages手册页设置中文</h3><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-manCN.jpg" alt="Linux-Basic-manCN"></p>
+<h4 id="2-1-通过包管理器进行安装"><a href="#2-1-通过包管理器进行安装" class="headerlink" title="2.1 通过包管理器进行安装"></a>2.1 通过包管理器进行安装</h4><p>在 CentOS&#x2F;RHEL 上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum -y install man-pages-zh-CN</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-临时设置语言环境"><a href="#2-2-临时设置语言环境" class="headerlink" title="2.2 临时设置语言环境"></a>2.2 临时设置语言环境</h4><p>在终端中，可以通过以下命令设置环境变量来使用中文手册页：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-修改man命令的配置文件"><a href="#2-3-修改man命令的配置文件" class="headerlink" title="2.3 修改man命令的配置文件"></a>2.3 修改man命令的配置文件</h4><p>您还可以修改<code>~/.bashrc</code>或<code>~/.zshrc</code>文件，以便每次打开终端时自动加载这些环境变量。</p>
+<ol>
+<li>打开配置文件（以 <code>~/.bashrc</code> 为例）：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在文件末尾添加以下内容：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>保存文件并重新加载：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>基础命令</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>man-pages</tag>
+      </tags>
+  </entry>
 </search>
