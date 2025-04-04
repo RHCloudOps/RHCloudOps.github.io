@@ -518,13 +518,13 @@
     <title>通过ipmitool工具查找管理口ip</title>
     <url>/2025/03/14/%E9%80%9A%E8%BF%87ipmitool%E5%B7%A5%E5%85%B7%E6%9F%A5%E6%89%BE%E7%AE%A1%E7%90%86%E5%8F%A3ip/</url>
     <content><![CDATA[<h1 id="通过ipmitool工具查找管理口ip"><a href="#通过ipmitool工具查找管理口ip" class="headerlink" title="通过ipmitool工具查找管理口ip"></a>通过ipmitool工具查找管理口ip</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-ipmitool.jpg" alt="Linux-ManagementTools-ipmitool"></p>
-<h3 id="一、查看服务器管理口的网络配置信息"><a href="#一、查看服务器管理口的网络配置信息" class="headerlink" title="一、查看服务器管理口的网络配置信息"></a>一、查看服务器管理口的网络配置信息</h3><h4 id="1-命令：ipmitool-lan-print"><a href="#1-命令：ipmitool-lan-print" class="headerlink" title="1.命令：ipmitool lan print"></a>1.命令：ipmitool lan print</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span></span><br></pre></td></tr></table></figure>
+<h2 id="一、查看服务器管理口的网络配置信息"><a href="#一、查看服务器管理口的网络配置信息" class="headerlink" title="一、查看服务器管理口的网络配置信息"></a>一、查看服务器管理口的网络配置信息</h2><h3 id="1-命令：ipmitool-lan-print"><a href="#1-命令：ipmitool-lan-print" class="headerlink" title="1.命令：ipmitool lan print"></a>1.命令：ipmitool lan print</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>作用</strong>：<br>查看服务器管理口（BMC&#x2F;iLO&#x2F;iDRAC）的网络配置信息，包括IP地址、子网掩码、网关等。  </li>
 <li><strong>适用场景</strong>：<br>当服务器管理口IP丢失、配置错误或无法通过常规方式访问时，通过该命令可快速确认当前管理口的网络状态。</li>
 </ul>
 <hr>
-<h4 id="2-命令输出关键信息解析"><a href="#2-命令输出关键信息解析" class="headerlink" title="2. 命令输出关键信息解析"></a>2. 命令输出关键信息解析</h4><p>执行 <code>ipmitool lan print</code> 后输出如下：  </p>
+<h3 id="2-命令输出关键信息解析"><a href="#2-命令输出关键信息解析" class="headerlink" title="2. 命令输出关键信息解析"></a>2. 命令输出关键信息解析</h3><p>执行 <code>ipmitool lan print</code> 后输出如下：  </p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Set in Progress         : Set Complete        # 配置已生效  </span><br><span class="line">IP Address Source       : Static Address     # IP地址来源为静态分配  </span><br><span class="line">IP Address              : 192.168.141.78     # 管理口当前IP地址  </span><br><span class="line">Subnet Mask             : 255.255.255.0      # 子网掩码  </span><br><span class="line">MAC Address             : 48:dc:2d:01:66:a0  # 管理口MAC地址  </span><br><span class="line">Default Gateway IP      : 192.168.141.254    # 默认网关  </span><br><span class="line">802.1q VLAN ID          : Disabled           # VLAN未启用  </span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>结论</strong>：  <ul>
@@ -539,69 +539,122 @@
 </li>
 </ul>
 <hr>
-<h3 id="二、ipmitool常用命令列表"><a href="#二、ipmitool常用命令列表" class="headerlink" title="二、ipmitool常用命令列表"></a>二、ipmitool常用命令列表</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong><code>ipmitool lan print</code></strong></td>
-<td>查看管理口网络配置（IP、网关、子网掩码等）。</td>
-</tr>
-<tr>
-<td><strong><code>ipmitool lan set &lt;channel&gt; ipsrc static/dhcp</code></strong></td>
-<td>设置IP来源为静态或DHCP（示例：<code>ipmitool lan set 1 ipsrc dhcp</code>）。</td>
-</tr>
-<tr>
-<td><strong><code>ipmitool lan set &lt;channel&gt; ipaddr &lt;IP&gt;</code></strong></td>
-<td>静态设置管理口IP（示例：<code>ipmitool lan set 1 ipaddr 192.168.1.100</code>）。</td>
-</tr>
-<tr>
-<td><strong><code>ipmitool power status</code></strong></td>
-<td>查看服务器电源状态（如 <code>on</code> 或 <code>off</code>）。</td>
-</tr>
-<tr>
-<td><strong><code>ipmitool power cycle</code></strong></td>
-<td>强制重启服务器（断电后重新上电）。</td>
-</tr>
-<tr>
-<td><strong><code>ipmitool sensor list</code></strong></td>
-<td>查看服务器硬件传感器信息（温度、电压、风扇转速等）。</td>
-</tr>
-<tr>
-<td><strong><code>ipmitool chassis status</code></strong></td>
-<td>查看服务器机箱状态（电源、开机状态、健康指示灯等）。</td>
-</tr>
-<tr>
-<td><strong><code>ipmitool user list</code></strong></td>
-<td>列出BMC用户账户信息。</td>
-</tr>
-<tr>
-<td><strong><code>ipmitool sol activate</code></strong></td>
-<td>启用串口控制台（Serial Over LAN），用于远程调试。</td>
-</tr>
-</tbody></table>
-<hr>
-<h3 id="三、管理口IP问题的排查步骤"><a href="#三、管理口IP问题的排查步骤" class="headerlink" title="三、管理口IP问题的排查步骤"></a>三、管理口IP问题的排查步骤</h3><h4 id="1-确认管理口网络配置："><a href="#1-确认管理口网络配置：" class="headerlink" title="1.确认管理口网络配置："></a>1.确认管理口网络配置：</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span>  <span class="comment"># 检查IP、子网掩码、网关是否配置正确</span></span><br></pre></td></tr></table></figure>
+<h2 id="二、管理口IP问题的排查步骤"><a href="#二、管理口IP问题的排查步骤" class="headerlink" title="二、管理口IP问题的排查步骤"></a>二、管理口IP问题的排查步骤</h2><h3 id="1-确认管理口网络配置："><a href="#1-确认管理口网络配置：" class="headerlink" title="1.确认管理口网络配置："></a>1.确认管理口网络配置：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span>  <span class="comment"># 检查IP、子网掩码、网关是否配置正确</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>若IP为 <code>0.0.0.0</code>，说明未分配，需手动设置静态IP或启用DHCP。</li>
 </ul>
-<h4 id="2-测试网络连通性："><a href="#2-测试网络连通性：" class="headerlink" title="2.测试网络连通性："></a>2.测试网络连通性：</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping 192.168.141.78       <span class="comment"># 测试管理口IP是否可达  </span></span><br><span class="line">arp -n | grep 48:dc:2d    <span class="comment"># 根据MAC地址确认IP是否在局域网中可见  </span></span><br></pre></td></tr></table></figure>
+<h3 id="2-测试网络连通性："><a href="#2-测试网络连通性：" class="headerlink" title="2.测试网络连通性："></a>2.测试网络连通性：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping 192.168.141.78       <span class="comment"># 测试管理口IP是否可达  </span></span><br><span class="line">arp -n | grep 48:dc:2d    <span class="comment"># 根据MAC地址确认IP是否在局域网中可见  </span></span><br></pre></td></tr></table></figure>
 
-<h4 id="3-检查硬件与驱动："><a href="#3-检查硬件与驱动：" class="headerlink" title="3.检查硬件与驱动："></a>3.检查硬件与驱动：</h4><ul>
+<h3 id="3-检查硬件与驱动："><a href="#3-检查硬件与驱动：" class="headerlink" title="3.检查硬件与驱动："></a>3.检查硬件与驱动：</h3><ul>
 <li>确认服务器BMC模块已启用（部分服务器需在BIOS中开启IPMI功能）。  </li>
 <li>检查网线连接和管理口指示灯状态。</li>
 </ul>
-<hr>
-<h3 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h3><ul>
-<li><strong>核心问题</strong>：<br>文件通过 <code>ipmitool lan print</code> 确认管理口IP配置，帮助排查因网络设置错误或丢失导致的无法访问问题。  </li>
-<li><strong>关键工具</strong>：<br><code>ipmitool</code> 是管理服务器带外控制（如BMC&#x2F;iDRAC）的通用工具，支持网络配置、电源控制、传感器监控等功能。  </li>
-<li><strong>操作建议</strong>：  <ul>
-<li>优先通过 <code>ipmitool lan print</code> 验证当前配置，再根据结果调整IP或排查物理连接。  </li>
-<li>若IP配置正确但仍无法访问，需检查防火墙规则、交换机配置或硬件状态。</li>
+<h2 id="三、ipmitool常用命令及用法详解"><a href="#三、ipmitool常用命令及用法详解" class="headerlink" title="三、ipmitool常用命令及用法详解"></a>三、ipmitool常用命令及用法详解</h2><h3 id="1-基本连接命令"><a href="#1-基本连接命令" class="headerlink" title="1. 基本连接命令"></a><strong>1. 基本连接命令</strong></h3><ul>
+<li><p><strong>本地 BMC 访问</strong>（需 root 权限）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool -I open &lt;<span class="built_in">command</span>&gt;  <span class="comment"># 通过本地接口直接访问</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>远程 BMC 访问</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool -I lanplus -H &lt;BMC_IP&gt; -U &lt;用户名&gt; -P &lt;密码&gt; &lt;command&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-I lanplus</code>：使用加密的 LAN 协议（推荐）。</li>
+<li><code>-H</code>：BMC 的 IP 地址。</li>
+<li><code>-U</code>&#x2F;<code>-P</code>：BMC 的用户名和密码。</li>
 </ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-电源管理"><a href="#2-电源管理" class="headerlink" title="2. 电源管理"></a><strong>2. 电源管理</strong></h3><ul>
+<li><p><strong>查看电源状态</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool power status</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>开机</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool power on</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关机</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool power off</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>强制关机</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool power off -f  # 强制断电（类似拔电）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>重启</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool power reset</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>软关机</strong>（优雅关机）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool power soft</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="3-传感器监控"><a href="#3-传感器监控" class="headerlink" title="3. 传感器监控"></a><strong>3. 传感器监控</strong></h3><ul>
+<li><p><strong>查看所有传感器数据</strong>（温度、电压、风扇等）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool sensor list</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>筛选特定传感器</strong>（如 CPU 温度）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool sensor get &quot;CPU Temp&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="4-FRU（现场可更换单元）信息"><a href="#4-FRU（现场可更换单元）信息" class="headerlink" title="4. FRU（现场可更换单元）信息"></a><strong>4. FRU（现场可更换单元）信息</strong></h3><ul>
+<li><p><strong>显示 FRU 信息</strong>（主板、产品序列号等）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool fru print</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>导出 FRU 数据到文件</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool fru read &lt;file.bin&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="5-BMC-配置"><a href="#5-BMC-配置" class="headerlink" title="5. BMC 配置"></a><strong>5. BMC 配置</strong></h3><ul>
+<li><p><strong>重置 BMC</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool mc reset [cold|warm]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>查看 BMC 信息</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool mc info</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>设置 BMC 网络</strong>（静态 IP）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool lan set 1 ipsrc static</span><br><span class="line">ipmitool lan set 1 ipaddr &lt;IP&gt;</span><br><span class="line">ipmitool lan set 1 netmask &lt;NETMASK&gt;</span><br><span class="line">ipmitool lan set 1 defgw &lt;GATEWAY&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="6-SEL（系统事件日志）"><a href="#6-SEL（系统事件日志）" class="headerlink" title="6. SEL（系统事件日志）"></a><strong>6. SEL（系统事件日志）</strong></h3><ul>
+<li><p><strong>查看所有日志</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool sel list</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>清除日志</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool sel clear</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>获取特定日志详情</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool sel get &lt;ID&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="7-用户管理"><a href="#7-用户管理" class="headerlink" title="7. 用户管理"></a><strong>7. 用户管理</strong></h3><ul>
+<li><p><strong>列出用户</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool user list 1  # 1 是通道号（通常为1）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>添加用户</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool user set name &lt;用户ID&gt; &lt;用户名&gt;</span><br><span class="line">ipmitool user set password &lt;用户ID&gt; &lt;密码&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>设置用户权限</strong>（如管理员）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool channel setaccess 1 &lt;用户ID&gt; callin=on ipmi=on link=on privilege=4</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>privilege=4</code> 表示管理员权限（1-4 分别对应不同权限等级）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="8-远程控制台（SOL）"><a href="#8-远程控制台（SOL）" class="headerlink" title="8. 远程控制台（SOL）"></a><strong>8. 远程控制台（SOL）</strong></h3><ul>
+<li><p><strong>启动 Serial Over LAN（SOL）</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool sol activate</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>退出 SOL</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool sol deactivate</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="9-其他实用命令"><a href="#9-其他实用命令" class="headerlink" title="9. 其他实用命令"></a><strong>9. 其他实用命令</strong></h3><ul>
+<li><p><strong>查看支持的 IPMI 命令</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool -h</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>执行原始 IPMI 命令</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipmitool raw &lt;HEX_COMMAND&gt;</span><br></pre></td></tr></table></figure>
+
+<p>（例如：<code>ipmitool raw 0x06 0x01</code> 查看设备 ID）</p>
 </li>
 </ul>
 ]]></content>
