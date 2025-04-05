@@ -772,7 +772,7 @@
       </tags>
   </entry>
   <entry>
-    <title>通过ipmitool工具查找管理口ip</title>
+    <title>ipmitool工具查找管理口ip</title>
     <url>/2025/03/14/ipmitool%E5%B7%A5%E5%85%B7%E6%9F%A5%E6%89%BE%E7%AE%A1%E7%90%86%E5%8F%A3ip/</url>
     <content><![CDATA[<h1 id="ipmitool工具查找管理口ip"><a href="#ipmitool工具查找管理口ip" class="headerlink" title="ipmitool工具查找管理口ip"></a>ipmitool工具查找管理口ip</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-ipmitool.jpg" alt="Linux-ManagementTools-ipmitool"></p>
 <h2 id="一、查看服务器管理口的网络配置信息"><a href="#一、查看服务器管理口的网络配置信息" class="headerlink" title="一、查看服务器管理口的网络配置信息"></a>一、查看服务器管理口的网络配置信息</h2><h3 id="1-命令：ipmitool-lan-print"><a href="#1-命令：ipmitool-lan-print" class="headerlink" title="1.命令：ipmitool lan print"></a>1.命令：ipmitool lan print</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span></span><br></pre></td></tr></table></figure>
