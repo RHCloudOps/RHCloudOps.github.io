@@ -1698,4 +1698,127 @@
         <tag>RAID</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Vim编辑器入门指南</title>
+    <url>/2025/03/27/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
+<h2 id="一、Vim模式与切换"><a href="#一、Vim模式与切换" class="headerlink" title="一、Vim模式与切换"></a>一、Vim模式与切换</h2><h3 id="1-命令模式"><a href="#1-命令模式" class="headerlink" title="1.命令模式"></a>1.命令模式</h3><ul>
+<li><strong>进入方式</strong>：通过<code>vi/vim</code>打开文件后的默认模式。  </li>
+<li><strong>功能</strong>：执行快捷键操作（如复制、删除、移动光标等），不可直接编辑文本。</li>
+</ul>
+<h3 id="2-编辑模式（插入模式）"><a href="#2-编辑模式（插入模式）" class="headerlink" title="2.编辑模式（插入模式）"></a>2.编辑模式（插入模式）</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>i</code>（插入）、<code>a</code>（追加）、<code>o</code>（新行）等。  </li>
+<li><strong>退出方式</strong>：按 <code>Esc</code> 返回命令模式。  </li>
+<li><strong>功能</strong>：直接编辑文本内容。</li>
+</ul>
+<h3 id="3-底行模式"><a href="#3-底行模式" class="headerlink" title="3.底行模式"></a>3.底行模式</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>:</code>。  </li>
+<li><strong>功能</strong>：执行保存、退出、搜索、设置等操作（如 <code>:wq</code> 保存退出）。</li>
+</ul>
+<h3 id="4-可视块模式"><a href="#4-可视块模式" class="headerlink" title="4.可视块模式"></a>4.可视块模式</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>Ctrl + v</code>。  </li>
+<li><strong>功能</strong>：批量选择文本块进行编辑（如删除、复制多行）。</li>
+</ul>
+<hr>
+<h2 id="二、常用快捷键"><a href="#二、常用快捷键" class="headerlink" title="二、常用快捷键"></a>二、常用快捷键</h2><h3 id="1-光标移动"><a href="#1-光标移动" class="headerlink" title="1. 光标移动"></a><strong>1. 光标移动</strong></h3><ul>
+<li><strong>行内移动</strong>：  <ul>
+<li><code>^</code>（数字 <code>6</code>）：移动到行首（首个非空字符）。  </li>
+<li><code>$</code>（数字 <code>4</code>）：移动到行尾。</li>
+</ul>
+</li>
+<li><strong>跨行移动</strong>：  <ul>
+<li><code>gg</code>：移动到文件第一行。  </li>
+<li><code>G</code>（<code>Shift + g</code>）：移动到文件最后一行。  </li>
+<li><code>100gg</code>：跳转到第100行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-复制、删除（剪切）、粘贴"><a href="#2-复制、删除（剪切）、粘贴" class="headerlink" title="2. 复制、删除（剪切）、粘贴"></a><strong>2. 复制、删除（剪切）、粘贴</strong></h3><ul>
+<li><code>yy</code>：复制当前行。  </li>
+<li><code>dd</code>：删除（剪切）当前行。  </li>
+<li><code>p</code>：粘贴到当前行下方。  </li>
+<li><code>P</code>（大写）：粘贴到当前行上方。</li>
+</ul>
+<h3 id="3-撤销与恢复"><a href="#3-撤销与恢复" class="headerlink" title="3. 撤销与恢复"></a><strong>3. 撤销与恢复</strong></h3><ul>
+<li><code>u</code>（undo）：撤销上一次操作。  </li>
+<li><code>Ctrl + r</code>（redo）：恢复被撤销的操作。</li>
+</ul>
+<h3 id="4-行号显示与搜索"><a href="#4-行号显示与搜索" class="headerlink" title="4. 行号显示与搜索"></a><strong>4. 行号显示与搜索</strong></h3><ul>
+<li><strong>显示行号</strong>：  <ul>
+<li><code>:set nu</code> 或 <code>:set number</code>：显示行号。  </li>
+<li><code>:set nonu</code>：隐藏行号。</li>
+</ul>
+</li>
+<li><strong>搜索功能</strong>：  <ul>
+<li><code>/keyword</code>：向下搜索指定内容（如 <code>/error</code>）。  </li>
+<li><code>n</code>：继续向下搜索。  </li>
+<li><code>N</code>：继续向上搜索。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="三、高级操作"><a href="#三、高级操作" class="headerlink" title="三、高级操作"></a>三、高级操作</h2><h3 id="1-批量编辑（可视块模式）"><a href="#1-批量编辑（可视块模式）" class="headerlink" title="1. 批量编辑（可视块模式）"></a><strong>1. 批量编辑（可视块模式）</strong></h3><ol>
+<li>按 <code>Ctrl + v</code> 进入可视块模式。  </li>
+<li>使用方向键选择多行文本块。  </li>
+<li>执行操作：  <ul>
+<li><code>d</code>：删除选中块。  </li>
+<li><code>y</code>：复制选中块。  </li>
+<li><code>I</code> 或 <code>A</code>：在块前&#x2F;后插入内容（按 <code>Esc</code> 完成批量插入）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-行调整"><a href="#2-行调整" class="headerlink" title="2. 行调整"></a><strong>2. 行调整</strong></h3><ul>
+<li><strong>上下移动行</strong>：  <ul>
+<li>命令模式下按 <code>dd</code> 剪切当前行，再按 <code>p</code> 或 <code>P</code> 粘贴到目标位置。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="四、常用命令速查表"><a href="#四、常用命令速查表" class="headerlink" title="四、常用命令速查表"></a>四、<strong>常用命令速查表</strong></h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>快捷键&#x2F;命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>保存退出</td>
+<td><code>:wq</code></td>
+</tr>
+<tr>
+<td>强制退出不保存</td>
+<td><code>:q!</code></td>
+</tr>
+<tr>
+<td>复制行</td>
+<td><code>yy</code></td>
+</tr>
+<tr>
+<td>删除行</td>
+<td><code>dd</code></td>
+</tr>
+<tr>
+<td>撤销操作</td>
+<td><code>u</code></td>
+</tr>
+<tr>
+<td>跳转到行首</td>
+<td><code>^</code></td>
+</tr>
+<tr>
+<td>跳转到行尾</td>
+<td><code>$</code></td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>基础命令</category>
+        <category>vim</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>vim</tag>
+      </tags>
+  </entry>
 </search>
