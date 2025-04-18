@@ -1,224 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux man命令手册使用指南</title>
-    <url>/2025/03/20/Linux%20man%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="Linux-man命令手册使用指南"><a href="#Linux-man命令手册使用指南" class="headerlink" title="Linux man命令手册使用指南"></a>Linux man命令手册使用指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
-<h2 id="一、Linux-的man命令手册页"><a href="#一、Linux-的man命令手册页" class="headerlink" title="一、Linux 的man命令手册页"></a>一、Linux 的man命令手册页</h2><blockquote>
-<p><a href="https://man7.org/linux/man-pages/index.html">https://man7.org/linux/man-pages/index.html</a></p>
-</blockquote>
-<h2 id="二、man命令使用方法"><a href="#二、man命令使用方法" class="headerlink" title="二、man命令使用方法"></a>二、man命令使用方法</h2><h3 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h3><h4 id="1-1-查看命令手册"><a href="#1-1-查看命令手册" class="headerlink" title="1.1 查看命令手册"></a>1.1 查看命令手册</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man [章节] &lt;命令名&gt;</span><br><span class="line"><span class="comment"># 示例：查看 ls 命令的手册</span></span><br><span class="line">man <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="1-2-查看指定章节的手册"><a href="#1-2-查看指定章节的手册" class="headerlink" title="1.2 查看指定章节的手册"></a>1.2 查看指定章节的手册</h4><p>某些关键词（如<code>passwd</code>）可能存在于多个章节：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man 1 passwd   <span class="comment"># 查看 passwd 命令的手册（用户命令）</span></span><br><span class="line">man 5 passwd   <span class="comment"># 查看 passwd 文件格式的手册（配置文件）</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="2-常用操作快捷键"><a href="#2-常用操作快捷键" class="headerlink" title="2. 常用操作快捷键"></a>2. 常用操作快捷键</h3><ul>
-<li><strong>导航</strong>：<ul>
-<li><code>↑</code>&#x2F;<code>↓</code>：逐行滚动。</li>
-<li><code>Page Up</code>&#x2F;<code>Page Down</code>：翻页。</li>
-<li><code>Home</code>&#x2F;<code>End</code>：跳转至开头&#x2F;结尾。</li>
-</ul>
-</li>
-<li><strong>搜索</strong>：<ul>
-<li><code>/关键字</code>：向前搜索（如 <code>/--help</code>）。</li>
-<li><code>n</code>：跳转到下一个匹配项。</li>
-<li><code>N</code>：跳转到上一个匹配项。</li>
-</ul>
-</li>
-<li><strong>退出</strong>：<ul>
-<li><code>q</code>：退出手册。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="3-常用命令选项"><a href="#3-常用命令选项" class="headerlink" title="3. 常用命令选项"></a>3. 常用命令选项</h3><h4 id="3-1-搜索相关手册"><a href="#3-1-搜索相关手册" class="headerlink" title="3.1 搜索相关手册"></a>3.1 搜索相关手册</h4><ul>
-<li><p>**<code>-k</code> 或 <code>--apropos</code>**：按关键字搜索手册（类似<code>apropos</code>）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -k network    <span class="comment"># 查找所有包含 &quot;network&quot; 的手册页</span></span><br><span class="line">apropos network   <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>**<code>-f</code> 或 <code>--whatis</code>**：显示命令的简短描述（类似<code>whatis</code>）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -f passwd     <span class="comment"># 列出 passwd 的所有相关手册章节</span></span><br><span class="line">whatis passwd     <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="3-2其他选项"><a href="#3-2其他选项" class="headerlink" title="3.2其他选项"></a>3.2其他选项</h4><ul>
-<li><p>**<code>-a</code>**：显示所有匹配章节的手册（按<code>q</code>后继续下一章节）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -a passwd</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>**<code>-w</code>**：显示手册页的路径：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -w <span class="built_in">ls</span>         <span class="comment"># 输出 /usr/share/man/man1/ls.1.gz</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h2 id="三、Linux彩色man-page设置方法"><a href="#三、Linux彩色man-page设置方法" class="headerlink" title="三、Linux彩色man page设置方法"></a>三、Linux彩色man page设置方法</h2><blockquote>
-<p>原文: <a href="https://gaomf.cn/2017/01/13/Linux_Colourful_Man/">https://gaomf.cn/2017/01/13/Linux_Colourful_Man/</a>　　作者: 高明飞</p>
-</blockquote>
-<h3 id="1-在-bashrc文件中添加less的相关设置参数"><a href="#1-在-bashrc文件中添加less的相关设置参数" class="headerlink" title="1. 在 .bashrc文件中添加less的相关设置参数"></a>1. 在 .bashrc文件中添加less的相关设置参数</h3><p>Linux下<code>man page</code>的显示默认是通过<code>less</code>来完成的，故在<code>.bashrc</code>文件中添加<code>less</code>的相关设置参数即可使<code>man page</code>变成彩色的:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># colourful man page</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_mb=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_md=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_me=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_us=$<span class="string">&#x27;\E[01;32m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_ue=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_so=$<span class="string">&#x27;\E[01;33;44m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_se=$<span class="string">&#x27;\E[0m&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>更改完<code>.bashrc</code>文件后要重新载入一下配置：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-
-<p>之后重启终端才会生效，以上配置显示效果如下：</p>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
-<h3 id="2-less的相关设置参数的含义"><a href="#2-less的相关设置参数的含义" class="headerlink" title="2. less的相关设置参数的含义"></a>2. less的相关设置参数的含义</h3><p>其中<code>LESS_TERMCAP_xx</code>的含义如下：</p>
-<table>
-<thead>
-<tr>
-<th align="center"><code>termcap</code></th>
-<th align="center">含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>mb</code></td>
-<td align="center">start blink 开始闪烁</td>
-</tr>
-<tr>
-<td align="center"><code>md</code></td>
-<td align="center">start bold 开始加粗</td>
-</tr>
-<tr>
-<td align="center"><code>me</code></td>
-<td align="center">turn off bold, blink and underline 关闭粗体、闪烁和下划线</td>
-</tr>
-<tr>
-<td align="center"><code>us</code></td>
-<td align="center">start underline 开始下划线</td>
-</tr>
-<tr>
-<td align="center"><code>ue</code></td>
-<td align="center">stop underline 停止下划线</td>
-</tr>
-<tr>
-<td align="center"><code>so</code></td>
-<td align="center">start standout 开始脱颖而出</td>
-</tr>
-<tr>
-<td align="center"><code>se</code></td>
-<td align="center">stop standout 停止突出</td>
-</tr>
-</tbody></table>
-<p>对照上面实际的<code>man page</code>页面可以看到：<code>md</code>对应蓝色部分；<code>us</code>对应绿色部分；<code>so</code>对应底部黄色状态栏。</p>
-<h3 id="3-具体颜色设置方法，参考以下页面："><a href="#3-具体颜色设置方法，参考以下页面：" class="headerlink" title="3.具体颜色设置方法，参考以下页面："></a>3.具体颜色设置方法，参考以下页面：</h3><blockquote>
-<p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">https://en.wikipedia.org/wiki/ANSI_escape_code#Colors</a></p>
-</blockquote>
-<p>简而言之，在<code>&#39;\E[0x;3y;4zm&#39;</code>中：<code>x</code>代表是否加粗，<code>1</code>为加粗，<code>2</code>为正常；<code>y</code>和<code>z</code>分别代表文字前景色和背景色，使用默认值的话可省略，颜色列表如下：</p>
-<table>
-<thead>
-<tr>
-<th align="center">Intensity</th>
-<th align="center">0</th>
-<th align="center">1</th>
-<th align="center">2</th>
-<th align="center">3</th>
-<th align="center">4</th>
-<th align="center">5</th>
-<th align="center">6</th>
-<th align="center">7</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Normal</td>
-<td align="center">Black</td>
-<td align="center">Red</td>
-<td align="center">Green</td>
-<td align="center">Yellow</td>
-<td align="center">Blue</td>
-<td align="center">Magenta</td>
-<td align="center">Cyan</td>
-<td align="center">White</td>
-</tr>
-<tr>
-<td align="center">Bright</td>
-<td align="center">Black</td>
-<td align="center">Red</td>
-<td align="center">Green</td>
-<td align="center">Yellow</td>
-<td align="center">Blue</td>
-<td align="center">Magenta</td>
-<td align="center">Cyan</td>
-<td align="center">White</td>
-</tr>
-</tbody></table>
-<h2 id="四、man-pages手册页设置中文"><a href="#四、man-pages手册页设置中文" class="headerlink" title="四、man pages手册页设置中文"></a>四、man pages手册页设置中文</h2><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-manCN.jpg" alt="Linux-Basic-manCN"></p>
-<h3 id="1-通过包管理器进行安装"><a href="#1-通过包管理器进行安装" class="headerlink" title="1. 通过包管理器进行安装"></a>1. 通过包管理器进行安装</h3><p>在 CentOS&#x2F;RHEL 上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum -y install man-pages-zh-CN</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-临时设置语言环境"><a href="#2-临时设置语言环境" class="headerlink" title="2. 临时设置语言环境"></a>2. 临时设置语言环境</h3><p>在终端中，可以通过以下命令设置环境变量来使用中文手册页：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-修改man命令的配置文件"><a href="#3-修改man命令的配置文件" class="headerlink" title="3. 修改man命令的配置文件"></a>3. 修改man命令的配置文件</h3><p>您还可以修改<code>~/.bashrc</code>或<code>~/.zshrc</code>文件，以便每次打开终端时自动加载这些环境变量。</p>
-<ol>
-<li>打开配置文件（以 <code>~/.bashrc</code> 为例）：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在文件末尾添加以下内容：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>保存文件并重新加载：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="五、man-pages手册页未安装"><a href="#五、man-pages手册页未安装" class="headerlink" title="五、man pages手册页未安装"></a>五、man pages手册页未安装</h2><p>某些命令的手册可能需要单独安装：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 man-pages（系统调用/库函数手册）</span></span><br><span class="line"><span class="built_in">sudo</span> yum -y install man-pages</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>基础命令</category>
-        <category>man</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>man-pages</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7更换国内YUM源及初始化配置</title>
-    <url>/2025/03/19/CentOS7%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85YUM%E6%BA%90%E5%8F%8A%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="CentOS-7-更换国内YUM源及初始化配置"><a href="#CentOS-7-更换国内YUM源及初始化配置" class="headerlink" title="CentOS 7 更换国内YUM源及初始化配置"></a>CentOS 7 更换国内YUM源及初始化配置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/CentOS7-YUM-Initialization.jpg" alt="CentOS7-YUM-Initialization"></p>
-<h2 id="一、备份原有YUM源"><a href="#一、备份原有YUM源" class="headerlink" title="一、备份原有YUM源"></a>一、备份原有YUM源</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="二、更换为国内YUM源"><a href="#二、更换为国内YUM源" class="headerlink" title="二、更换为国内YUM源"></a>二、更换为国内YUM源</h2><h3 id="1-阿里云源"><a href="#1-阿里云源" class="headerlink" title="1. 阿里云源"></a>1. 阿里云源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-或者使用清华源"><a href="#2-或者使用清华源" class="headerlink" title="2. 或者使用清华源"></a>2. 或者使用清华源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.tuna.tsinghua.edu.cn/help/centos/centos7.repo</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="三、清理并重建YUM缓存"><a href="#三、清理并重建YUM缓存" class="headerlink" title="三、清理并重建YUM缓存"></a>三、清理并重建YUM缓存</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum clean all</span><br><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="四、更新系统软件包（可选但推荐）"><a href="#四、更新系统软件包（可选但推荐）" class="headerlink" title="四、更新系统软件包（可选但推荐）"></a>四、更新系统软件包（可选但推荐）</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update -y</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="五、其他常用初始化操作"><a href="#五、其他常用初始化操作" class="headerlink" title="五、其他常用初始化操作"></a>五、其他常用初始化操作</h2><h3 id="1-安装常用工具集"><a href="#1-安装常用工具集" class="headerlink" title="1. 安装常用工具集"></a>1. 安装常用工具集</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y wget vim net-tools tree</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-安装EPEL源（额外软件包）"><a href="#2-安装EPEL源（额外软件包）" class="headerlink" title="2. 安装EPEL源（额外软件包）"></a>2. 安装EPEL源（额外软件包）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y epel-release</span><br><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-设置时区（如设置为亚洲-上海）"><a href="#3-设置时区（如设置为亚洲-上海）" class="headerlink" title="3. 设置时区（如设置为亚洲&#x2F;上海）"></a>3. 设置时区（如设置为亚洲&#x2F;上海）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> timedatectl set-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-关闭防火墙（仅用于测试环境）"><a href="#4-关闭防火墙（仅用于测试环境）" class="headerlink" title="4. 关闭防火墙（仅用于测试环境）"></a>4. 关闭防火墙（仅用于测试环境）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl stop firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-禁用SELinux（可选）"><a href="#5-禁用SELinux（可选）" class="headerlink" title="5. 禁用SELinux（可选）"></a>5. 禁用SELinux（可选）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> setenforce 0</span><br><span class="line"><span class="built_in">sudo</span> sed -i <span class="string">&#x27;s/SELINUX=enforcing/SELINUX=disabled/g&#x27;</span> /etc/selinux/config</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>CentOS7</category>
-        <category>系统初始化</category>
-      </categories>
-      <tags>
-        <tag>CentOS7</tag>
-        <tag>YUM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>AIX系统错误日志工具errpt详解</title>
     <url>/2025/03/11/AIX%E7%B3%BB%E7%BB%9F%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7errpt%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="AIX系统错误日志工具errpt详解"><a href="#AIX系统错误日志工具errpt详解" class="headerlink" title="AIX系统错误日志工具errpt详解"></a>AIX系统错误日志工具errpt详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/IBM-AIX-errpt.jpg" alt="IBM-AIX-errpt"></p>
@@ -345,6 +127,48 @@
         <tag>IBM</tag>
         <tag>AIX</tag>
         <tag>errpt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS7更换国内YUM源及初始化配置</title>
+    <url>/2025/03/19/CentOS7%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85YUM%E6%BA%90%E5%8F%8A%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="CentOS-7-更换国内YUM源及初始化配置"><a href="#CentOS-7-更换国内YUM源及初始化配置" class="headerlink" title="CentOS 7 更换国内YUM源及初始化配置"></a>CentOS 7 更换国内YUM源及初始化配置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/CentOS7-YUM-Initialization.jpg" alt="CentOS7-YUM-Initialization"></p>
+<h2 id="一、备份原有YUM源"><a href="#一、备份原有YUM源" class="headerlink" title="一、备份原有YUM源"></a>一、备份原有YUM源</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、更换为国内YUM源"><a href="#二、更换为国内YUM源" class="headerlink" title="二、更换为国内YUM源"></a>二、更换为国内YUM源</h2><h3 id="1-阿里云源"><a href="#1-阿里云源" class="headerlink" title="1. 阿里云源"></a>1. 阿里云源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-或者使用清华源"><a href="#2-或者使用清华源" class="headerlink" title="2. 或者使用清华源"></a>2. 或者使用清华源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.tuna.tsinghua.edu.cn/help/centos/centos7.repo</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、清理并重建YUM缓存"><a href="#三、清理并重建YUM缓存" class="headerlink" title="三、清理并重建YUM缓存"></a>三、清理并重建YUM缓存</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum clean all</span><br><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、更新系统软件包（可选但推荐）"><a href="#四、更新系统软件包（可选但推荐）" class="headerlink" title="四、更新系统软件包（可选但推荐）"></a>四、更新系统软件包（可选但推荐）</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update -y</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、其他常用初始化操作"><a href="#五、其他常用初始化操作" class="headerlink" title="五、其他常用初始化操作"></a>五、其他常用初始化操作</h2><h3 id="1-安装常用工具集"><a href="#1-安装常用工具集" class="headerlink" title="1. 安装常用工具集"></a>1. 安装常用工具集</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y wget vim net-tools tree</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-安装EPEL源（额外软件包）"><a href="#2-安装EPEL源（额外软件包）" class="headerlink" title="2. 安装EPEL源（额外软件包）"></a>2. 安装EPEL源（额外软件包）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y epel-release</span><br><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-设置时区（如设置为亚洲-上海）"><a href="#3-设置时区（如设置为亚洲-上海）" class="headerlink" title="3. 设置时区（如设置为亚洲&#x2F;上海）"></a>3. 设置时区（如设置为亚洲&#x2F;上海）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> timedatectl set-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-关闭防火墙（仅用于测试环境）"><a href="#4-关闭防火墙（仅用于测试环境）" class="headerlink" title="4. 关闭防火墙（仅用于测试环境）"></a>4. 关闭防火墙（仅用于测试环境）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl stop firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-禁用SELinux（可选）"><a href="#5-禁用SELinux（可选）" class="headerlink" title="5. 禁用SELinux（可选）"></a>5. 禁用SELinux（可选）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> setenforce 0</span><br><span class="line"><span class="built_in">sudo</span> sed -i <span class="string">&#x27;s/SELINUX=enforcing/SELINUX=disabled/g&#x27;</span> /etc/selinux/config</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>CentOS7</category>
+        <category>系统初始化</category>
+      </categories>
+      <tags>
+        <tag>CentOS7</tag>
+        <tag>YUM</tag>
       </tags>
   </entry>
   <entry>
@@ -772,73 +596,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ipmitool工具查找管理口ip</title>
-    <url>/2025/03/14/ipmitool%E5%B7%A5%E5%85%B7%E6%9F%A5%E6%89%BE%E7%AE%A1%E7%90%86%E5%8F%A3ip/</url>
-    <content><![CDATA[<h1 id="ipmitool工具查找管理口ip"><a href="#ipmitool工具查找管理口ip" class="headerlink" title="ipmitool工具查找管理口ip"></a>ipmitool工具查找管理口ip</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-ipmitool.jpg" alt="Linux-ManagementTools-ipmitool"></p>
-<h2 id="一、查看服务器管理口的网络配置信息"><a href="#一、查看服务器管理口的网络配置信息" class="headerlink" title="一、查看服务器管理口的网络配置信息"></a>一、查看服务器管理口的网络配置信息</h2><h3 id="1-命令：ipmitool-lan-print"><a href="#1-命令：ipmitool-lan-print" class="headerlink" title="1.命令：ipmitool lan print"></a>1.命令：ipmitool lan print</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：<br>查看服务器管理口（BMC&#x2F;iLO&#x2F;iDRAC）的网络配置信息，包括IP地址、子网掩码、网关等。  </li>
-<li><strong>适用场景</strong>：<br>当服务器管理口IP丢失、配置错误或无法通过常规方式访问时，通过该命令可快速确认当前管理口的网络状态。</li>
-</ul>
-<hr>
-<h3 id="2-命令输出关键信息解析"><a href="#2-命令输出关键信息解析" class="headerlink" title="2. 命令输出关键信息解析"></a>2. 命令输出关键信息解析</h3><p>执行 <code>ipmitool lan print</code> 后输出如下：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Set in Progress         : Set Complete        # 配置已生效  </span><br><span class="line">IP Address Source       : Static Address     # IP地址来源为静态分配  </span><br><span class="line">IP Address              : 192.168.141.78     # 管理口当前IP地址  </span><br><span class="line">Subnet Mask             : 255.255.255.0      # 子网掩码  </span><br><span class="line">MAC Address             : 48:dc:2d:01:66:a0  # 管理口MAC地址  </span><br><span class="line">Default Gateway IP      : 192.168.141.254    # 默认网关  </span><br><span class="line">802.1q VLAN ID          : Disabled           # VLAN未启用  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>结论</strong>：  <ul>
-<li>当前管理口已配置静态IP <code>192.168.141.78</code>，子网掩码和网关正常。  </li>
-<li>若无法通过该IP访问管理口，可能原因包括：  <ul>
-<li>网络物理连接故障（如网线未插或交换机端口问题）。  </li>
-<li>IP地址冲突或被防火墙拦截。  </li>
-<li>管理口硬件故障（如BMC模块异常）。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="二、管理口IP问题的排查步骤"><a href="#二、管理口IP问题的排查步骤" class="headerlink" title="二、管理口IP问题的排查步骤"></a>二、管理口IP问题的排查步骤</h2><h3 id="1-确认管理口网络配置："><a href="#1-确认管理口网络配置：" class="headerlink" title="1.确认管理口网络配置："></a>1.确认管理口网络配置：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span>  <span class="comment"># 检查IP、子网掩码、网关是否配置正确</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>若IP为 <code>0.0.0.0</code>，说明未分配，需手动设置静态IP或启用DHCP。</li>
-</ul>
-<h3 id="2-测试网络连通性："><a href="#2-测试网络连通性：" class="headerlink" title="2.测试网络连通性："></a>2.测试网络连通性：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping 192.168.141.78       <span class="comment"># 测试管理口IP是否可达  </span></span><br><span class="line">arp -n | grep 48:dc:2d    <span class="comment"># 根据MAC地址确认IP是否在局域网中可见  </span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-检查硬件与驱动："><a href="#3-检查硬件与驱动：" class="headerlink" title="3.检查硬件与驱动："></a>3.检查硬件与驱动：</h3><ul>
-<li>确认服务器BMC模块已启用（部分服务器需在BIOS中开启IPMI功能）。  </li>
-<li>检查网线连接和管理口指示灯状态。</li>
-</ul>
-<h2 id="三、常见问题与解决方案"><a href="#三、常见问题与解决方案" class="headerlink" title="三、常见问题与解决方案"></a>三、常见问题与解决方案</h2><h3 id="1-命令执行失败的可能原因"><a href="#1-命令执行失败的可能原因" class="headerlink" title="1. 命令执行失败的可能原因"></a>1. 命令执行失败的可能原因</h3><ul>
-<li><p><strong>问题</strong>：执行<code>ipmitool</code>命令时提示<code>Could not open device</code>或<code>No such file or directory</code>。<br><strong>解决方案</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 检查IPMI内核模块是否加载</span></span><br><span class="line">lsmod | grep ipmi</span><br><span class="line"><span class="comment"># 若未加载，手动加载模块</span></span><br><span class="line">modprobe ipmi_devintf</span><br><span class="line">modprobe ipmi_si</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="2-动态获取IP地址"><a href="#2-动态获取IP地址" class="headerlink" title="2. 动态获取IP地址"></a>2. 动态获取IP地址</h3><p>如果管理口配置为DHCP但未获取到IP，可以强制更新DHCP租约：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc dhcp  <span class="comment"># 设置为DHCP模式</span></span><br><span class="line">ipmitool lan dhcp 1            <span class="comment"># 强制更新DHCP</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-修改管理口IP地址"><a href="#3-修改管理口IP地址" class="headerlink" title="3. 修改管理口IP地址"></a>3. 修改管理口IP地址</h3><p>如需修改静态IP，执行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc static</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipaddr 192.168.1.100</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 netmask 255.255.255.0</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 defgw ipaddr 192.168.1.1</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-跨网段访问管理口"><a href="#4-跨网段访问管理口" class="headerlink" title="4. 跨网段访问管理口"></a>4. 跨网段访问管理口</h3><p>若管理口与本地网络不在同一子网，可通过以下方式临时访问：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加临时路由（Linux）</span></span><br><span class="line">ip route add 192.168.141.0/24 via 192.168.1.254 dev eth0</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-其他实用命令"><a href="#5-其他实用命令" class="headerlink" title="5. 其他实用命令"></a>5. 其他实用命令</h3><ul>
-<li><p>查看BMC硬件状态：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool mc info</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重启BMC模块（谨慎操作）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool mc reset cold</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Linux管理工具</category>
-        <category>ipmitool</category>
-      </categories>
-      <tags>
-        <tag>Linux管理工具</tag>
-        <tag>ipmitool</tag>
-        <tag>服务器管理口</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux软硬链接详解</title>
     <url>/2025/03/26/Linux%E8%BD%AF%E7%A1%AC%E9%93%BE%E6%8E%A5%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="Linux软硬链接详解"><a href="#Linux软硬链接详解" class="headerlink" title="Linux软硬链接详解"></a>Linux软硬链接详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-FileSystem-SymbolicHardLink.jpg" alt="Linux-FileSystem-SymbolicHardLink"></p>
@@ -956,61 +713,179 @@
       </tags>
   </entry>
   <entry>
-    <title>ipmitool常用命令及用法详解</title>
-    <url>/2025/03/24/ipmitool%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="ipmitool常用命令及用法详解"><a href="#ipmitool常用命令及用法详解" class="headerlink" title="ipmitool常用命令及用法详解"></a>ipmitool常用命令及用法详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-IPMItoolCommon.jpg" alt="Linux-ManagementTools-IPMItoolCommon"></p>
-<h2 id="IPMI官方文档"><a href="#IPMI官方文档" class="headerlink" title="IPMI官方文档"></a>IPMI官方文档</h2><blockquote>
-<p><a href="https://github.com/ipmitool/ipmitool">https://github.com/ipmitool/ipmitool</a></p>
+    <title>Linux man命令手册使用指南</title>
+    <url>/2025/03/20/Linux%20man%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="Linux-man命令手册使用指南"><a href="#Linux-man命令手册使用指南" class="headerlink" title="Linux man命令手册使用指南"></a>Linux man命令手册使用指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
+<h2 id="一、Linux-的man命令手册页"><a href="#一、Linux-的man命令手册页" class="headerlink" title="一、Linux 的man命令手册页"></a>一、Linux 的man命令手册页</h2><blockquote>
+<p><a href="https://man7.org/linux/man-pages/index.html">https://man7.org/linux/man-pages/index.html</a></p>
 </blockquote>
-<h2 id="一、基本连接方式"><a href="#一、基本连接方式" class="headerlink" title="一、基本连接方式"></a>一、基本连接方式</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 本地管理（需要root权限）</span></span><br><span class="line">ipmitool [<span class="built_in">command</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 远程管理（带密码）</span></span><br><span class="line">ipmitool -I lanplus -H [BMC_IP] -U [username] -P [password] [<span class="built_in">command</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 远程管理（交互式输入密码）</span></span><br><span class="line">ipmitool -I lanplus -H [BMC_IP] -U [username] -p [password] [<span class="built_in">command</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="二、man命令使用方法"><a href="#二、man命令使用方法" class="headerlink" title="二、man命令使用方法"></a>二、man命令使用方法</h2><h3 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h3><h4 id="1-1-查看命令手册"><a href="#1-1-查看命令手册" class="headerlink" title="1.1 查看命令手册"></a>1.1 查看命令手册</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man [章节] &lt;命令名&gt;</span><br><span class="line"><span class="comment"># 示例：查看 ls 命令的手册</span></span><br><span class="line">man <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
 
+<h4 id="1-2-查看指定章节的手册"><a href="#1-2-查看指定章节的手册" class="headerlink" title="1.2 查看指定章节的手册"></a>1.2 查看指定章节的手册</h4><p>某些关键词（如<code>passwd</code>）可能存在于多个章节：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man 1 passwd   <span class="comment"># 查看 passwd 命令的手册（用户命令）</span></span><br><span class="line">man 5 passwd   <span class="comment"># 查看 passwd 文件格式的手册（配置文件）</span></span><br></pre></td></tr></table></figure>
 
+<hr>
+<h3 id="2-常用操作快捷键"><a href="#2-常用操作快捷键" class="headerlink" title="2. 常用操作快捷键"></a>2. 常用操作快捷键</h3><ul>
+<li><strong>导航</strong>：<ul>
+<li><code>↑</code>&#x2F;<code>↓</code>：逐行滚动。</li>
+<li><code>Page Up</code>&#x2F;<code>Page Down</code>：翻页。</li>
+<li><code>Home</code>&#x2F;<code>End</code>：跳转至开头&#x2F;结尾。</li>
+</ul>
+</li>
+<li><strong>搜索</strong>：<ul>
+<li><code>/关键字</code>：向前搜索（如 <code>/--help</code>）。</li>
+<li><code>n</code>：跳转到下一个匹配项。</li>
+<li><code>N</code>：跳转到上一个匹配项。</li>
+</ul>
+</li>
+<li><strong>退出</strong>：<ul>
+<li><code>q</code>：退出手册。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-常用命令选项"><a href="#3-常用命令选项" class="headerlink" title="3. 常用命令选项"></a>3. 常用命令选项</h3><h4 id="3-1-搜索相关手册"><a href="#3-1-搜索相关手册" class="headerlink" title="3.1 搜索相关手册"></a>3.1 搜索相关手册</h4><ul>
+<li><p>**<code>-k</code> 或 <code>--apropos</code>**：按关键字搜索手册（类似<code>apropos</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -k network    <span class="comment"># 查找所有包含 &quot;network&quot; 的手册页</span></span><br><span class="line">apropos network   <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>**<code>-f</code> 或 <code>--whatis</code>**：显示命令的简短描述（类似<code>whatis</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -f passwd     <span class="comment"># 列出 passwd 的所有相关手册章节</span></span><br><span class="line">whatis passwd     <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-2其他选项"><a href="#3-2其他选项" class="headerlink" title="3.2其他选项"></a>3.2其他选项</h4><ul>
+<li><p>**<code>-a</code>**：显示所有匹配章节的手册（按<code>q</code>后继续下一章节）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -a passwd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>**<code>-w</code>**：显示手册页的路径：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -w <span class="built_in">ls</span>         <span class="comment"># 输出 /usr/share/man/man1/ls.1.gz</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="三、Linux彩色man-page设置方法"><a href="#三、Linux彩色man-page设置方法" class="headerlink" title="三、Linux彩色man page设置方法"></a>三、Linux彩色man page设置方法</h2><blockquote>
+<p>原文: <a href="https://gaomf.cn/2017/01/13/Linux_Colourful_Man/">https://gaomf.cn/2017/01/13/Linux_Colourful_Man/</a>　　作者: 高明飞</p>
+</blockquote>
+<h3 id="1-在-bashrc文件中添加less的相关设置参数"><a href="#1-在-bashrc文件中添加less的相关设置参数" class="headerlink" title="1. 在 .bashrc文件中添加less的相关设置参数"></a>1. 在 .bashrc文件中添加less的相关设置参数</h3><p>Linux下<code>man page</code>的显示默认是通过<code>less</code>来完成的，故在<code>.bashrc</code>文件中添加<code>less</code>的相关设置参数即可使<code>man page</code>变成彩色的:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># colourful man page</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_mb=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_md=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_me=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_us=$<span class="string">&#x27;\E[01;32m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_ue=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_so=$<span class="string">&#x27;\E[01;33;44m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_se=$<span class="string">&#x27;\E[0m&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="二、常用命令分类"><a href="#二、常用命令分类" class="headerlink" title="二、常用命令分类"></a>二、常用命令分类</h2><h3 id="1-传感器信息相关"><a href="#1-传感器信息相关" class="headerlink" title="1. 传感器信息相关"></a>1. 传感器信息相关</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看所有传感器信息</span></span><br><span class="line">ipmitool sensor list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定传感器信息（如CPU温度）</span></span><br><span class="line">ipmitool sensor get <span class="string">&quot;CPU Temp&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看传感器阈值</span></span><br><span class="line">ipmitool sensor thresh <span class="string">&quot;CPU Temp&quot;</span> upper 80 85 90</span><br></pre></td></tr></table></figure>
+<p>更改完<code>.bashrc</code>文件后要重新载入一下配置：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-电源管理"><a href="#2-电源管理" class="headerlink" title="2. 电源管理"></a>2. 电源管理</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看电源状态</span></span><br><span class="line">ipmitool power status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开机</span></span><br><span class="line">ipmitool power on</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关机</span></span><br><span class="line">ipmitool power off</span><br><span class="line"></span><br><span class="line"><span class="comment"># 硬重启（相当于按电源按钮）</span></span><br><span class="line">ipmitool power reset</span><br><span class="line"></span><br><span class="line"><span class="comment"># 软关机（正常关机）</span></span><br><span class="line">ipmitool power soft</span><br><span class="line"></span><br><span class="line"><span class="comment"># 电源循环（先关机再开机）</span></span><br><span class="line">ipmitool power cycle</span><br></pre></td></tr></table></figure>
+<p>之后重启终端才会生效，以上配置显示效果如下：</p>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
+<h3 id="2-less的相关设置参数的含义"><a href="#2-less的相关设置参数的含义" class="headerlink" title="2. less的相关设置参数的含义"></a>2. less的相关设置参数的含义</h3><p>其中<code>LESS_TERMCAP_xx</code>的含义如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><code>termcap</code></th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>mb</code></td>
+<td align="center">start blink 开始闪烁</td>
+</tr>
+<tr>
+<td align="center"><code>md</code></td>
+<td align="center">start bold 开始加粗</td>
+</tr>
+<tr>
+<td align="center"><code>me</code></td>
+<td align="center">turn off bold, blink and underline 关闭粗体、闪烁和下划线</td>
+</tr>
+<tr>
+<td align="center"><code>us</code></td>
+<td align="center">start underline 开始下划线</td>
+</tr>
+<tr>
+<td align="center"><code>ue</code></td>
+<td align="center">stop underline 停止下划线</td>
+</tr>
+<tr>
+<td align="center"><code>so</code></td>
+<td align="center">start standout 开始脱颖而出</td>
+</tr>
+<tr>
+<td align="center"><code>se</code></td>
+<td align="center">stop standout 停止突出</td>
+</tr>
+</tbody></table>
+<p>对照上面实际的<code>man page</code>页面可以看到：<code>md</code>对应蓝色部分；<code>us</code>对应绿色部分；<code>so</code>对应底部黄色状态栏。</p>
+<h3 id="3-具体颜色设置方法，参考以下页面："><a href="#3-具体颜色设置方法，参考以下页面：" class="headerlink" title="3.具体颜色设置方法，参考以下页面："></a>3.具体颜色设置方法，参考以下页面：</h3><blockquote>
+<p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">https://en.wikipedia.org/wiki/ANSI_escape_code#Colors</a></p>
+</blockquote>
+<p>简而言之，在<code>&#39;\E[0x;3y;4zm&#39;</code>中：<code>x</code>代表是否加粗，<code>1</code>为加粗，<code>2</code>为正常；<code>y</code>和<code>z</code>分别代表文字前景色和背景色，使用默认值的话可省略，颜色列表如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Intensity</th>
+<th align="center">0</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+<th align="center">6</th>
+<th align="center">7</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Normal</td>
+<td align="center">Black</td>
+<td align="center">Red</td>
+<td align="center">Green</td>
+<td align="center">Yellow</td>
+<td align="center">Blue</td>
+<td align="center">Magenta</td>
+<td align="center">Cyan</td>
+<td align="center">White</td>
+</tr>
+<tr>
+<td align="center">Bright</td>
+<td align="center">Black</td>
+<td align="center">Red</td>
+<td align="center">Green</td>
+<td align="center">Yellow</td>
+<td align="center">Blue</td>
+<td align="center">Magenta</td>
+<td align="center">Cyan</td>
+<td align="center">White</td>
+</tr>
+</tbody></table>
+<h2 id="四、man-pages手册页设置中文"><a href="#四、man-pages手册页设置中文" class="headerlink" title="四、man pages手册页设置中文"></a>四、man pages手册页设置中文</h2><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-manCN.jpg" alt="Linux-Basic-manCN"></p>
+<h3 id="1-通过包管理器进行安装"><a href="#1-通过包管理器进行安装" class="headerlink" title="1. 通过包管理器进行安装"></a>1. 通过包管理器进行安装</h3><p>在 CentOS&#x2F;RHEL 上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum -y install man-pages-zh-CN</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-FRU（Field-Replaceable-Unit）信息"><a href="#3-FRU（Field-Replaceable-Unit）信息" class="headerlink" title="3. FRU（Field Replaceable Unit）信息"></a>3. FRU（Field Replaceable Unit）信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看FRU信息</span></span><br><span class="line">ipmitool fru <span class="built_in">print</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定FRU信息（如0表示主板）</span></span><br><span class="line">ipmitool fru <span class="built_in">print</span> 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将FRU信息导出到文件</span></span><br><span class="line">ipmitool fru <span class="built_in">read</span> 0 fru_board.bin</span><br></pre></td></tr></table></figure>
+<h3 id="2-临时设置语言环境"><a href="#2-临时设置语言环境" class="headerlink" title="2. 临时设置语言环境"></a>2. 临时设置语言环境</h3><p>在终端中，可以通过以下命令设置环境变量来使用中文手册页：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
 
-<h3 id="4-SEL（System-Event-Log）管理"><a href="#4-SEL（System-Event-Log）管理" class="headerlink" title="4. SEL（System Event Log）管理"></a>4. SEL（System Event Log）管理</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看SEL日志</span></span><br><span class="line">ipmitool sel list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看详细的SEL信息</span></span><br><span class="line">ipmitool sel elist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除SEL日志</span></span><br><span class="line">ipmitool sel clear</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取SEL时间信息</span></span><br><span class="line">ipmitool sel time get</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置SEL时间（与本地时间同步）</span></span><br><span class="line">ipmitool sel time <span class="built_in">set</span> <span class="string">&quot;now&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="5-BMC配置"><a href="#5-BMC配置" class="headerlink" title="5. BMC配置"></a>5. BMC配置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看BMC网络配置</span></span><br><span class="line">ipmitool lan <span class="built_in">print</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置BMC IP地址</span></span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc static</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipaddr 192.168.1.100</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 netmask 255.255.255.0</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 defgw ipaddr 192.168.1.1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看BMC用户列表</span></span><br><span class="line">ipmitool user list 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加BMC用户</span></span><br><span class="line">ipmitool user <span class="built_in">set</span> name 2 newuser</span><br><span class="line">ipmitool user <span class="built_in">set</span> password 2 <span class="string">&quot;newpassword&quot;</span></span><br><span class="line">ipmitool user <span class="built_in">enable</span> 2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更改用户权限</span></span><br><span class="line">ipmitool channel setaccess 1 2 callin=on ipmi=on <span class="built_in">link</span>=on privilege=4</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-远程控制台"><a href="#6-远程控制台" class="headerlink" title="6. 远程控制台"></a>6. 远程控制台</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动SOL（Serial Over LAN）会话</span></span><br><span class="line">ipmitool -I lanplus -H [BMC_IP] -U [username] -P [password] sol activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 退出SOL会话</span></span><br><span class="line"><span class="comment"># 在SOL会话中按&quot;~.&quot;组合键</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="7-传感器数据记录（SDR）"><a href="#7-传感器数据记录（SDR）" class="headerlink" title="7. 传感器数据记录（SDR）"></a>7. 传感器数据记录（SDR）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看SDR信息</span></span><br><span class="line">ipmitool sdr list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看详细的SDR信息</span></span><br><span class="line">ipmitool sdr elist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定类型的传感器</span></span><br><span class="line">ipmitool sdr <span class="built_in">type</span> temperature</span><br><span class="line">ipmitool sdr <span class="built_in">type</span> fan</span><br><span class="line">ipmitool sdr <span class="built_in">type</span> voltage</span><br></pre></td></tr></table></figure>
-
-<h3 id="8-机箱状态"><a href="#8-机箱状态" class="headerlink" title="8. 机箱状态"></a>8. 机箱状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看机箱状态</span></span><br><span class="line">ipmitool chassis status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看机箱策略</span></span><br><span class="line">ipmitool chassis policy list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置机箱电源恢复策略</span></span><br><span class="line">ipmitool chassis policy always-on  <span class="comment"># 上电后自动开机</span></span><br><span class="line">ipmitool chassis policy previous  <span class="comment"># 保持上次状态</span></span><br><span class="line">ipmitool chassis policy stay-off  <span class="comment"># 保持关机状态</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="9-固件管理"><a href="#9-固件管理" class="headerlink" title="9. 固件管理"></a>9. 固件管理</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看BMC固件版本</span></span><br><span class="line">ipmitool mc info</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制BMC冷重启</span></span><br><span class="line">ipmitool mc reset cold</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制BMC热重启</span></span><br><span class="line">ipmitool mc reset warm</span><br></pre></td></tr></table></figure>
-
-<h3 id="10-网络配置"><a href="#10-网络配置" class="headerlink" title="10. 网络配置"></a>10. 网络配置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#查看 BMC 网络配置</span></span><br><span class="line">ipmitool lan <span class="built_in">print</span> 1</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改 BMC IP 地址</span></span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipaddr &lt;新IP地址&gt;</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 netmask &lt;子网掩码&gt;</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 defgw ipaddr &lt;网关&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="三、高级用法"><a href="#三、高级用法" class="headerlink" title="三、高级用法"></a>三、高级用法</h2><h3 id="批量执行命令"><a href="#批量执行命令" class="headerlink" title="批量执行命令"></a>批量执行命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用批处理模式执行多个命令</span></span><br><span class="line">ipmitool -H [BMC_IP] -U [username] -P [password] -b [baud_rate] -t [device_type] &lt; commands.txt</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用加密通道"><a href="#使用加密通道" class="headerlink" title="使用加密通道"></a>使用加密通道</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用加密的lanplus接口</span></span><br><span class="line">ipmitool -I lanplus -H [BMC_IP] -U [username] -P [password] -C 17 [<span class="built_in">command</span>]</span><br></pre></td></tr></table></figure>
-
-<h3 id="调试模式"><a href="#调试模式" class="headerlink" title="调试模式"></a>调试模式</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启用调试输出</span></span><br><span class="line">ipmitool -d [debug_level] [<span class="built_in">command</span>]</span><br><span class="line"><span class="comment"># debug_level: 1-3，数字越大输出越详细</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="四、注意事项"><a href="#四、注意事项" class="headerlink" title="四、注意事项"></a>四、注意事项</h2><ol>
-<li>执行某些命令（如电源控制）需要管理员权限</li>
-<li>频繁查询传感器可能会导致BMC负载增加</li>
-<li>修改网络配置时要小心，错误的配置可能导致无法远程访问BMC</li>
-<li>在生产环境中操作前建议先测试</li>
-<li>不同厂商的IPMI实现可能有细微差别，某些命令可能不支持</li>
+<h3 id="3-修改man命令的配置文件"><a href="#3-修改man命令的配置文件" class="headerlink" title="3. 修改man命令的配置文件"></a>3. 修改man命令的配置文件</h3><p>您还可以修改<code>~/.bashrc</code>或<code>~/.zshrc</code>文件，以便每次打开终端时自动加载这些环境变量。</p>
+<ol>
+<li>打开配置文件（以 <code>~/.bashrc</code> 为例）：</li>
 </ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在文件末尾添加以下内容：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>保存文件并重新加载：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、man-pages手册页未安装"><a href="#五、man-pages手册页未安装" class="headerlink" title="五、man pages手册页未安装"></a>五、man pages手册页未安装</h2><p>某些命令的手册可能需要单独安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 man-pages（系统调用/库函数手册）</span></span><br><span class="line"><span class="built_in">sudo</span> yum -y install man-pages</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>Linux管理工具</category>
-        <category>ipmitool</category>
+        <category>Linux</category>
+        <category>基础命令</category>
+        <category>man</category>
       </categories>
       <tags>
-        <tag>Linux管理工具</tag>
-        <tag>ipmitool</tag>
+        <tag>Linux</tag>
+        <tag>man-pages</tag>
       </tags>
   </entry>
   <entry>
@@ -1162,72 +1037,625 @@
       </tags>
   </entry>
   <entry>
-    <title>日志messages中有IO和文件系统报错</title>
-    <url>/2025/03/18/%E6%97%A5%E5%BF%97messages%E4%B8%AD%E6%9C%89IO%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%8A%A5%E9%94%99/</url>
-    <content><![CDATA[<h1 id="日志messages中有IO和文件系统报错"><a href="#日志messages中有IO和文件系统报错" class="headerlink" title="日志messages中有IO和文件系统报错"></a>日志messages中有IO和文件系统报错</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-messages-XFSIOEXT4.jpg" alt="Linux-messages-XFSIOEXT4"></p>
-<h3 id="一、-检查日志中的I-O和文件系统报错"><a href="#一、-检查日志中的I-O和文件系统报错" class="headerlink" title="一、 检查日志中的I&#x2F;O和文件系统报错"></a>一、 检查日志中的I&#x2F;O和文件系统报错</h3><p><strong>命令含义</strong>：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /var/log/messages | grep <span class="string">&#x27;kernel&#x27;</span> | egrep -i <span class="string">&#x27;error|fail|readonly|abort|offline|fatal&#x27;</span> | egrep -i <span class="string">&#x27;ext.-fs|I/O|xfs-fs&#x27;</span></span><br></pre></td></tr></table></figure>
+    <title>NTP服务配置与管理指南</title>
+    <url>/2025/04/02/NTP%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE%E4%B8%8E%E7%AE%A1%E7%90%86%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="NTP服务配置与管理指南"><a href="#NTP服务配置与管理指南" class="headerlink" title="NTP服务配置与管理指南"></a>NTP服务配置与管理指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-DeploymentService-NTPConfig.jpg" alt="Linux-DeploymentService-NTPConfig"></p>
+<h2 id="一、检查并安装NTP服务"><a href="#一、检查并安装NTP服务" class="headerlink" title="一、检查并安装NTP服务"></a>一、检查并安装NTP服务</h2><h3 id="1-首先查询NTP软件版本"><a href="#1-首先查询NTP软件版本" class="headerlink" title="1.首先查询NTP软件版本"></a>1.首先查询NTP软件版本</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rpm -qa | grep ntp</span><br><span class="line">ntpdate-4.2.6p5-29.el7.centos.2.x86_64</span><br><span class="line">ntp-4.2.6p5-29.el7.centos.2.x86_64</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-安装-NTP-软件包："><a href="#2-安装-NTP-软件包：" class="headerlink" title="2. 安装 NTP 软件包："></a>2. 安装 NTP 软件包：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum -y install ntp</span><br><span class="line">已安装:</span><br><span class="line">  ntp.x86_64 0:4.2.6p5-29.el7.centos.2                                                                     </span><br><span class="line"></span><br><span class="line">作为依赖被安装:</span><br><span class="line">  autogen-libopts.x86_64 0:5.18-5.el7               ntpdate.x86_64 0:4.2.6p5-29.el7.centos.2              </span><br><span class="line"></span><br><span class="line">完毕！</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-启动-NTP-服务："><a href="#3-启动-NTP-服务：" class="headerlink" title="3. 启动 NTP 服务："></a>3. 启动 NTP 服务：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start ntpd</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-设置-NTP-服务开机自启："><a href="#4-设置-NTP-服务开机自启：" class="headerlink" title="4. 设置 NTP 服务开机自启："></a>4. 设置 NTP 服务开机自启：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ntpd</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/ntpd.service to /usr/lib/systemd/system/ntpd.service.</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-检查-NTP-服务状态："><a href="#5-检查-NTP-服务状态：" class="headerlink" title="5. 检查 NTP 服务状态："></a>5. 检查 NTP 服务状态：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status ntpd</span><br><span class="line">● ntpd.service - Network Time Service</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/ntpd.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since 三 2025-04-09 17:25:07 CST; 12s ago</span><br><span class="line"> Main PID: 8015 (ntpd)</span><br><span class="line">   CGroup: /system.slice/ntpd.service</span><br><span class="line">           └─8015 /usr/sbin/ntpd -u ntp:ntp -g</span><br><span class="line"></span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen and drop on 1 v6wildcard :: UDP 123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen normally on 2 lo 127.0.0.1 UDP 123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen normally on 3 ens33 192.168.184.128 UDP 123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen normally on 4 lo ::1 UDP 123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen normally on 5 ens33 fe80::cbd9:ea82:743b:52...123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listening on routing socket on fd <span class="comment">#22 for interfac...tes</span></span><br><span class="line">4月 09 17:25:08 localhost.localdomain ntpd[8015]: 0.0.0.0 c016 06 restart</span><br><span class="line">4月 09 17:25:08 localhost.localdomain ntpd[8015]: 0.0.0.0 c012 02 freq_set kernel 0.000 PPM</span><br><span class="line">4月 09 17:25:08 localhost.localdomain ntpd[8015]: 0.0.0.0 c011 01 freq_not_set</span><br><span class="line">4月 09 17:25:14 localhost.localdomain ntpd[8015]: 0.0.0.0 c614 04 freq_mode</span><br><span class="line">Hint: Some lines were ellipsized, use -l to show <span class="keyword">in</span> full.</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-手动同步时间（可选）："><a href="#6-手动同步时间（可选）：" class="headerlink" title="6. 手动同步时间（可选）："></a>6. 手动同步时间（可选）：</h3><p>如果你想立即同步时间，可以使用以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ntpdate pool.ntp.org</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="7-备份配置文件"><a href="#7-备份配置文件" class="headerlink" title="7. 备份配置文件"></a>7. 备份配置文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /etc/ntp.conf 是NTP服务的主要配置文件，用于控制如何同步系统时间。</span></span><br><span class="line"><span class="built_in">cp</span> -p /etc/ntp.conf /etc/ntp.conf.bak</span><br><span class="line"><span class="comment"># /etc/sysconfig/ntpd 此配置文件主要用来定义NTP守护程序(ntpd)启动时使用的各种选项。</span></span><br><span class="line"><span class="built_in">cp</span> -p /etc/sysconfig/ntpd /etc/sysconfig/ntpd.bak  </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、编辑-etc-ntp-conf配置文件"><a href="#二、编辑-etc-ntp-conf配置文件" class="headerlink" title="二、编辑&#x2F;etc&#x2F;ntp.conf配置文件"></a>二、编辑&#x2F;etc&#x2F;ntp.conf配置文件</h2><h3 id="1-注释默认的-server-配置"><a href="#1-注释默认的-server-配置" class="headerlink" title="1. 注释默认的 server 配置"></a>1. 注释默认的 server 配置</h3><p>默认的 NTP 服务器可能是 <code>pool.ntp.org</code> 或一些公共 NTP 池服务器，但这些服务器可能：</p>
 <ul>
-<li><p><strong>作用</strong>：从系统日志 <code>/var/log/messages</code> 中筛选出与内核（<code>kernel</code>）相关的错误信息，进一步过滤出包含 <strong>I&#x2F;O错误、文件系统异常（ext4、XFS）</strong> 的关键字条目（如 <code>error</code>, <code>fail</code>, <code>readonly</code> 等）。  </p>
-</li>
-<li><p><strong>输出关键信息</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.278904] blk_update_request: I/O error, dev sdd, sector 5855646432  </span><br><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.279098] blk_update_request: I/O error, dev sdd, sector 5855512576  </span><br><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.279120] Buffer I/O error on dev sdd1, logical block 731938816, lost sync page write  </span><br></pre></td></tr></table></figure></li>
-<li><p><strong>结论</strong>：  </p>
+<li><strong>响应较慢</strong>（受网络延迟影响）。</li>
+<li><strong>不稳定</strong>（公共服务器可能过载）。</li>
+<li><strong>不符合企业内网需求</strong>（如需要同步内部时间源）。</li>
+</ul>
+<p><strong>调整方式</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 注释掉原有的 server 行，例如：</span><br><span class="line"># server 0.centos.pool.ntp.org iburst</span><br><span class="line"># server 1.centos.pool.ntp.org iburst</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2-加入自定义-NTP-服务器"><a href="#2-加入自定义-NTP-服务器" class="headerlink" title="2. 加入自定义 NTP 服务器"></a>2. 加入自定义 NTP 服务器</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo &quot;server 首要NTP服务器IP地址 prefer&quot; &gt;&gt; /etc/ntp.conf</span><br><span class="line">echo &quot;server 备用NTP服务器IP地址&quot; &gt;&gt; /etc/ntp.conf</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>设备 <code>sdd</code> 出现 <strong>I&#x2F;O错误</strong>，涉及特定扇区和逻辑块，可能是物理磁盘损坏、连接故障或文件系统损坏。  </li>
-<li><strong>需立即通知二线备份团队（Backup）进行应急处理</strong>，并通知应用团队检查业务是否受影响。</li>
+<li>**<code>prefer</code>**：标记为首选服务器，NTP 会优先同步它（即使延迟稍高）。</li>
+<li><strong>备用服务器</strong>：在主服务器不可用时自动切换，提高可靠性。</li>
+<li><strong>适用场景</strong>：<ul>
+<li>企业内部 NTP 服务器（如 <code>192.168.1.10</code>）。</li>
+<li>国家授时中心（如 <code>cn.pool.ntp.org</code>）。</li>
+<li>云厂商提供的 NTP（如阿里云 <code>ntp.aliyun.com</code>）。</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h3 id="二、-查看磁盘状态（是否掉盘）"><a href="#二、-查看磁盘状态（是否掉盘）" class="headerlink" title="二、. 查看磁盘状态（是否掉盘）"></a>二、. 查看磁盘状态（是否掉盘）</h3><p><strong>命令含义</strong>：  </p>
+<h3 id="3-注释掉-restrict-default-ignore"><a href="#3-注释掉-restrict-default-ignore" class="headerlink" title="3. 注释掉 restrict default ignore"></a>3. 注释掉 restrict default ignore</h3><p>默认配置可能包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># restrict default ignore</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><p>**<code>/home/ansible/storcli64 /c0 show all</code>**：<br>使用 RAID 管理工具 <code>storcli64</code> 检查控制器 <code>/c0</code> 下所有物理磁盘（PD）的状态。  </p>
-<ul>
-<li><strong>输出关键信息</strong>：<br>所有磁盘状态为 <code>Onln</code>（在线），DG（驱动器组）值为 1-10，无 <code>Offln</code>（离线）或 <code>UBad</code>（异常）磁盘。  </li>
-<li><strong>结论</strong>：<br>磁盘阵列中 <strong>未检测到掉盘</strong>，硬件层面未发现全局故障。</li>
-</ul>
+<li><p><strong>作用</strong>：拒绝所有外部客户端访问本机的 NTP 服务。</p>
 </li>
-<li><p>**<code>lsblk</code>**：<br>列出所有块设备及其挂载信息，确认文件系统挂载点正常。  </p>
+<li><p><strong>为什么要注释掉？</strong></p>
 <ul>
-<li><strong>输出关键信息</strong>：<br><code>sdd</code> 对应的分区 <code>sdd1</code> 挂载至 <code>/srv/BigData/hadoop/data*</code>，未显示异常状态。  </li>
-<li><strong>结论</strong>：<br>date也为1-10证明没有掉盘，逻辑层面挂载正常，但需结合日志进一步排查 <code>sdd</code> 的硬件健康状态。</li>
+<li><p>如果这台 NTP 服务器需要<strong>为内网其他设备提供时间同步服务</strong>，必须允许客户端访问。</p>
+</li>
+<li><p>替代方案（推荐）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap</span><br></pre></td></tr></table></figure>
+
+<p>仅允许 <code>192.168.1.0/24</code> 网段同步时间，但不允许修改配置（<code>nomodify notrap</code>）。</p>
+</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h3 id="三、综合分析"><a href="#三、综合分析" class="headerlink" title="三、综合分析"></a>三、综合分析</h3><h4 id="1-问题定位："><a href="#1-问题定位：" class="headerlink" title="1.问题定位："></a>1.问题定位：</h4><ul>
-<li>日志显示 <code>sdd</code> 存在 <strong>I&#x2F;O错误</strong>，可能是物理磁盘损坏、数据线接触不良或文件系统故障。  </li>
-<li>磁盘阵列状态正常（无掉盘），说明问题可能局限于单盘 <code>sdd</code>，而非全局存储故障。</li>
-</ul>
-<h4 id="2-建议操作："><a href="#2-建议操作：" class="headerlink" title="2.建议操作："></a>2.建议操作：</h4><ul>
-<li><strong>立即行动</strong>：  <ul>
-<li>通知二线备份团队介入，启动业务应急预案。  </li>
-<li>检查 <code>/srv/BigData/hadoop/data*</code> 的业务是否受影响（如数据写入失败、服务中断）。</li>
-</ul>
-</li>
-<li><strong>进一步排查</strong>：  <ul>
-<li>使用 <code>smartctl</code> 检查 <code>sdd</code> 的 SMART 健康状态。  </li>
-<li>检查磁盘连接线、控制器插槽是否松动。  </li>
-<li>尝试对 <code>sdd</code> 执行文件系统修复（如 <code>xfs_repair</code> 或 <code>fsck</code>）。</li>
-</ul>
-</li>
-<li><strong>长期建议</strong>：  <ul>
-<li>监控磁盘 I&#x2F;O 错误率，提前替换潜在故障盘。  </li>
-<li>优化日志监控告警规则，确保及时响应。</li>
+<h3 id="4-注释掉本地时钟源（server-127-0-0-1）"><a href="#4-注释掉本地时钟源（server-127-0-0-1）" class="headerlink" title="4. 注释掉本地时钟源（server 127.0.0.1）"></a>4. 注释掉本地时钟源（server 127.0.0.1）</h3><p>默认可能包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># server 127.0.0.1</span><br><span class="line"># fudge 127.0.0.1 stratum 10</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：当所有外部 NTP 服务器不可用时，回退到本地时钟（但本地硬件时钟通常不准）。</li>
+<li><strong>为什么要注释掉？</strong><ul>
+<li>避免在<strong>网络隔离环境</strong>下依赖不准确的本地时钟。</li>
+<li>如果确实需要本地时钟作为兜底，可以保留，但 <code>stratum</code> 应设为较高值（如 <code>10</code>），表示优先级最低。</li>
 </ul>
 </li>
 </ul>
+<h3 id="5-重启NTP服务器"><a href="#5-重启NTP服务器" class="headerlink" title="5.重启NTP服务器"></a>5.重启NTP服务器</h3><blockquote>
+<p>注意：所有配置修改后都需要重启服务生效：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart ntpd</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="三、NTP配置文件详解"><a href="#三、NTP配置文件详解" class="headerlink" title="三、NTP配置文件详解"></a>三、NTP配置文件详解</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 指定NTP守护进程用来记录频率偏差的文件位置。</span></span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认情况下，拒绝所有对NTP服务器状态或时间的查询请求。</span></span><br><span class="line">restrict default noquery</span><br><span class="line"></span><br><span class="line"><span class="comment"># IPv4 默认访问控制规则（严格限制所有外部客户端）</span></span><br><span class="line"><span class="comment"># - kod: 发送Kiss-of-Death包以减缓过于频繁的请求。</span></span><br><span class="line"><span class="comment"># - nomodify: 发送Kiss-of-Death包以减缓过于频繁的请求。</span></span><br><span class="line"><span class="comment"># - notrap: 禁用 trap 服务（防攻击）</span></span><br><span class="line"><span class="comment"># - nopeer: 发送Kiss-of-Death包以减缓过于频繁的请求。</span></span><br><span class="line"><span class="comment"># - noquery: 阻止查询NTP服务器的时间或状态。</span></span><br><span class="line">restrict default kod nomodify notrap nopeer noquery</span><br><span class="line"><span class="comment">#restrict规则是叠加生效的，最后出现的规则会覆盖之前的同名规则</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># IPv6 默认访问控制规则（同 IPv4，但针对 IPv6 地址）</span></span><br><span class="line">restrict -6 default kod nomodify notrap nopeer noquery</span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许本地回环接口（127.0.0.1）完全访问 NTP 服务</span></span><br><span class="line">restrict 127.0.0.1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许 IPv6 本地回环接口（::1）完全访问 NTP 服务</span></span><br><span class="line">restrict -6 ::1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载加密认证文件（如 Autokey 或对称密钥）</span></span><br><span class="line"><span class="comment"># 若未使用认证功能，可删除以简化配置</span></span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定 NTP 密钥文件路径（用于认证）</span></span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置首选 NTP 服务器（10.252.17.10）</span></span><br><span class="line"><span class="comment"># - prefer: 标记为优先使用的服务器</span></span><br><span class="line"><span class="comment"># - minpoll 4 maxpoll 4: 固定轮询间隔为 16 秒（2^4）</span></span><br><span class="line">server 10.252.17.10 prefer minpoll 4 maxpoll 4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置备用 NTP 服务器（10.252.17.11）</span></span><br><span class="line"><span class="comment"># 轮询间隔同样固定为 16 秒</span></span><br><span class="line">server 10.252.17.11 minpoll 4 maxpoll 4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 禁用 NTP 监控功能（安全加固）</span></span><br><span class="line"><span class="comment"># 防止滥用 monlist 命令导致的 DDoS 攻击</span></span><br><span class="line"><span class="built_in">disable</span> monitor</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：所有配置修改后都需要重启服务生效：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart ntpd</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="四、配置step-tickers文件"><a href="#四、配置step-tickers文件" class="headerlink" title="四、配置step-tickers文件"></a>四、配置step-tickers文件</h2><p>&#x2F;etc&#x2F;ntp&#x2F;step-tickers 文件在基于NTP进行时间同步的系统中用于指定初次启动时要同步的服务器。</p>
+<p>默认情况下，我们配置的NTP服务器不会去时间源那里同步时间，所以必须修改&#x2F;etc&#x2F;ntp&#x2F;step-tickers文件，加入我们的时间源，这样每次启动ntp服务的时候就会自动更新时间。</p>
+<h3 id="1-将首要和备用NTP服务器IP地址写入"><a href="#1-将首要和备用NTP服务器IP地址写入" class="headerlink" title="1. 将首要和备用NTP服务器IP地址写入"></a>1. 将首要和备用NTP服务器IP地址写入</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># echo &quot;首要NTP服务器IP地址&quot; &gt;&gt;/etc/ntp/step-tickers</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;10.252.17.10&quot;</span> &gt; /etc/ntp/step-tickers</span><br><span class="line"></span><br><span class="line"><span class="comment"># echo &quot;备用NTP服务器IP地址&quot; &gt;&gt;/etc/ntp/step-tickers</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;10.252.17.11&quot;</span> &gt;&gt; /etc/ntp/step-tickers</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-ntp-conf和step-tickers的区别"><a href="#2-ntp-conf和step-tickers的区别" class="headerlink" title="2. ntp.conf和step-tickers的区别"></a>2. ntp.conf和step-tickers的区别</h3><h4 id="2-1-etc-ntp-conf"><a href="#2-1-etc-ntp-conf" class="headerlink" title="2.1 &#x2F;etc&#x2F;ntp.conf"></a>2.1 &#x2F;etc&#x2F;ntp.conf</h4><ul>
+<li><strong>作用</strong>：NTP 服务的主配置文件，用于定义 NTP 守护进程（<code>ntpd</code>）的所有行为。</li>
+<li><strong>内容</strong>：<ul>
+<li>指定时间服务器（NTP server）的地址（如 <code>pool.ntp.org</code> 或具体 IP）。</li>
+<li>配置访问控制规则（如允许哪些客户端同步时间）。</li>
+<li>定义本地时钟（如系统时钟作为备用时间源）。</li>
+<li>其他高级参数（如日志、 drift 文件路径等）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-2-etc-ntp-step-tickers"><a href="#2-2-etc-ntp-step-tickers" class="headerlink" title="2.2 &#x2F;etc&#x2F;ntp&#x2F;step-tickers"></a>2.2 &#x2F;etc&#x2F;ntp&#x2F;step-tickers</h4><ul>
+<li><strong>作用</strong>：仅用于在 NTP 服务启动时<strong>快速初始化系统时钟</strong>（通常用于 <code>ntpd</code> 启动前的第一次时间同步）。</li>
+<li><strong>使用场景</strong>：<ul>
+<li>当系统时间与真实时间偏差较大时（例如相差几分钟以上），<code>ntpd</code> 默认会逐步调整（缓慢校准）。但通过 <code>step-tickers</code> 中列出的服务器，系统可以在启动时<strong>立即大步调整时间</strong>（一步到位）。</li>
+<li>通常由 <code>/etc/init.d/ntpd</code> 或 <code>systemd</code> 服务脚本在启动 <code>ntpd</code> 前调用 <code>ntpdate</code> 命令读取此文件。</li>
+</ul>
+</li>
+<li><strong>内容</strong>：<ul>
+<li>简单列出 NTP 服务器的地址（每行一个）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-3-主要区别对比"><a href="#2-3-主要区别对比" class="headerlink" title="2.3 主要区别对比"></a>2.3 主要区别对比</h4><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left"><code>/etc/ntp.conf</code></th>
+<th align="left"><code>/etc/ntp/step-tickers</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>用途</strong></td>
+<td align="left">定义 <code>ntpd</code> 的长期运行行为</td>
+<td align="left">仅在启动时用于快速初始化时间</td>
+</tr>
+<tr>
+<td align="left"><strong>生效阶段</strong></td>
+<td align="left"><code>ntpd</code> 运行时持续生效</td>
+<td align="left"><code>ntpd</code> 启动前通过 <code>ntpdate</code> 使用</td>
+</tr>
+<tr>
+<td align="left"><strong>时间同步方式</strong></td>
+<td align="left">渐进式校准（默认）</td>
+<td align="left">立即大步调整（若时间偏差大）</td>
+</tr>
+<tr>
+<td align="left"><strong>依赖关系</strong></td>
+<td align="left">必需</td>
+<td align="left">可选（部分旧系统可能不需要）</td>
+</tr>
+</tbody></table>
+<h2 id="五、检查NTP同步情况"><a href="#五、检查NTP同步情况" class="headerlink" title="五、检查NTP同步情况"></a>五、检查NTP同步情况</h2><h3 id="ntpq-p"><a href="#ntpq-p" class="headerlink" title="ntpq -p"></a>ntpq -p</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ntpq -p</span><br><span class="line">     remote           refid      st t when poll reach   delay   offset  jitter</span><br><span class="line">==============================================================================</span><br><span class="line">*10.252.17.10    10.252.15.2      2 u   15   16  377    3.129   -0.022   0.063</span><br><span class="line">+10.252.17.11    10.252.15.1      2 u    5   16  377    3.092   -0.928   0.027</span><br></pre></td></tr></table></figure>
+
+<p>* 号代理首选NTP服务器</p>
+<p>+号代理备选的可用NTP服务器</p>
+<p>offset的绝对值越接近0越精准</p>
+<h3 id="ntpstat"><a href="#ntpstat" class="headerlink" title="ntpstat"></a>ntpstat</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ntpstat</span><br><span class="line">synchronised to NTP server (10.252.17.10) at stratum 3 </span><br><span class="line">   time correct to within 20 ms</span><br><span class="line">   polling server every 16 s</span><br></pre></td></tr></table></figure>
+
+<p>一般生产环境要求time correct小于 100ms 即合格</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>服务部署</category>
+        <category>NTP</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>NTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vim编辑器入门指南</title>
+    <url>/2025/03/27/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
+<h2 id="一、Vim模式与切换"><a href="#一、Vim模式与切换" class="headerlink" title="一、Vim模式与切换"></a>一、Vim模式与切换</h2><h3 id="1-命令模式"><a href="#1-命令模式" class="headerlink" title="1.命令模式"></a>1.命令模式</h3><ul>
+<li><strong>进入方式</strong>：通过<code>vi/vim</code>打开文件后的默认模式。  </li>
+<li><strong>功能</strong>：执行快捷键操作（如复制、删除、移动光标等），不可直接编辑文本。</li>
+</ul>
+<h3 id="2-编辑模式（插入模式）"><a href="#2-编辑模式（插入模式）" class="headerlink" title="2.编辑模式（插入模式）"></a>2.编辑模式（插入模式）</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>i</code>（插入）、<code>a</code>（追加）、<code>o</code>（新行）等。  </li>
+<li><strong>退出方式</strong>：按 <code>Esc</code> 返回命令模式。  </li>
+<li><strong>功能</strong>：直接编辑文本内容。</li>
+</ul>
+<h3 id="3-底行模式"><a href="#3-底行模式" class="headerlink" title="3.底行模式"></a>3.底行模式</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>:</code>。  </li>
+<li><strong>功能</strong>：执行保存、退出、搜索、设置等操作（如 <code>:wq</code> 保存退出）。</li>
+</ul>
+<h3 id="4-可视块模式"><a href="#4-可视块模式" class="headerlink" title="4.可视块模式"></a>4.可视块模式</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>Ctrl + v</code>。  </li>
+<li><strong>功能</strong>：批量选择文本块进行编辑（如删除、复制多行）。</li>
+</ul>
+<hr>
+<h2 id="二、常用快捷键"><a href="#二、常用快捷键" class="headerlink" title="二、常用快捷键"></a>二、常用快捷键</h2><h3 id="1-光标移动"><a href="#1-光标移动" class="headerlink" title="1. 光标移动"></a><strong>1. 光标移动</strong></h3><ul>
+<li><strong>行内移动</strong>：  <ul>
+<li><code>^</code>（数字 <code>6</code>）：移动到行首（首个非空字符）。  </li>
+<li><code>$</code>（数字 <code>4</code>）：移动到行尾。</li>
+</ul>
+</li>
+<li><strong>跨行移动</strong>：  <ul>
+<li><code>gg</code>：移动到文件第一行。  </li>
+<li><code>G</code>（<code>Shift + g</code>）：移动到文件最后一行。  </li>
+<li><code>100gg</code>：跳转到第100行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-复制、删除（剪切）、粘贴"><a href="#2-复制、删除（剪切）、粘贴" class="headerlink" title="2. 复制、删除（剪切）、粘贴"></a><strong>2. 复制、删除（剪切）、粘贴</strong></h3><ul>
+<li><code>yy</code>：复制当前行。  </li>
+<li><code>dd</code>：删除（剪切）当前行。  </li>
+<li><code>p</code>：粘贴到当前行下方。  </li>
+<li><code>P</code>（大写）：粘贴到当前行上方。</li>
+</ul>
+<h3 id="3-撤销与恢复"><a href="#3-撤销与恢复" class="headerlink" title="3. 撤销与恢复"></a><strong>3. 撤销与恢复</strong></h3><ul>
+<li><code>u</code>（undo）：撤销上一次操作。  </li>
+<li><code>Ctrl + r</code>（redo）：恢复被撤销的操作。</li>
+</ul>
+<h3 id="4-行号显示与搜索"><a href="#4-行号显示与搜索" class="headerlink" title="4. 行号显示与搜索"></a><strong>4. 行号显示与搜索</strong></h3><ul>
+<li><strong>显示行号</strong>：  <ul>
+<li><code>:set nu</code> 或 <code>:set number</code>：显示行号。  </li>
+<li><code>:set nonu</code>：隐藏行号。</li>
+</ul>
+</li>
+<li><strong>搜索功能</strong>：  <ul>
+<li><code>/keyword</code>：向下搜索指定内容（如 <code>/error</code>）。  </li>
+<li><code>n</code>：继续向下搜索。  </li>
+<li><code>N</code>：继续向上搜索。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="三、高级操作"><a href="#三、高级操作" class="headerlink" title="三、高级操作"></a>三、高级操作</h2><h3 id="1-批量编辑（可视块模式）"><a href="#1-批量编辑（可视块模式）" class="headerlink" title="1. 批量编辑（可视块模式）"></a><strong>1. 批量编辑（可视块模式）</strong></h3><ol>
+<li>按 <code>Ctrl + v</code> 进入可视块模式。  </li>
+<li>使用方向键选择多行文本块。  </li>
+<li>执行操作：  <ul>
+<li><code>d</code>：删除选中块。  </li>
+<li><code>y</code>：复制选中块。  </li>
+<li><code>I</code> 或 <code>A</code>：在块前&#x2F;后插入内容（按 <code>Esc</code> 完成批量插入）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-行调整"><a href="#2-行调整" class="headerlink" title="2. 行调整"></a><strong>2. 行调整</strong></h3><ul>
+<li><strong>上下移动行</strong>：  <ul>
+<li>命令模式下按 <code>dd</code> 剪切当前行，再按 <code>p</code> 或 <code>P</code> 粘贴到目标位置。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="四、常用命令速查表"><a href="#四、常用命令速查表" class="headerlink" title="四、常用命令速查表"></a>四、<strong>常用命令速查表</strong></h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>快捷键&#x2F;命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>保存退出</td>
+<td><code>:wq</code></td>
+</tr>
+<tr>
+<td>强制退出不保存</td>
+<td><code>:q!</code></td>
+</tr>
+<tr>
+<td>复制行</td>
+<td><code>yy</code></td>
+</tr>
+<tr>
+<td>删除行</td>
+<td><code>dd</code></td>
+</tr>
+<tr>
+<td>撤销操作</td>
+<td><code>u</code></td>
+</tr>
+<tr>
+<td>跳转到行首</td>
+<td><code>^</code></td>
+</tr>
+<tr>
+<td>跳转到行尾</td>
+<td><code>$</code></td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>基础命令</category>
+        <category>vim</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>vim</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sas3ircu &amp; storcli64工具定位故障硬盘位置</title>
+    <url>/2025/03/17/sas3ircu%20&amp;%20storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98%E4%BD%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircu.jpg" alt="Hardware-Disk-sas3ircu"></p>
+<h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：  <ul>
+<li><code>cd /home/ansible/</code>：进入服务器管理工具目录。  </li>
+<li><code>ls</code>：列出目录中的文件，确认工具（如 <code>storcli64</code> 和 <code>sas3ircu</code>）存在。</li>
+</ul>
+</li>
+<li><strong>输出关键信息</strong>：<br>目录中包含多个管理脚本和工具，例如 <code>storcli64</code>（RAID管理工具）、<code>sas3ircu</code>（SAS控制器工具）等。</li>
+</ul>
+<hr>
+<h4 id="命令-2：检查-RAID-控制器状态"><a href="#命令-2：检查-RAID-控制器状态" class="headerlink" title="命令 2：检查 RAID 控制器状态"></a>命令 2：检查 RAID 控制器状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 show all  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：使用 <code>storcli64</code> 工具查看控制器 0 的详细信息（包括磁盘组、物理磁盘状态等）。  </li>
+<li><strong>输出关键信息</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Status = Failure  </span><br><span class="line">Description = Controller 0 not found  </span><br></pre></td></tr></table></figure></li>
+<li><strong>结论</strong>：  <ul>
+<li><strong>RAID控制器 0 未被识别</strong>，可能原因包括：  <ul>
+<li>控制器硬件故障或未正确连接。  </li>
+<li>驱动未安装或工具版本不兼容。  </li>
+<li>命令路径或参数错误。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="命令-3：检查-SAS-控制器与磁盘阵列状态"><a href="#命令-3：检查-SAS-控制器与磁盘阵列状态" class="headerlink" title="命令 3：检查 SAS 控制器与磁盘阵列状态"></a>命令 3：检查 SAS 控制器与磁盘阵列状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./sas3ircu 0 display  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：使用 <code>sas3ircu</code> 工具查看 SAS 控制器 0 的配置信息，包括 RAID 卷状态和物理磁盘详情。  </li>
+<li><strong>输出关键信息</strong>：  <ul>
+<li><strong>IR Volume 1</strong>：  <ul>
+<li>RAID 级别：RAID10  </li>
+<li>状态：**Degraded (DGD)**（降级）  </li>
+<li>关联物理硬盘位置：<code>Enclosure#/Slot#</code> 如 <code>1:2</code>, <code>0:0</code> 等。</li>
+</ul>
+</li>
+<li><strong>IR Volume 2</strong>：  <ul>
+<li>RAID 级别：RAID1  </li>
+<li>状态：**Okay (OKY)**（正常）。</li>
+</ul>
+</li>
+<li><strong>错误提示</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SAS3IRCU: Error executing command DISPLAY.  </span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><strong>结论</strong>：  <ul>
+<li>RAID10 卷处于降级状态，表明 <strong>至少一块硬盘失效</strong>，需定位具体故障盘。  </li>
+<li>最后的错误提示可能因部分物理设备信息无法读取（如硬盘掉线或通信故障）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="二、故障定位与可能原因"><a href="#二、故障定位与可能原因" class="headerlink" title="二、故障定位与可能原因"></a>二、故障定位与可能原因</h3><h4 id="1-RAID-控制器问题："><a href="#1-RAID-控制器问题：" class="headerlink" title="1.RAID 控制器问题："></a>1.RAID 控制器问题：</h4><ul>
+<li><code>storcli64</code> 无法识别控制器 0，可能为硬件故障或驱动问题。</li>
+</ul>
+<h4 id="2-RAID-卷降级："><a href="#2-RAID-卷降级：" class="headerlink" title="2.RAID 卷降级："></a>2.RAID 卷降级：</h4><ul>
+<li>RAID10 卷降级说明部分硬盘失效，需根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>, <code>0:0</code>）定位具体槽位。</li>
+</ul>
+<h4 id="3-物理硬盘故障："><a href="#3-物理硬盘故障：" class="headerlink" title="3.物理硬盘故障："></a>3.物理硬盘故障：</h4><ul>
+<li>降级卷关联的硬盘可能存在物理损坏、连接松动或电源问题。</li>
+</ul>
+<h4 id="4-工具兼容性或权限问题："><a href="#4-工具兼容性或权限问题：" class="headerlink" title="4.工具兼容性或权限问题："></a>4.工具兼容性或权限问题：</h4><ul>
+<li><code>storcli64</code> 和 <code>sas3ircu</code> 版本与当前系统或硬件不兼容，或执行权限不足。</li>
+</ul>
+<hr>
+<h3 id="三、-建议操作步骤"><a href="#三、-建议操作步骤" class="headerlink" title="三、 建议操作步骤"></a>三、 建议操作步骤</h3><h4 id="1-检查-RAID-控制器硬件："><a href="#1-检查-RAID-控制器硬件：" class="headerlink" title="1.检查 RAID 控制器硬件："></a>1.检查 RAID 控制器硬件：</h4><ul>
+<li>确认控制器 0 的物理连接（如 PCIe插槽、电源线）。  </li>
+<li>更新 RAID 控制器驱动或固件。</li>
+</ul>
+<h4 id="2-定位故障硬盘："><a href="#2-定位故障硬盘：" class="headerlink" title="2.定位故障硬盘："></a>2.定位故障硬盘：</h4><ul>
+<li>根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>），找到对应槽位的硬盘，检查其状态灯（通常故障盘会亮红灯）。  </li>
+<li>使用 <code>smartctl</code> 检查硬盘 SMART 健康状态：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">smartctl -a /dev/sdX  </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-修复-RAID-卷："><a href="#3-修复-RAID-卷：" class="headerlink" title="3.修复 RAID 卷："></a>3.修复 RAID 卷：</h4><ul>
+<li>更换故障硬盘后，通过 <code>sas3ircu</code> 或 RAID 管理界面重建阵列。</li>
+</ul>
+<h4 id="4-排查工具问题："><a href="#4-排查工具问题：" class="headerlink" title="4.排查工具问题："></a>4.排查工具问题：</h4><ul>
+<li>确认 <code>storcli64</code> 和 <code>sas3ircu</code> 版本与硬件兼容。  </li>
+<li>以 <code>root</code> 权限执行命令，或检查文件执行权限：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /home/ansible/storcli64  </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="5-查看系统日志："><a href="#5-查看系统日志：" class="headerlink" title="5.查看系统日志："></a>5.查看系统日志：</h4><ul>
+<li>检查 <code>/var/log/messages</code> 或 <code>dmesg</code> 输出，获取更多硬件错误信息。</li>
+</ul>
+<hr>
+<h3 id="四-总结"><a href="#四-总结" class="headerlink" title="四. 总结"></a>四. 总结</h3><ul>
+<li><strong>当前问题</strong>：  <ul>
+<li>RAID 控制器 0 无法识别，RAID10 卷降级，存在硬盘故障风险。  </li>
+<li>SAS 控制器工具报错，可能因部分硬盘通信异常。</li>
+</ul>
+</li>
+<li><strong>风险等级</strong>：<br><strong>高</strong>（降级卷可能导致数据丢失，需立即处理）。  </li>
+<li><strong>处理优先级</strong>：  <ol>
+<li>定位并更换故障硬盘，修复降级卷。  </li>
+<li>排查 RAID 控制器硬件或驱动问题。  </li>
+<li>验证工具兼容性，确保后续管理操作正常。</li>
+</ol>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>硬件运维</category>
+        <category>硬盘</category>
+      </categories>
+      <tags>
+        <tag>硬件运维</tag>
+        <tag>sas3ircu</tag>
+        <tag>storcli64</tag>
+        <tag>硬盘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>NTP服务处理手册</title>
+    <url>/2025/04/03/NTP%E6%9C%8D%E5%8A%A1%E5%A4%84%E7%90%86%E6%89%8B%E5%86%8C/</url>
+    <content><![CDATA[<h1 id="NTP服务处理手册"><a href="#NTP服务处理手册" class="headerlink" title="NTP服务处理手册"></a>NTP服务处理手册</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-DeploymentService-NTPProcManual.jpg" alt="Linux-DeploymentService-NTPProcManual"></p>
+<h2 id="一、服务状态管理"><a href="#一、服务状态管理" class="headerlink" title="一、服务状态管理"></a>一、服务状态管理</h2><h3 id="1-快速检查服务状态"><a href="#1-快速检查服务状态" class="headerlink" title="1. 快速检查服务状态"></a>1. 快速检查服务状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl is-active ntpd</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>输出说明</strong>：<br><code>active</code>：服务运行中<br><code>inactive</code>：服务未启动<br><code>failed</code>：服务启动失败  </li>
+<li><strong>脚本适用性</strong>：✅ 直接返回状态码，适合自动化脚本调用</li>
+</ul>
+<hr>
+<h3 id="2-查看详细服务状态"><a href="#2-查看详细服务状态" class="headerlink" title="2. 查看详细服务状态"></a>2. 查看详细服务状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl status ntpd</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>输出内容</strong>：  <ul>
+<li>服务启停状态  </li>
+<li>进程ID及资源占用  </li>
+<li>最近日志片段（关键错误会在此显示）  </li>
+<li>开机自启配置状态</li>
+</ul>
+</li>
+</ul>
+<p><strong>正常状态示例</strong>：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Active: active (running) since 三 2025-04-16 20:03:48 CST; 2s ago</span><br><span class="line">Main PID: 1318 (ntpd)</span><br></pre></td></tr></table></figure>
+
+<p><strong>异常状态示例</strong>：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Active: failed (Result: exit-code) since ...</span><br><span class="line">Process: 1317 ExecStart=... (code=exited, status=1/FAILURE)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>解决方案</strong>：  <ol>
+<li>查看完整日志：<code>journalctl -u ntpd</code>  </li>
+<li>检查配置文件语法：<code>ntpd -p</code>  </li>
+<li>重启服务：<code>systemctl restart ntpd</code></li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="二、时间同步状态诊断"><a href="#二、时间同步状态诊断" class="headerlink" title="二、时间同步状态诊断"></a>二、时间同步状态诊断</h2><h3 id="1-快速同步状态检查（ntpstat）"><a href="#1-快速同步状态检查（ntpstat）" class="headerlink" title="1. 快速同步状态检查（ntpstat）"></a>1. 快速同步状态检查（ntpstat）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ntpstat</span><br></pre></td></tr></table></figure>
+<p><strong>正常输出示例</strong>：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">synchronised to NTP server (10.252.17.10) at stratum 3</span><br><span class="line">time correct to within 20 ms</span><br><span class="line">polling server every 16 s</span><br></pre></td></tr></table></figure>
+
+<p><strong>异常场景及处理</strong>：  </p>
+<table>
+<thead>
+<tr>
+<th>异常输出</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>unsynchronised</code></td>
+<td>未同步任何服务器</td>
+<td>1. 检查NTP服务状态<br>2. 验证防火墙是否放行UDP 123端口</td>
+</tr>
+<tr>
+<td><code>time offset exceeds tolerance</code></td>
+<td>时间偏差过大</td>
+<td>1. 强制同步：<code>ntpd -gq</code><br>2. 检查时区设置：<code>timedatectl</code></td>
+</tr>
+<tr>
+<td><code>no server suitable</code></td>
+<td>所有服务器不可达</td>
+<td>1. 更换NTP服务器地址<br>2. 检查网络连通性：<code>ping 10.252.17.10</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="2-详细对等体分析（ntpq-p）"><a href="#2-详细对等体分析（ntpq-p）" class="headerlink" title="2. 详细对等体分析（ntpq -p）"></a>2. 详细对等体分析（ntpq -p）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ntpq -pn</span><br></pre></td></tr></table></figure>
+<p><strong>正常状态示例</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">*10.252.17.10    10.252.15.2      2 u   15   16  377    3.129   -0.022   0.063</span><br><span class="line">+10.252.17.11    10.252.15.1      2 u    5   16  377    3.092   -0.928   0.027</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>关键指标</strong>：  <ul>
+<li><code>offset</code> &lt; 100ms  </li>
+<li><code>jitter</code> &lt; 1ms  </li>
+<li><code>reach</code> &#x3D; 377（全成功）</li>
+</ul>
+</li>
+</ul>
+<p><strong>常见异常及处理</strong>：  </p>
+<table>
+<thead>
+<tr>
+<th>异常现象</th>
+<th>诊断</th>
+<th>修复动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>所有节点标记为<code>-</code>或<code>x</code></td>
+<td>网络隔离或配置错误</td>
+<td>1. 检查<code>/etc/ntp.conf</code>的server条目<br>2. 执行<code>ntpdate -d &lt;server&gt;</code>测试连通性</td>
+</tr>
+<tr>
+<td><code>st=16</code></td>
+<td>节点自身未同步</td>
+<td>更换更高层级的NTP服务器</td>
+</tr>
+<tr>
+<td><code>delay &gt; 1000ms</code></td>
+<td>网络延迟过高</td>
+<td>1. 切换低延迟服务器<br>2. 检查本地网络QoS配置</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、配置文件管理"><a href="#三、配置文件管理" class="headerlink" title="三、配置文件管理"></a>三、配置文件管理</h2><h3 id="1-查看有效配置"><a href="#1-查看有效配置" class="headerlink" title="1. 查看有效配置"></a>1. 查看有效配置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">grep -v <span class="string">&quot;^#\|^$&quot;</span> /etc/ntp.conf</span><br></pre></td></tr></table></figure>
+<p><strong>标准配置示例</strong>：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict default noquery</span><br><span class="line">restrict default kod nomodify notrap nopeer noquery</span><br><span class="line">restrict -6 default kod nomodify notrap nopeer noquery</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line">server 10.252.17.10 prefer minpoll 4 maxpoll 4</span><br><span class="line">server 10.252.17.11 minpoll 4 maxpoll 4</span><br><span class="line"><span class="built_in">disable</span> monitor</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-配置修改规范"><a href="#2-配置修改规范" class="headerlink" title="2. 配置修改规范"></a>2. 配置修改规范</h3><ol>
+<li><strong>备份原配置</strong>：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> -p /etc/ntp.conf /etc/ntp.conf.bak</span><br></pre></td></tr></table></figure></li>
+<li><strong>关键参数说明</strong>：  <ul>
+<li><code>prefer</code>：优先使用该服务器  </li>
+<li><code>minpoll/maxpoll</code>：调整轮询间隔（2^4&#x3D;16秒 ~ 2^14&#x3D;16384秒）</li>
+</ul>
+</li>
+<li><strong>配置后操作</strong>：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart ntpd &amp;&amp; <span class="built_in">sleep</span> 5 &amp;&amp; ntpstat</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="四、工具对比与场景指南"><a href="#四、工具对比与场景指南" class="headerlink" title="四、工具对比与场景指南"></a>四、工具对比与场景指南</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>适用场景</th>
+<th>自动化支持</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>systemctl</code></td>
+<td>服务启停&#x2F;状态监控</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>ntpstat</code></td>
+<td>快速同步状态检查</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>ntpq -p</code></td>
+<td>深度网络与偏移分析</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>ntpdate</code></td>
+<td>强制单次同步（服务停止时）</td>
+<td>✅</td>
+</tr>
+</tbody></table>
 <hr>
 ]]></content>
       <categories>
-        <category>Linux文件系统</category>
-        <category>messages</category>
+        <category>Linux</category>
+        <category>服务部署</category>
+        <category>NTP</category>
       </categories>
       <tags>
-        <tag>文件系统</tag>
-        <tag>messages</tag>
-        <tag>硬盘</tag>
+        <tag>Linux</tag>
+        <tag>NTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ipmitool常用命令及用法详解</title>
+    <url>/2025/03/24/ipmitool%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="ipmitool常用命令及用法详解"><a href="#ipmitool常用命令及用法详解" class="headerlink" title="ipmitool常用命令及用法详解"></a>ipmitool常用命令及用法详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-IPMItoolCommon.jpg" alt="Linux-ManagementTools-IPMItoolCommon"></p>
+<h2 id="IPMI官方文档"><a href="#IPMI官方文档" class="headerlink" title="IPMI官方文档"></a>IPMI官方文档</h2><blockquote>
+<p><a href="https://github.com/ipmitool/ipmitool">https://github.com/ipmitool/ipmitool</a></p>
+</blockquote>
+<h2 id="一、基本连接方式"><a href="#一、基本连接方式" class="headerlink" title="一、基本连接方式"></a>一、基本连接方式</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 本地管理（需要root权限）</span></span><br><span class="line">ipmitool [<span class="built_in">command</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 远程管理（带密码）</span></span><br><span class="line">ipmitool -I lanplus -H [BMC_IP] -U [username] -P [password] [<span class="built_in">command</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 远程管理（交互式输入密码）</span></span><br><span class="line">ipmitool -I lanplus -H [BMC_IP] -U [username] -p [password] [<span class="built_in">command</span>]</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、常用命令分类"><a href="#二、常用命令分类" class="headerlink" title="二、常用命令分类"></a>二、常用命令分类</h2><h3 id="1-传感器信息相关"><a href="#1-传感器信息相关" class="headerlink" title="1. 传感器信息相关"></a>1. 传感器信息相关</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看所有传感器信息</span></span><br><span class="line">ipmitool sensor list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定传感器信息（如CPU温度）</span></span><br><span class="line">ipmitool sensor get <span class="string">&quot;CPU Temp&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看传感器阈值</span></span><br><span class="line">ipmitool sensor thresh <span class="string">&quot;CPU Temp&quot;</span> upper 80 85 90</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-电源管理"><a href="#2-电源管理" class="headerlink" title="2. 电源管理"></a>2. 电源管理</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看电源状态</span></span><br><span class="line">ipmitool power status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开机</span></span><br><span class="line">ipmitool power on</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关机</span></span><br><span class="line">ipmitool power off</span><br><span class="line"></span><br><span class="line"><span class="comment"># 硬重启（相当于按电源按钮）</span></span><br><span class="line">ipmitool power reset</span><br><span class="line"></span><br><span class="line"><span class="comment"># 软关机（正常关机）</span></span><br><span class="line">ipmitool power soft</span><br><span class="line"></span><br><span class="line"><span class="comment"># 电源循环（先关机再开机）</span></span><br><span class="line">ipmitool power cycle</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-FRU（Field-Replaceable-Unit）信息"><a href="#3-FRU（Field-Replaceable-Unit）信息" class="headerlink" title="3. FRU（Field Replaceable Unit）信息"></a>3. FRU（Field Replaceable Unit）信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看FRU信息</span></span><br><span class="line">ipmitool fru <span class="built_in">print</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定FRU信息（如0表示主板）</span></span><br><span class="line">ipmitool fru <span class="built_in">print</span> 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将FRU信息导出到文件</span></span><br><span class="line">ipmitool fru <span class="built_in">read</span> 0 fru_board.bin</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-SEL（System-Event-Log）管理"><a href="#4-SEL（System-Event-Log）管理" class="headerlink" title="4. SEL（System Event Log）管理"></a>4. SEL（System Event Log）管理</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看SEL日志</span></span><br><span class="line">ipmitool sel list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看详细的SEL信息</span></span><br><span class="line">ipmitool sel elist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除SEL日志</span></span><br><span class="line">ipmitool sel clear</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取SEL时间信息</span></span><br><span class="line">ipmitool sel time get</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置SEL时间（与本地时间同步）</span></span><br><span class="line">ipmitool sel time <span class="built_in">set</span> <span class="string">&quot;now&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-BMC配置"><a href="#5-BMC配置" class="headerlink" title="5. BMC配置"></a>5. BMC配置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看BMC网络配置</span></span><br><span class="line">ipmitool lan <span class="built_in">print</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置BMC IP地址</span></span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc static</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipaddr 192.168.1.100</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 netmask 255.255.255.0</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 defgw ipaddr 192.168.1.1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看BMC用户列表</span></span><br><span class="line">ipmitool user list 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加BMC用户</span></span><br><span class="line">ipmitool user <span class="built_in">set</span> name 2 newuser</span><br><span class="line">ipmitool user <span class="built_in">set</span> password 2 <span class="string">&quot;newpassword&quot;</span></span><br><span class="line">ipmitool user <span class="built_in">enable</span> 2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更改用户权限</span></span><br><span class="line">ipmitool channel setaccess 1 2 callin=on ipmi=on <span class="built_in">link</span>=on privilege=4</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-远程控制台"><a href="#6-远程控制台" class="headerlink" title="6. 远程控制台"></a>6. 远程控制台</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动SOL（Serial Over LAN）会话</span></span><br><span class="line">ipmitool -I lanplus -H [BMC_IP] -U [username] -P [password] sol activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 退出SOL会话</span></span><br><span class="line"><span class="comment"># 在SOL会话中按&quot;~.&quot;组合键</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="7-传感器数据记录（SDR）"><a href="#7-传感器数据记录（SDR）" class="headerlink" title="7. 传感器数据记录（SDR）"></a>7. 传感器数据记录（SDR）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看SDR信息</span></span><br><span class="line">ipmitool sdr list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看详细的SDR信息</span></span><br><span class="line">ipmitool sdr elist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定类型的传感器</span></span><br><span class="line">ipmitool sdr <span class="built_in">type</span> temperature</span><br><span class="line">ipmitool sdr <span class="built_in">type</span> fan</span><br><span class="line">ipmitool sdr <span class="built_in">type</span> voltage</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-机箱状态"><a href="#8-机箱状态" class="headerlink" title="8. 机箱状态"></a>8. 机箱状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看机箱状态</span></span><br><span class="line">ipmitool chassis status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看机箱策略</span></span><br><span class="line">ipmitool chassis policy list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置机箱电源恢复策略</span></span><br><span class="line">ipmitool chassis policy always-on  <span class="comment"># 上电后自动开机</span></span><br><span class="line">ipmitool chassis policy previous  <span class="comment"># 保持上次状态</span></span><br><span class="line">ipmitool chassis policy stay-off  <span class="comment"># 保持关机状态</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="9-固件管理"><a href="#9-固件管理" class="headerlink" title="9. 固件管理"></a>9. 固件管理</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看BMC固件版本</span></span><br><span class="line">ipmitool mc info</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制BMC冷重启</span></span><br><span class="line">ipmitool mc reset cold</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制BMC热重启</span></span><br><span class="line">ipmitool mc reset warm</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-网络配置"><a href="#10-网络配置" class="headerlink" title="10. 网络配置"></a>10. 网络配置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#查看 BMC 网络配置</span></span><br><span class="line">ipmitool lan <span class="built_in">print</span> 1</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改 BMC IP 地址</span></span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipaddr &lt;新IP地址&gt;</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 netmask &lt;子网掩码&gt;</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 defgw ipaddr &lt;网关&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、高级用法"><a href="#三、高级用法" class="headerlink" title="三、高级用法"></a>三、高级用法</h2><h3 id="批量执行命令"><a href="#批量执行命令" class="headerlink" title="批量执行命令"></a>批量执行命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用批处理模式执行多个命令</span></span><br><span class="line">ipmitool -H [BMC_IP] -U [username] -P [password] -b [baud_rate] -t [device_type] &lt; commands.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用加密通道"><a href="#使用加密通道" class="headerlink" title="使用加密通道"></a>使用加密通道</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用加密的lanplus接口</span></span><br><span class="line">ipmitool -I lanplus -H [BMC_IP] -U [username] -P [password] -C 17 [<span class="built_in">command</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="调试模式"><a href="#调试模式" class="headerlink" title="调试模式"></a>调试模式</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启用调试输出</span></span><br><span class="line">ipmitool -d [debug_level] [<span class="built_in">command</span>]</span><br><span class="line"><span class="comment"># debug_level: 1-3，数字越大输出越详细</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、注意事项"><a href="#四、注意事项" class="headerlink" title="四、注意事项"></a>四、注意事项</h2><ol>
+<li>执行某些命令（如电源控制）需要管理员权限</li>
+<li>频繁查询传感器可能会导致BMC负载增加</li>
+<li>修改网络配置时要小心，错误的配置可能导致无法远程访问BMC</li>
+<li>在生产环境中操作前建议先测试</li>
+<li>不同厂商的IPMI实现可能有细微差别，某些命令可能不支持</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Linux管理工具</category>
+        <category>ipmitool</category>
+      </categories>
+      <tags>
+        <tag>Linux管理工具</tag>
+        <tag>ipmitool</tag>
       </tags>
   </entry>
   <entry>
@@ -1378,202 +1806,6 @@
       </tags>
   </entry>
   <entry>
-    <title>深入解析Linux inode</title>
-    <url>/2025/03/25/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90Linux%20inode/</url>
-    <content><![CDATA[<h1 id="深入解析Linux-inode"><a href="#深入解析Linux-inode" class="headerlink" title="深入解析Linux inode"></a>深入解析Linux inode</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-FileSystem-inode.jpg" alt="Linux-FileSystem-inode"></p>
-<h2 id="一、inode是什么？"><a href="#一、inode是什么？" class="headerlink" title="一、inode是什么？"></a>一、inode是什么？</h2><p>inode（index node）是Linux&#x2F;Unix文件系统中用于存储文件<strong>元数据</strong>（metadata）的数据结构，每个文件或目录都有一个唯一的inode。你可以把它想象成文件的”身份证”。</p>
-<h2 id="二、inode包含哪些信息？"><a href="#二、inode包含哪些信息？" class="headerlink" title="二、inode包含哪些信息？"></a>二、inode包含哪些信息？</h2><p>每个inode存储以下关键信息（但不包含文件名）：</p>
-<ul>
-<li><p>文件类型（普通文件、目录、符号链接等）</p>
-</li>
-<li><p>文件权限（rwx权限）</p>
-</li>
-<li><p>文件所有者（UID&#x2F;GID）</p>
-</li>
-<li><p>文件大小</p>
-</li>
-<li><p>时间戳（创建、修改、访问时间）</p>
-</li>
-<li><p>指向文件数据块的指针（文件内容实际存储位置）</p>
-</li>
-<li><p>链接计数（有多少文件名指向此inode）</p>
-</li>
-</ul>
-<h2 id="三、inode与文件名的关系"><a href="#三、inode与文件名的关系" class="headerlink" title="三、inode与文件名的关系"></a>三、inode与文件名的关系</h2><ul>
-<li><p><strong>文件名</strong>只是inode的一个”别名”或”标签”</p>
-</li>
-<li><p>多个文件名可以指向同一个inode（这就是硬链接的原理）</p>
-</li>
-<li><p>系统通过目录项（directory entry）将文件名映射到inode</p>
-</li>
-</ul>
-<h2 id="四、如何查看inode？"><a href="#四、如何查看inode？" class="headerlink" title="四、如何查看inode？"></a>四、如何查看inode？</h2><p>使用<code>ls -i</code>命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> -i 文件名</span><br></pre></td></tr></table></figure>
-
-<p>示例输出：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> -i secure-ip.txt</span><br><span class="line">33582157 secure-ip.txt</span><br></pre></td></tr></table></figure>
-<p>这里的<code>33582157</code>就是file.txt的inode号。</p>
-<h2 id="五、硬链接与inode的关系"><a href="#五、硬链接与inode的关系" class="headerlink" title="五、硬链接与inode的关系"></a>五、硬链接与inode的关系</h2><p>当创建硬链接时：</p>
-<ol>
-<li>系统不会创建新的inode</li>
-<li>只是在目录中新增一个条目，指向相同的inode</li>
-<li>inode的”链接计数”值会增加1</li>
-</ol>
-<p>例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建源文件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;test&quot;</span> &gt; original.txt</span><br><span class="line"><span class="comment"># 创建硬链接</span></span><br><span class="line"><span class="built_in">ln</span> original.txt hardlink.txt</span><br><span class="line"><span class="comment"># 查看inode</span></span><br><span class="line"><span class="built_in">ls</span> -i original.txt hardlink.txt</span><br><span class="line">33610686 hardlink.txt  </span><br><span class="line">33610686 original.txt</span><br></pre></td></tr></table></figure>
-<p>输出会显示两个文件名有相同的inode号。</p>
-<h2 id="六、为什么硬链接不能跨分区？"><a href="#六、为什么硬链接不能跨分区？" class="headerlink" title="六、为什么硬链接不能跨分区？"></a>六、为什么硬链接不能跨分区？</h2><p>因为：</p>
-<ul>
-<li><p>不同文件系统（分区）有各自独立的inode编号体系</p>
-</li>
-<li><p>一个分区的inode号在另一个分区可能指向完全不同的文件</p>
-</li>
-<li><p>硬链接依赖于相同的inode号，所以不能跨分区</p>
-</li>
-</ul>
-<h2 id="七、inode的其他重要特性"><a href="#七、inode的其他重要特性" class="headerlink" title="七、inode的其他重要特性"></a>七、inode的其他重要特性</h2><ul>
-<li><p><strong>唯一性</strong>：在同一文件系统内，每个inode号是唯一的</p>
-</li>
-<li><p><strong>持久性</strong>：即使移动文件（在同分区内），inode号保持不变</p>
-</li>
-<li><p><strong>有限资源</strong>：文件系统创建时会分配固定数量的inode，用尽后即使有磁盘空间也无法创建新文件</p>
-</li>
-</ul>
-<h2 id="八、实际应用场景"><a href="#八、实际应用场景" class="headerlink" title="八、实际应用场景"></a>八、实际应用场景</h2><h3 id="1-查找大文件：通过inode查找被删除但仍被进程占用的文件"><a href="#1-查找大文件：通过inode查找被删除但仍被进程占用的文件" class="headerlink" title="1. 查找大文件：通过inode查找被删除但仍被进程占用的文件"></a>1. 查找大文件：通过inode查找被删除但仍被进程占用的文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsof | grep deleted</span><br><span class="line"><span class="built_in">tail</span>      1992         root    3r      REG              253,0        20   33625066 /root/testfile.txt (deleted)</span><br><span class="line"><span class="comment"># 清理保持文件打开的进程</span></span><br><span class="line"><span class="built_in">kill</span> 1992</span><br></pre></td></tr></table></figure>
-
-<p>其中：</p>
-<ul>
-<li><code>1992</code> 是保持文件打开的进程ID</li>
-<li><code>3r</code> 表示文件描述符</li>
-<li><code>253,0</code> 是设备号（标识文件所在的磁盘分区）。</li>
-<li><code>33625066</code> 是该文件的 <strong>inode 编号</strong>。</li>
-<li><code>(deleted)</code> 表示文件已被删除，但 inode 仍被进程占用。</li>
-</ul>
-<h3 id="2-解决”磁盘未满但无法创建文件”问题："><a href="#2-解决”磁盘未满但无法创建文件”问题：" class="headerlink" title="2. 解决”磁盘未满但无法创建文件”问题："></a>2. 解决”磁盘未满但无法创建文件”问题：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -i  <span class="comment"># 查看inode使用情况</span></span><br><span class="line">文件系统                   Inode 已用(I)  可用(I) 已用(I)% 挂载点</span><br><span class="line">devtmpfs                  229871     388   229483       1% /dev</span><br><span class="line">tmpfs                     232851       1   232850       1% /dev/shm</span><br><span class="line">tmpfs                     232851     724   232127       1% /run</span><br><span class="line">tmpfs                     232851      16   232835       1% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/centos-root 14151680   40014 14111666       1% /</span><br><span class="line">/dev/sda1                 524288     336   523952       1% /boot</span><br><span class="line">tmpfs                     232851       1   232850       1% /run/user/0</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux文件系统</category>
-        <category>inode</category>
-      </categories>
-      <tags>
-        <tag>文件系统</tag>
-        <tag>inode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sas3ircu &amp; storcli64工具定位故障硬盘位置</title>
-    <url>/2025/03/17/sas3ircu%20&amp;%20storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98%E4%BD%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircu.jpg" alt="Hardware-Disk-sas3ircu"></p>
-<h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：  <ul>
-<li><code>cd /home/ansible/</code>：进入服务器管理工具目录。  </li>
-<li><code>ls</code>：列出目录中的文件，确认工具（如 <code>storcli64</code> 和 <code>sas3ircu</code>）存在。</li>
-</ul>
-</li>
-<li><strong>输出关键信息</strong>：<br>目录中包含多个管理脚本和工具，例如 <code>storcli64</code>（RAID管理工具）、<code>sas3ircu</code>（SAS控制器工具）等。</li>
-</ul>
-<hr>
-<h4 id="命令-2：检查-RAID-控制器状态"><a href="#命令-2：检查-RAID-控制器状态" class="headerlink" title="命令 2：检查 RAID 控制器状态"></a>命令 2：检查 RAID 控制器状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 show all  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：使用 <code>storcli64</code> 工具查看控制器 0 的详细信息（包括磁盘组、物理磁盘状态等）。  </li>
-<li><strong>输出关键信息</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Status = Failure  </span><br><span class="line">Description = Controller 0 not found  </span><br></pre></td></tr></table></figure></li>
-<li><strong>结论</strong>：  <ul>
-<li><strong>RAID控制器 0 未被识别</strong>，可能原因包括：  <ul>
-<li>控制器硬件故障或未正确连接。  </li>
-<li>驱动未安装或工具版本不兼容。  </li>
-<li>命令路径或参数错误。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="命令-3：检查-SAS-控制器与磁盘阵列状态"><a href="#命令-3：检查-SAS-控制器与磁盘阵列状态" class="headerlink" title="命令 3：检查 SAS 控制器与磁盘阵列状态"></a>命令 3：检查 SAS 控制器与磁盘阵列状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./sas3ircu 0 display  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：使用 <code>sas3ircu</code> 工具查看 SAS 控制器 0 的配置信息，包括 RAID 卷状态和物理磁盘详情。  </li>
-<li><strong>输出关键信息</strong>：  <ul>
-<li><strong>IR Volume 1</strong>：  <ul>
-<li>RAID 级别：RAID10  </li>
-<li>状态：**Degraded (DGD)**（降级）  </li>
-<li>关联物理硬盘位置：<code>Enclosure#/Slot#</code> 如 <code>1:2</code>, <code>0:0</code> 等。</li>
-</ul>
-</li>
-<li><strong>IR Volume 2</strong>：  <ul>
-<li>RAID 级别：RAID1  </li>
-<li>状态：**Okay (OKY)**（正常）。</li>
-</ul>
-</li>
-<li><strong>错误提示</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SAS3IRCU: Error executing command DISPLAY.  </span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><strong>结论</strong>：  <ul>
-<li>RAID10 卷处于降级状态，表明 <strong>至少一块硬盘失效</strong>，需定位具体故障盘。  </li>
-<li>最后的错误提示可能因部分物理设备信息无法读取（如硬盘掉线或通信故障）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="二、故障定位与可能原因"><a href="#二、故障定位与可能原因" class="headerlink" title="二、故障定位与可能原因"></a>二、故障定位与可能原因</h3><h4 id="1-RAID-控制器问题："><a href="#1-RAID-控制器问题：" class="headerlink" title="1.RAID 控制器问题："></a>1.RAID 控制器问题：</h4><ul>
-<li><code>storcli64</code> 无法识别控制器 0，可能为硬件故障或驱动问题。</li>
-</ul>
-<h4 id="2-RAID-卷降级："><a href="#2-RAID-卷降级：" class="headerlink" title="2.RAID 卷降级："></a>2.RAID 卷降级：</h4><ul>
-<li>RAID10 卷降级说明部分硬盘失效，需根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>, <code>0:0</code>）定位具体槽位。</li>
-</ul>
-<h4 id="3-物理硬盘故障："><a href="#3-物理硬盘故障：" class="headerlink" title="3.物理硬盘故障："></a>3.物理硬盘故障：</h4><ul>
-<li>降级卷关联的硬盘可能存在物理损坏、连接松动或电源问题。</li>
-</ul>
-<h4 id="4-工具兼容性或权限问题："><a href="#4-工具兼容性或权限问题：" class="headerlink" title="4.工具兼容性或权限问题："></a>4.工具兼容性或权限问题：</h4><ul>
-<li><code>storcli64</code> 和 <code>sas3ircu</code> 版本与当前系统或硬件不兼容，或执行权限不足。</li>
-</ul>
-<hr>
-<h3 id="三、-建议操作步骤"><a href="#三、-建议操作步骤" class="headerlink" title="三、 建议操作步骤"></a>三、 建议操作步骤</h3><h4 id="1-检查-RAID-控制器硬件："><a href="#1-检查-RAID-控制器硬件：" class="headerlink" title="1.检查 RAID 控制器硬件："></a>1.检查 RAID 控制器硬件：</h4><ul>
-<li>确认控制器 0 的物理连接（如 PCIe插槽、电源线）。  </li>
-<li>更新 RAID 控制器驱动或固件。</li>
-</ul>
-<h4 id="2-定位故障硬盘："><a href="#2-定位故障硬盘：" class="headerlink" title="2.定位故障硬盘："></a>2.定位故障硬盘：</h4><ul>
-<li>根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>），找到对应槽位的硬盘，检查其状态灯（通常故障盘会亮红灯）。  </li>
-<li>使用 <code>smartctl</code> 检查硬盘 SMART 健康状态：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">smartctl -a /dev/sdX  </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="3-修复-RAID-卷："><a href="#3-修复-RAID-卷：" class="headerlink" title="3.修复 RAID 卷："></a>3.修复 RAID 卷：</h4><ul>
-<li>更换故障硬盘后，通过 <code>sas3ircu</code> 或 RAID 管理界面重建阵列。</li>
-</ul>
-<h4 id="4-排查工具问题："><a href="#4-排查工具问题：" class="headerlink" title="4.排查工具问题："></a>4.排查工具问题：</h4><ul>
-<li>确认 <code>storcli64</code> 和 <code>sas3ircu</code> 版本与硬件兼容。  </li>
-<li>以 <code>root</code> 权限执行命令，或检查文件执行权限：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /home/ansible/storcli64  </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="5-查看系统日志："><a href="#5-查看系统日志：" class="headerlink" title="5.查看系统日志："></a>5.查看系统日志：</h4><ul>
-<li>检查 <code>/var/log/messages</code> 或 <code>dmesg</code> 输出，获取更多硬件错误信息。</li>
-</ul>
-<hr>
-<h3 id="四-总结"><a href="#四-总结" class="headerlink" title="四. 总结"></a>四. 总结</h3><ul>
-<li><strong>当前问题</strong>：  <ul>
-<li>RAID 控制器 0 无法识别，RAID10 卷降级，存在硬盘故障风险。  </li>
-<li>SAS 控制器工具报错，可能因部分硬盘通信异常。</li>
-</ul>
-</li>
-<li><strong>风险等级</strong>：<br><strong>高</strong>（降级卷可能导致数据丢失，需立即处理）。  </li>
-<li><strong>处理优先级</strong>：  <ol>
-<li>定位并更换故障硬盘，修复降级卷。  </li>
-<li>排查 RAID 控制器硬件或驱动问题。  </li>
-<li>验证工具兼容性，确保后续管理操作正常。</li>
-</ol>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>硬件运维</category>
-        <category>硬盘</category>
-      </categories>
-      <tags>
-        <tag>硬件运维</tag>
-        <tag>硬盘</tag>
-        <tag>sas3ircu</tag>
-        <tag>storcli64</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用storcli64工具定位与排查RAID卡告警</title>
     <url>/2025/03/10/%E4%BD%BF%E7%94%A8storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E4%B8%8E%E6%8E%92%E6%9F%A5RAID%E5%8D%A1%E5%91%8A%E8%AD%A6/</url>
     <content><![CDATA[<h1 id="使用storcli64工具定位与排查RAID卡告警"><a href="#使用storcli64工具定位与排查RAID卡告警" class="headerlink" title="使用storcli64工具定位与排查RAID卡告警"></a>使用storcli64工具定位与排查RAID卡告警</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-RAID-storcli64.jpg" alt="Hardware-RAID-storcli64"></p>
@@ -1699,126 +1931,139 @@
       </tags>
   </entry>
   <entry>
-    <title>Vim编辑器入门指南</title>
-    <url>/2025/03/27/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
-<h2 id="一、Vim模式与切换"><a href="#一、Vim模式与切换" class="headerlink" title="一、Vim模式与切换"></a>一、Vim模式与切换</h2><h3 id="1-命令模式"><a href="#1-命令模式" class="headerlink" title="1.命令模式"></a>1.命令模式</h3><ul>
-<li><strong>进入方式</strong>：通过<code>vi/vim</code>打开文件后的默认模式。  </li>
-<li><strong>功能</strong>：执行快捷键操作（如复制、删除、移动光标等），不可直接编辑文本。</li>
-</ul>
-<h3 id="2-编辑模式（插入模式）"><a href="#2-编辑模式（插入模式）" class="headerlink" title="2.编辑模式（插入模式）"></a>2.编辑模式（插入模式）</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>i</code>（插入）、<code>a</code>（追加）、<code>o</code>（新行）等。  </li>
-<li><strong>退出方式</strong>：按 <code>Esc</code> 返回命令模式。  </li>
-<li><strong>功能</strong>：直接编辑文本内容。</li>
-</ul>
-<h3 id="3-底行模式"><a href="#3-底行模式" class="headerlink" title="3.底行模式"></a>3.底行模式</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>:</code>。  </li>
-<li><strong>功能</strong>：执行保存、退出、搜索、设置等操作（如 <code>:wq</code> 保存退出）。</li>
-</ul>
-<h3 id="4-可视块模式"><a href="#4-可视块模式" class="headerlink" title="4.可视块模式"></a>4.可视块模式</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>Ctrl + v</code>。  </li>
-<li><strong>功能</strong>：批量选择文本块进行编辑（如删除、复制多行）。</li>
+    <title>ipmitool工具查找管理口ip</title>
+    <url>/2025/03/14/ipmitool%E5%B7%A5%E5%85%B7%E6%9F%A5%E6%89%BE%E7%AE%A1%E7%90%86%E5%8F%A3ip/</url>
+    <content><![CDATA[<h1 id="ipmitool工具查找管理口ip"><a href="#ipmitool工具查找管理口ip" class="headerlink" title="ipmitool工具查找管理口ip"></a>ipmitool工具查找管理口ip</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-ipmitool.jpg" alt="Linux-ManagementTools-ipmitool"></p>
+<h2 id="一、查看服务器管理口的网络配置信息"><a href="#一、查看服务器管理口的网络配置信息" class="headerlink" title="一、查看服务器管理口的网络配置信息"></a>一、查看服务器管理口的网络配置信息</h2><h3 id="1-命令：ipmitool-lan-print"><a href="#1-命令：ipmitool-lan-print" class="headerlink" title="1.命令：ipmitool lan print"></a>1.命令：ipmitool lan print</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：<br>查看服务器管理口（BMC&#x2F;iLO&#x2F;iDRAC）的网络配置信息，包括IP地址、子网掩码、网关等。  </li>
+<li><strong>适用场景</strong>：<br>当服务器管理口IP丢失、配置错误或无法通过常规方式访问时，通过该命令可快速确认当前管理口的网络状态。</li>
 </ul>
 <hr>
-<h2 id="二、常用快捷键"><a href="#二、常用快捷键" class="headerlink" title="二、常用快捷键"></a>二、常用快捷键</h2><h3 id="1-光标移动"><a href="#1-光标移动" class="headerlink" title="1. 光标移动"></a><strong>1. 光标移动</strong></h3><ul>
-<li><strong>行内移动</strong>：  <ul>
-<li><code>^</code>（数字 <code>6</code>）：移动到行首（首个非空字符）。  </li>
-<li><code>$</code>（数字 <code>4</code>）：移动到行尾。</li>
+<h3 id="2-命令输出关键信息解析"><a href="#2-命令输出关键信息解析" class="headerlink" title="2. 命令输出关键信息解析"></a>2. 命令输出关键信息解析</h3><p>执行 <code>ipmitool lan print</code> 后输出如下：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Set in Progress         : Set Complete        # 配置已生效  </span><br><span class="line">IP Address Source       : Static Address     # IP地址来源为静态分配  </span><br><span class="line">IP Address              : 192.168.141.78     # 管理口当前IP地址  </span><br><span class="line">Subnet Mask             : 255.255.255.0      # 子网掩码  </span><br><span class="line">MAC Address             : 48:dc:2d:01:66:a0  # 管理口MAC地址  </span><br><span class="line">Default Gateway IP      : 192.168.141.254    # 默认网关  </span><br><span class="line">802.1q VLAN ID          : Disabled           # VLAN未启用  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>结论</strong>：  <ul>
+<li>当前管理口已配置静态IP <code>192.168.141.78</code>，子网掩码和网关正常。  </li>
+<li>若无法通过该IP访问管理口，可能原因包括：  <ul>
+<li>网络物理连接故障（如网线未插或交换机端口问题）。  </li>
+<li>IP地址冲突或被防火墙拦截。  </li>
+<li>管理口硬件故障（如BMC模块异常）。</li>
 </ul>
 </li>
-<li><strong>跨行移动</strong>：  <ul>
-<li><code>gg</code>：移动到文件第一行。  </li>
-<li><code>G</code>（<code>Shift + g</code>）：移动到文件最后一行。  </li>
-<li><code>100gg</code>：跳转到第100行。</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-复制、删除（剪切）、粘贴"><a href="#2-复制、删除（剪切）、粘贴" class="headerlink" title="2. 复制、删除（剪切）、粘贴"></a><strong>2. 复制、删除（剪切）、粘贴</strong></h3><ul>
-<li><code>yy</code>：复制当前行。  </li>
-<li><code>dd</code>：删除（剪切）当前行。  </li>
-<li><code>p</code>：粘贴到当前行下方。  </li>
-<li><code>P</code>（大写）：粘贴到当前行上方。</li>
-</ul>
-<h3 id="3-撤销与恢复"><a href="#3-撤销与恢复" class="headerlink" title="3. 撤销与恢复"></a><strong>3. 撤销与恢复</strong></h3><ul>
-<li><code>u</code>（undo）：撤销上一次操作。  </li>
-<li><code>Ctrl + r</code>（redo）：恢复被撤销的操作。</li>
-</ul>
-<h3 id="4-行号显示与搜索"><a href="#4-行号显示与搜索" class="headerlink" title="4. 行号显示与搜索"></a><strong>4. 行号显示与搜索</strong></h3><ul>
-<li><strong>显示行号</strong>：  <ul>
-<li><code>:set nu</code> 或 <code>:set number</code>：显示行号。  </li>
-<li><code>:set nonu</code>：隐藏行号。</li>
-</ul>
-</li>
-<li><strong>搜索功能</strong>：  <ul>
-<li><code>/keyword</code>：向下搜索指定内容（如 <code>/error</code>）。  </li>
-<li><code>n</code>：继续向下搜索。  </li>
-<li><code>N</code>：继续向上搜索。</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h2 id="三、高级操作"><a href="#三、高级操作" class="headerlink" title="三、高级操作"></a>三、高级操作</h2><h3 id="1-批量编辑（可视块模式）"><a href="#1-批量编辑（可视块模式）" class="headerlink" title="1. 批量编辑（可视块模式）"></a><strong>1. 批量编辑（可视块模式）</strong></h3><ol>
-<li>按 <code>Ctrl + v</code> 进入可视块模式。  </li>
-<li>使用方向键选择多行文本块。  </li>
-<li>执行操作：  <ul>
-<li><code>d</code>：删除选中块。  </li>
-<li><code>y</code>：复制选中块。  </li>
-<li><code>I</code> 或 <code>A</code>：在块前&#x2F;后插入内容（按 <code>Esc</code> 完成批量插入）。</li>
+<h2 id="二、管理口IP问题的排查步骤"><a href="#二、管理口IP问题的排查步骤" class="headerlink" title="二、管理口IP问题的排查步骤"></a>二、管理口IP问题的排查步骤</h2><h3 id="1-确认管理口网络配置："><a href="#1-确认管理口网络配置：" class="headerlink" title="1.确认管理口网络配置："></a>1.确认管理口网络配置：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span>  <span class="comment"># 检查IP、子网掩码、网关是否配置正确</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若IP为 <code>0.0.0.0</code>，说明未分配，需手动设置静态IP或启用DHCP。</li>
 </ul>
+<h3 id="2-测试网络连通性："><a href="#2-测试网络连通性：" class="headerlink" title="2.测试网络连通性："></a>2.测试网络连通性：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping 192.168.141.78       <span class="comment"># 测试管理口IP是否可达  </span></span><br><span class="line">arp -n | grep 48:dc:2d    <span class="comment"># 根据MAC地址确认IP是否在局域网中可见  </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-检查硬件与驱动："><a href="#3-检查硬件与驱动：" class="headerlink" title="3.检查硬件与驱动："></a>3.检查硬件与驱动：</h3><ul>
+<li>确认服务器BMC模块已启用（部分服务器需在BIOS中开启IPMI功能）。  </li>
+<li>检查网线连接和管理口指示灯状态。</li>
+</ul>
+<h2 id="三、常见问题与解决方案"><a href="#三、常见问题与解决方案" class="headerlink" title="三、常见问题与解决方案"></a>三、常见问题与解决方案</h2><h3 id="1-命令执行失败的可能原因"><a href="#1-命令执行失败的可能原因" class="headerlink" title="1. 命令执行失败的可能原因"></a>1. 命令执行失败的可能原因</h3><ul>
+<li><p><strong>问题</strong>：执行<code>ipmitool</code>命令时提示<code>Could not open device</code>或<code>No such file or directory</code>。<br><strong>解决方案</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 检查IPMI内核模块是否加载</span></span><br><span class="line">lsmod | grep ipmi</span><br><span class="line"><span class="comment"># 若未加载，手动加载模块</span></span><br><span class="line">modprobe ipmi_devintf</span><br><span class="line">modprobe ipmi_si</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="2-动态获取IP地址"><a href="#2-动态获取IP地址" class="headerlink" title="2. 动态获取IP地址"></a>2. 动态获取IP地址</h3><p>如果管理口配置为DHCP但未获取到IP，可以强制更新DHCP租约：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc dhcp  <span class="comment"># 设置为DHCP模式</span></span><br><span class="line">ipmitool lan dhcp 1            <span class="comment"># 强制更新DHCP</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-修改管理口IP地址"><a href="#3-修改管理口IP地址" class="headerlink" title="3. 修改管理口IP地址"></a>3. 修改管理口IP地址</h3><p>如需修改静态IP，执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc static</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipaddr 192.168.1.100</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 netmask 255.255.255.0</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 defgw ipaddr 192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-跨网段访问管理口"><a href="#4-跨网段访问管理口" class="headerlink" title="4. 跨网段访问管理口"></a>4. 跨网段访问管理口</h3><p>若管理口与本地网络不在同一子网，可通过以下方式临时访问：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加临时路由（Linux）</span></span><br><span class="line">ip route add 192.168.141.0/24 via 192.168.1.254 dev eth0</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-其他实用命令"><a href="#5-其他实用命令" class="headerlink" title="5. 其他实用命令"></a>5. 其他实用命令</h3><ul>
+<li><p>查看BMC硬件状态：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool mc info</span><br></pre></td></tr></table></figure>
 </li>
-</ol>
-<h3 id="2-行调整"><a href="#2-行调整" class="headerlink" title="2. 行调整"></a><strong>2. 行调整</strong></h3><ul>
-<li><strong>上下移动行</strong>：  <ul>
-<li>命令模式下按 <code>dd</code> 剪切当前行，再按 <code>p</code> 或 <code>P</code> 粘贴到目标位置。</li>
+<li><p>重启BMC模块（谨慎操作）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool mc reset cold</span><br></pre></td></tr></table></figure></li>
 </ul>
-</li>
-</ul>
-<hr>
-<h2 id="四、常用命令速查表"><a href="#四、常用命令速查表" class="headerlink" title="四、常用命令速查表"></a>四、<strong>常用命令速查表</strong></h2><table>
-<thead>
-<tr>
-<th>操作</th>
-<th>快捷键&#x2F;命令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>保存退出</td>
-<td><code>:wq</code></td>
-</tr>
-<tr>
-<td>强制退出不保存</td>
-<td><code>:q!</code></td>
-</tr>
-<tr>
-<td>复制行</td>
-<td><code>yy</code></td>
-</tr>
-<tr>
-<td>删除行</td>
-<td><code>dd</code></td>
-</tr>
-<tr>
-<td>撤销操作</td>
-<td><code>u</code></td>
-</tr>
-<tr>
-<td>跳转到行首</td>
-<td><code>^</code></td>
-</tr>
-<tr>
-<td>跳转到行尾</td>
-<td><code>$</code></td>
-</tr>
-</tbody></table>
 ]]></content>
       <categories>
-        <category>Linux</category>
-        <category>基础命令</category>
-        <category>vim</category>
+        <category>Linux管理工具</category>
+        <category>ipmitool</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
-        <tag>vim</tag>
+        <tag>Linux管理工具</tag>
+        <tag>ipmitool</tag>
+        <tag>服务器管理口</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>日志messages中有IO和文件系统报错</title>
+    <url>/2025/03/18/%E6%97%A5%E5%BF%97messages%E4%B8%AD%E6%9C%89IO%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%8A%A5%E9%94%99/</url>
+    <content><![CDATA[<h1 id="日志messages中有IO和文件系统报错"><a href="#日志messages中有IO和文件系统报错" class="headerlink" title="日志messages中有IO和文件系统报错"></a>日志messages中有IO和文件系统报错</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-messages-XFSIOEXT4.jpg" alt="Linux-messages-XFSIOEXT4"></p>
+<h3 id="一、-检查日志中的I-O和文件系统报错"><a href="#一、-检查日志中的I-O和文件系统报错" class="headerlink" title="一、 检查日志中的I&#x2F;O和文件系统报错"></a>一、 检查日志中的I&#x2F;O和文件系统报错</h3><p><strong>命令含义</strong>：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /var/log/messages | grep <span class="string">&#x27;kernel&#x27;</span> | egrep -i <span class="string">&#x27;error|fail|readonly|abort|offline|fatal&#x27;</span> | egrep -i <span class="string">&#x27;ext.-fs|I/O|xfs-fs&#x27;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>作用</strong>：从系统日志 <code>/var/log/messages</code> 中筛选出与内核（<code>kernel</code>）相关的错误信息，进一步过滤出包含 <strong>I&#x2F;O错误、文件系统异常（ext4、XFS）</strong> 的关键字条目（如 <code>error</code>, <code>fail</code>, <code>readonly</code> 等）。  </p>
+</li>
+<li><p><strong>输出关键信息</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.278904] blk_update_request: I/O error, dev sdd, sector 5855646432  </span><br><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.279098] blk_update_request: I/O error, dev sdd, sector 5855512576  </span><br><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.279120] Buffer I/O error on dev sdd1, logical block 731938816, lost sync page write  </span><br></pre></td></tr></table></figure></li>
+<li><p><strong>结论</strong>：  </p>
+<ul>
+<li>设备 <code>sdd</code> 出现 <strong>I&#x2F;O错误</strong>，涉及特定扇区和逻辑块，可能是物理磁盘损坏、连接故障或文件系统损坏。  </li>
+<li><strong>需立即通知二线备份团队（Backup）进行应急处理</strong>，并通知应用团队检查业务是否受影响。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="二、-查看磁盘状态（是否掉盘）"><a href="#二、-查看磁盘状态（是否掉盘）" class="headerlink" title="二、. 查看磁盘状态（是否掉盘）"></a>二、. 查看磁盘状态（是否掉盘）</h3><p><strong>命令含义</strong>：  </p>
+<ul>
+<li><p>**<code>/home/ansible/storcli64 /c0 show all</code>**：<br>使用 RAID 管理工具 <code>storcli64</code> 检查控制器 <code>/c0</code> 下所有物理磁盘（PD）的状态。  </p>
+<ul>
+<li><strong>输出关键信息</strong>：<br>所有磁盘状态为 <code>Onln</code>（在线），DG（驱动器组）值为 1-10，无 <code>Offln</code>（离线）或 <code>UBad</code>（异常）磁盘。  </li>
+<li><strong>结论</strong>：<br>磁盘阵列中 <strong>未检测到掉盘</strong>，硬件层面未发现全局故障。</li>
+</ul>
+</li>
+<li><p>**<code>lsblk</code>**：<br>列出所有块设备及其挂载信息，确认文件系统挂载点正常。  </p>
+<ul>
+<li><strong>输出关键信息</strong>：<br><code>sdd</code> 对应的分区 <code>sdd1</code> 挂载至 <code>/srv/BigData/hadoop/data*</code>，未显示异常状态。  </li>
+<li><strong>结论</strong>：<br>date也为1-10证明没有掉盘，逻辑层面挂载正常，但需结合日志进一步排查 <code>sdd</code> 的硬件健康状态。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="三、综合分析"><a href="#三、综合分析" class="headerlink" title="三、综合分析"></a>三、综合分析</h3><h4 id="1-问题定位："><a href="#1-问题定位：" class="headerlink" title="1.问题定位："></a>1.问题定位：</h4><ul>
+<li>日志显示 <code>sdd</code> 存在 <strong>I&#x2F;O错误</strong>，可能是物理磁盘损坏、数据线接触不良或文件系统故障。  </li>
+<li>磁盘阵列状态正常（无掉盘），说明问题可能局限于单盘 <code>sdd</code>，而非全局存储故障。</li>
+</ul>
+<h4 id="2-建议操作："><a href="#2-建议操作：" class="headerlink" title="2.建议操作："></a>2.建议操作：</h4><ul>
+<li><strong>立即行动</strong>：  <ul>
+<li>通知二线备份团队介入，启动业务应急预案。  </li>
+<li>检查 <code>/srv/BigData/hadoop/data*</code> 的业务是否受影响（如数据写入失败、服务中断）。</li>
+</ul>
+</li>
+<li><strong>进一步排查</strong>：  <ul>
+<li>使用 <code>smartctl</code> 检查 <code>sdd</code> 的 SMART 健康状态。  </li>
+<li>检查磁盘连接线、控制器插槽是否松动。  </li>
+<li>尝试对 <code>sdd</code> 执行文件系统修复（如 <code>xfs_repair</code> 或 <code>fsck</code>）。</li>
+</ul>
+</li>
+<li><strong>长期建议</strong>：  <ul>
+<li>监控磁盘 I&#x2F;O 错误率，提前替换潜在故障盘。  </li>
+<li>优化日志监控告警规则，确保及时响应。</li>
+</ul>
+</li>
+</ul>
+<hr>
+]]></content>
+      <categories>
+        <category>Linux文件系统</category>
+        <category>messages</category>
+      </categories>
+      <tags>
+        <tag>文件系统</tag>
+        <tag>硬盘</tag>
+        <tag>messages</tag>
       </tags>
   </entry>
   <entry>
@@ -2206,332 +2451,87 @@
       </tags>
   </entry>
   <entry>
-    <title>NTP服务配置与管理指南</title>
-    <url>/2025/04/02/NTP%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE%E4%B8%8E%E7%AE%A1%E7%90%86%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="NTP服务配置与管理指南"><a href="#NTP服务配置与管理指南" class="headerlink" title="NTP服务配置与管理指南"></a>NTP服务配置与管理指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-DeploymentService-NTPConfig.jpg" alt="Linux-DeploymentService-NTPConfig"></p>
-<h2 id="一、检查并安装NTP服务"><a href="#一、检查并安装NTP服务" class="headerlink" title="一、检查并安装NTP服务"></a>一、检查并安装NTP服务</h2><h3 id="1-首先查询NTP软件版本"><a href="#1-首先查询NTP软件版本" class="headerlink" title="1.首先查询NTP软件版本"></a>1.首先查询NTP软件版本</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rpm -qa | grep ntp</span><br><span class="line">ntpdate-4.2.6p5-29.el7.centos.2.x86_64</span><br><span class="line">ntp-4.2.6p5-29.el7.centos.2.x86_64</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2-安装-NTP-软件包："><a href="#2-安装-NTP-软件包：" class="headerlink" title="2. 安装 NTP 软件包："></a>2. 安装 NTP 软件包：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum -y install ntp</span><br><span class="line">已安装:</span><br><span class="line">  ntp.x86_64 0:4.2.6p5-29.el7.centos.2                                                                     </span><br><span class="line"></span><br><span class="line">作为依赖被安装:</span><br><span class="line">  autogen-libopts.x86_64 0:5.18-5.el7               ntpdate.x86_64 0:4.2.6p5-29.el7.centos.2              </span><br><span class="line"></span><br><span class="line">完毕！</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="3-启动-NTP-服务："><a href="#3-启动-NTP-服务：" class="headerlink" title="3. 启动 NTP 服务："></a>3. 启动 NTP 服务：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl start ntpd</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="4-设置-NTP-服务开机自启："><a href="#4-设置-NTP-服务开机自启：" class="headerlink" title="4. 设置 NTP 服务开机自启："></a>4. 设置 NTP 服务开机自启：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ntpd</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/ntpd.service to /usr/lib/systemd/system/ntpd.service.</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="5-检查-NTP-服务状态："><a href="#5-检查-NTP-服务状态：" class="headerlink" title="5. 检查 NTP 服务状态："></a>5. 检查 NTP 服务状态：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status ntpd</span><br><span class="line">● ntpd.service - Network Time Service</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/ntpd.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since 三 2025-04-09 17:25:07 CST; 12s ago</span><br><span class="line"> Main PID: 8015 (ntpd)</span><br><span class="line">   CGroup: /system.slice/ntpd.service</span><br><span class="line">           └─8015 /usr/sbin/ntpd -u ntp:ntp -g</span><br><span class="line"></span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen and drop on 1 v6wildcard :: UDP 123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen normally on 2 lo 127.0.0.1 UDP 123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen normally on 3 ens33 192.168.184.128 UDP 123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen normally on 4 lo ::1 UDP 123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listen normally on 5 ens33 fe80::cbd9:ea82:743b:52...123</span><br><span class="line">4月 09 17:25:07 localhost.localdomain ntpd[8015]: Listening on routing socket on fd <span class="comment">#22 for interfac...tes</span></span><br><span class="line">4月 09 17:25:08 localhost.localdomain ntpd[8015]: 0.0.0.0 c016 06 restart</span><br><span class="line">4月 09 17:25:08 localhost.localdomain ntpd[8015]: 0.0.0.0 c012 02 freq_set kernel 0.000 PPM</span><br><span class="line">4月 09 17:25:08 localhost.localdomain ntpd[8015]: 0.0.0.0 c011 01 freq_not_set</span><br><span class="line">4月 09 17:25:14 localhost.localdomain ntpd[8015]: 0.0.0.0 c614 04 freq_mode</span><br><span class="line">Hint: Some lines were ellipsized, use -l to show <span class="keyword">in</span> full.</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="6-手动同步时间（可选）："><a href="#6-手动同步时间（可选）：" class="headerlink" title="6. 手动同步时间（可选）："></a>6. 手动同步时间（可选）：</h3><p>如果你想立即同步时间，可以使用以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ntpdate pool.ntp.org</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="7-备份配置文件"><a href="#7-备份配置文件" class="headerlink" title="7. 备份配置文件"></a>7. 备份配置文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /etc/ntp.conf 是NTP服务的主要配置文件，用于控制如何同步系统时间。</span></span><br><span class="line"><span class="built_in">cp</span> -p /etc/ntp.conf /etc/ntp.conf.bak</span><br><span class="line"><span class="comment"># /etc/sysconfig/ntpd 此配置文件主要用来定义NTP守护程序(ntpd)启动时使用的各种选项。</span></span><br><span class="line"><span class="built_in">cp</span> -p /etc/sysconfig/ntpd /etc/sysconfig/ntpd.bak  </span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="二、编辑-etc-ntp-conf配置文件"><a href="#二、编辑-etc-ntp-conf配置文件" class="headerlink" title="二、编辑&#x2F;etc&#x2F;ntp.conf配置文件"></a>二、编辑&#x2F;etc&#x2F;ntp.conf配置文件</h2><h3 id="1-注释默认的-server-配置"><a href="#1-注释默认的-server-配置" class="headerlink" title="1. 注释默认的 server 配置"></a>1. 注释默认的 server 配置</h3><p>默认的 NTP 服务器可能是 <code>pool.ntp.org</code> 或一些公共 NTP 池服务器，但这些服务器可能：</p>
+    <title>深入解析Linux inode</title>
+    <url>/2025/03/25/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90Linux%20inode/</url>
+    <content><![CDATA[<h1 id="深入解析Linux-inode"><a href="#深入解析Linux-inode" class="headerlink" title="深入解析Linux inode"></a>深入解析Linux inode</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-FileSystem-inode.jpg" alt="Linux-FileSystem-inode"></p>
+<h2 id="一、inode是什么？"><a href="#一、inode是什么？" class="headerlink" title="一、inode是什么？"></a>一、inode是什么？</h2><p>inode（index node）是Linux&#x2F;Unix文件系统中用于存储文件<strong>元数据</strong>（metadata）的数据结构，每个文件或目录都有一个唯一的inode。你可以把它想象成文件的”身份证”。</p>
+<h2 id="二、inode包含哪些信息？"><a href="#二、inode包含哪些信息？" class="headerlink" title="二、inode包含哪些信息？"></a>二、inode包含哪些信息？</h2><p>每个inode存储以下关键信息（但不包含文件名）：</p>
 <ul>
-<li><strong>响应较慢</strong>（受网络延迟影响）。</li>
-<li><strong>不稳定</strong>（公共服务器可能过载）。</li>
-<li><strong>不符合企业内网需求</strong>（如需要同步内部时间源）。</li>
+<li><p>文件类型（普通文件、目录、符号链接等）</p>
+</li>
+<li><p>文件权限（rwx权限）</p>
+</li>
+<li><p>文件所有者（UID&#x2F;GID）</p>
+</li>
+<li><p>文件大小</p>
+</li>
+<li><p>时间戳（创建、修改、访问时间）</p>
+</li>
+<li><p>指向文件数据块的指针（文件内容实际存储位置）</p>
+</li>
+<li><p>链接计数（有多少文件名指向此inode）</p>
+</li>
 </ul>
-<p><strong>调整方式</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 注释掉原有的 server 行，例如：</span><br><span class="line"># server 0.centos.pool.ntp.org iburst</span><br><span class="line"># server 1.centos.pool.ntp.org iburst</span><br></pre></td></tr></table></figure>
+<h2 id="三、inode与文件名的关系"><a href="#三、inode与文件名的关系" class="headerlink" title="三、inode与文件名的关系"></a>三、inode与文件名的关系</h2><ul>
+<li><p><strong>文件名</strong>只是inode的一个”别名”或”标签”</p>
+</li>
+<li><p>多个文件名可以指向同一个inode（这就是硬链接的原理）</p>
+</li>
+<li><p>系统通过目录项（directory entry）将文件名映射到inode</p>
+</li>
+</ul>
+<h2 id="四、如何查看inode？"><a href="#四、如何查看inode？" class="headerlink" title="四、如何查看inode？"></a>四、如何查看inode？</h2><p>使用<code>ls -i</code>命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> -i 文件名</span><br></pre></td></tr></table></figure>
 
-<hr>
-<h3 id="2-加入自定义-NTP-服务器"><a href="#2-加入自定义-NTP-服务器" class="headerlink" title="2. 加入自定义 NTP 服务器"></a>2. 加入自定义 NTP 服务器</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo &quot;server 首要NTP服务器IP地址 prefer&quot; &gt;&gt; /etc/ntp.conf</span><br><span class="line">echo &quot;server 备用NTP服务器IP地址&quot; &gt;&gt; /etc/ntp.conf</span><br></pre></td></tr></table></figure>
-
+<p>示例输出：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> -i secure-ip.txt</span><br><span class="line">33582157 secure-ip.txt</span><br></pre></td></tr></table></figure>
+<p>这里的<code>33582157</code>就是file.txt的inode号。</p>
+<h2 id="五、硬链接与inode的关系"><a href="#五、硬链接与inode的关系" class="headerlink" title="五、硬链接与inode的关系"></a>五、硬链接与inode的关系</h2><p>当创建硬链接时：</p>
+<ol>
+<li>系统不会创建新的inode</li>
+<li>只是在目录中新增一个条目，指向相同的inode</li>
+<li>inode的”链接计数”值会增加1</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建源文件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;test&quot;</span> &gt; original.txt</span><br><span class="line"><span class="comment"># 创建硬链接</span></span><br><span class="line"><span class="built_in">ln</span> original.txt hardlink.txt</span><br><span class="line"><span class="comment"># 查看inode</span></span><br><span class="line"><span class="built_in">ls</span> -i original.txt hardlink.txt</span><br><span class="line">33610686 hardlink.txt  </span><br><span class="line">33610686 original.txt</span><br></pre></td></tr></table></figure>
+<p>输出会显示两个文件名有相同的inode号。</p>
+<h2 id="六、为什么硬链接不能跨分区？"><a href="#六、为什么硬链接不能跨分区？" class="headerlink" title="六、为什么硬链接不能跨分区？"></a>六、为什么硬链接不能跨分区？</h2><p>因为：</p>
 <ul>
-<li>**<code>prefer</code>**：标记为首选服务器，NTP 会优先同步它（即使延迟稍高）。</li>
-<li><strong>备用服务器</strong>：在主服务器不可用时自动切换，提高可靠性。</li>
-<li><strong>适用场景</strong>：<ul>
-<li>企业内部 NTP 服务器（如 <code>192.168.1.10</code>）。</li>
-<li>国家授时中心（如 <code>cn.pool.ntp.org</code>）。</li>
-<li>云厂商提供的 NTP（如阿里云 <code>ntp.aliyun.com</code>）。</li>
-</ul>
+<li><p>不同文件系统（分区）有各自独立的inode编号体系</p>
+</li>
+<li><p>一个分区的inode号在另一个分区可能指向完全不同的文件</p>
+</li>
+<li><p>硬链接依赖于相同的inode号，所以不能跨分区</p>
 </li>
 </ul>
-<hr>
-<h3 id="3-注释掉-restrict-default-ignore"><a href="#3-注释掉-restrict-default-ignore" class="headerlink" title="3. 注释掉 restrict default ignore"></a>3. 注释掉 restrict default ignore</h3><p>默认配置可能包含：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># restrict default ignore</span><br></pre></td></tr></table></figure>
+<h2 id="七、inode的其他重要特性"><a href="#七、inode的其他重要特性" class="headerlink" title="七、inode的其他重要特性"></a>七、inode的其他重要特性</h2><ul>
+<li><p><strong>唯一性</strong>：在同一文件系统内，每个inode号是唯一的</p>
+</li>
+<li><p><strong>持久性</strong>：即使移动文件（在同分区内），inode号保持不变</p>
+</li>
+<li><p><strong>有限资源</strong>：文件系统创建时会分配固定数量的inode，用尽后即使有磁盘空间也无法创建新文件</p>
+</li>
+</ul>
+<h2 id="八、实际应用场景"><a href="#八、实际应用场景" class="headerlink" title="八、实际应用场景"></a>八、实际应用场景</h2><h3 id="1-查找大文件：通过inode查找被删除但仍被进程占用的文件"><a href="#1-查找大文件：通过inode查找被删除但仍被进程占用的文件" class="headerlink" title="1. 查找大文件：通过inode查找被删除但仍被进程占用的文件"></a>1. 查找大文件：通过inode查找被删除但仍被进程占用的文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsof | grep deleted</span><br><span class="line"><span class="built_in">tail</span>      1992         root    3r      REG              253,0        20   33625066 /root/testfile.txt (deleted)</span><br><span class="line"><span class="comment"># 清理保持文件打开的进程</span></span><br><span class="line"><span class="built_in">kill</span> 1992</span><br></pre></td></tr></table></figure>
 
+<p>其中：</p>
 <ul>
-<li><p><strong>作用</strong>：拒绝所有外部客户端访问本机的 NTP 服务。</p>
-</li>
-<li><p><strong>为什么要注释掉？</strong></p>
-<ul>
-<li><p>如果这台 NTP 服务器需要<strong>为内网其他设备提供时间同步服务</strong>，必须允许客户端访问。</p>
-</li>
-<li><p>替代方案（推荐）：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap</span><br></pre></td></tr></table></figure>
+<li><code>1992</code> 是保持文件打开的进程ID</li>
+<li><code>3r</code> 表示文件描述符</li>
+<li><code>253,0</code> 是设备号（标识文件所在的磁盘分区）。</li>
+<li><code>33625066</code> 是该文件的 <strong>inode 编号</strong>。</li>
+<li><code>(deleted)</code> 表示文件已被删除，但 inode 仍被进程占用。</li>
+</ul>
+<h3 id="2-解决”磁盘未满但无法创建文件”问题："><a href="#2-解决”磁盘未满但无法创建文件”问题：" class="headerlink" title="2. 解决”磁盘未满但无法创建文件”问题："></a>2. 解决”磁盘未满但无法创建文件”问题：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -i  <span class="comment"># 查看inode使用情况</span></span><br><span class="line">文件系统                   Inode 已用(I)  可用(I) 已用(I)% 挂载点</span><br><span class="line">devtmpfs                  229871     388   229483       1% /dev</span><br><span class="line">tmpfs                     232851       1   232850       1% /dev/shm</span><br><span class="line">tmpfs                     232851     724   232127       1% /run</span><br><span class="line">tmpfs                     232851      16   232835       1% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/centos-root 14151680   40014 14111666       1% /</span><br><span class="line">/dev/sda1                 524288     336   523952       1% /boot</span><br><span class="line">tmpfs                     232851       1   232850       1% /run/user/0</span><br></pre></td></tr></table></figure>
 
-<p>仅允许 <code>192.168.1.0/24</code> 网段同步时间，但不允许修改配置（<code>nomodify notrap</code>）。</p>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="4-注释掉本地时钟源（server-127-0-0-1）"><a href="#4-注释掉本地时钟源（server-127-0-0-1）" class="headerlink" title="4. 注释掉本地时钟源（server 127.0.0.1）"></a>4. 注释掉本地时钟源（server 127.0.0.1）</h3><p>默认可能包含：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># server 127.0.0.1</span><br><span class="line"># fudge 127.0.0.1 stratum 10</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>作用</strong>：当所有外部 NTP 服务器不可用时，回退到本地时钟（但本地硬件时钟通常不准）。</li>
-<li><strong>为什么要注释掉？</strong><ul>
-<li>避免在<strong>网络隔离环境</strong>下依赖不准确的本地时钟。</li>
-<li>如果确实需要本地时钟作为兜底，可以保留，但 <code>stratum</code> 应设为较高值（如 <code>10</code>），表示优先级最低。</li>
-</ul>
-</li>
-</ul>
-<h3 id="5-重启NTP服务器"><a href="#5-重启NTP服务器" class="headerlink" title="5.重启NTP服务器"></a>5.重启NTP服务器</h3><blockquote>
-<p>注意：所有配置修改后都需要重启服务生效：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart ntpd</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="三、NTP配置文件详解"><a href="#三、NTP配置文件详解" class="headerlink" title="三、NTP配置文件详解"></a>三、NTP配置文件详解</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 指定NTP守护进程用来记录频率偏差的文件位置。</span></span><br><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认情况下，拒绝所有对NTP服务器状态或时间的查询请求。</span></span><br><span class="line">restrict default noquery</span><br><span class="line"></span><br><span class="line"><span class="comment"># IPv4 默认访问控制规则（严格限制所有外部客户端）</span></span><br><span class="line"><span class="comment"># - kod: 发送Kiss-of-Death包以减缓过于频繁的请求。</span></span><br><span class="line"><span class="comment"># - nomodify: 发送Kiss-of-Death包以减缓过于频繁的请求。</span></span><br><span class="line"><span class="comment"># - notrap: 禁用 trap 服务（防攻击）</span></span><br><span class="line"><span class="comment"># - nopeer: 发送Kiss-of-Death包以减缓过于频繁的请求。</span></span><br><span class="line"><span class="comment"># - noquery: 阻止查询NTP服务器的时间或状态。</span></span><br><span class="line">restrict default kod nomodify notrap nopeer noquery</span><br><span class="line"><span class="comment">#restrict规则是叠加生效的，最后出现的规则会覆盖之前的同名规则</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># IPv6 默认访问控制规则（同 IPv4，但针对 IPv6 地址）</span></span><br><span class="line">restrict -6 default kod nomodify notrap nopeer noquery</span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许本地回环接口（127.0.0.1）完全访问 NTP 服务</span></span><br><span class="line">restrict 127.0.0.1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许 IPv6 本地回环接口（::1）完全访问 NTP 服务</span></span><br><span class="line">restrict -6 ::1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载加密认证文件（如 Autokey 或对称密钥）</span></span><br><span class="line"><span class="comment"># 若未使用认证功能，可删除以简化配置</span></span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定 NTP 密钥文件路径（用于认证）</span></span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置首选 NTP 服务器（10.252.17.10）</span></span><br><span class="line"><span class="comment"># - prefer: 标记为优先使用的服务器</span></span><br><span class="line"><span class="comment"># - minpoll 4 maxpoll 4: 固定轮询间隔为 16 秒（2^4）</span></span><br><span class="line">server 10.252.17.10 prefer minpoll 4 maxpoll 4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置备用 NTP 服务器（10.252.17.11）</span></span><br><span class="line"><span class="comment"># 轮询间隔同样固定为 16 秒</span></span><br><span class="line">server 10.252.17.11 minpoll 4 maxpoll 4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 禁用 NTP 监控功能（安全加固）</span></span><br><span class="line"><span class="comment"># 防止滥用 monlist 命令导致的 DDoS 攻击</span></span><br><span class="line"><span class="built_in">disable</span> monitor</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意：所有配置修改后都需要重启服务生效：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart ntpd</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="四、配置step-tickers文件"><a href="#四、配置step-tickers文件" class="headerlink" title="四、配置step-tickers文件"></a>四、配置step-tickers文件</h2><p>&#x2F;etc&#x2F;ntp&#x2F;step-tickers 文件在基于NTP进行时间同步的系统中用于指定初次启动时要同步的服务器。</p>
-<p>默认情况下，我们配置的NTP服务器不会去时间源那里同步时间，所以必须修改&#x2F;etc&#x2F;ntp&#x2F;step-tickers文件，加入我们的时间源，这样每次启动ntp服务的时候就会自动更新时间。</p>
-<h3 id="1-将首要和备用NTP服务器IP地址写入"><a href="#1-将首要和备用NTP服务器IP地址写入" class="headerlink" title="1. 将首要和备用NTP服务器IP地址写入"></a>1. 将首要和备用NTP服务器IP地址写入</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># echo &quot;首要NTP服务器IP地址&quot; &gt;&gt;/etc/ntp/step-tickers</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;10.252.17.10&quot;</span> &gt; /etc/ntp/step-tickers</span><br><span class="line"></span><br><span class="line"><span class="comment"># echo &quot;备用NTP服务器IP地址&quot; &gt;&gt;/etc/ntp/step-tickers</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;10.252.17.11&quot;</span> &gt;&gt; /etc/ntp/step-tickers</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-ntp-conf和step-tickers的区别"><a href="#2-ntp-conf和step-tickers的区别" class="headerlink" title="2. ntp.conf和step-tickers的区别"></a>2. ntp.conf和step-tickers的区别</h3><h4 id="2-1-etc-ntp-conf"><a href="#2-1-etc-ntp-conf" class="headerlink" title="2.1 &#x2F;etc&#x2F;ntp.conf"></a>2.1 &#x2F;etc&#x2F;ntp.conf</h4><ul>
-<li><strong>作用</strong>：NTP 服务的主配置文件，用于定义 NTP 守护进程（<code>ntpd</code>）的所有行为。</li>
-<li><strong>内容</strong>：<ul>
-<li>指定时间服务器（NTP server）的地址（如 <code>pool.ntp.org</code> 或具体 IP）。</li>
-<li>配置访问控制规则（如允许哪些客户端同步时间）。</li>
-<li>定义本地时钟（如系统时钟作为备用时间源）。</li>
-<li>其他高级参数（如日志、 drift 文件路径等）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="2-2-etc-ntp-step-tickers"><a href="#2-2-etc-ntp-step-tickers" class="headerlink" title="2.2 &#x2F;etc&#x2F;ntp&#x2F;step-tickers"></a>2.2 &#x2F;etc&#x2F;ntp&#x2F;step-tickers</h4><ul>
-<li><strong>作用</strong>：仅用于在 NTP 服务启动时<strong>快速初始化系统时钟</strong>（通常用于 <code>ntpd</code> 启动前的第一次时间同步）。</li>
-<li><strong>使用场景</strong>：<ul>
-<li>当系统时间与真实时间偏差较大时（例如相差几分钟以上），<code>ntpd</code> 默认会逐步调整（缓慢校准）。但通过 <code>step-tickers</code> 中列出的服务器，系统可以在启动时<strong>立即大步调整时间</strong>（一步到位）。</li>
-<li>通常由 <code>/etc/init.d/ntpd</code> 或 <code>systemd</code> 服务脚本在启动 <code>ntpd</code> 前调用 <code>ntpdate</code> 命令读取此文件。</li>
-</ul>
-</li>
-<li><strong>内容</strong>：<ul>
-<li>简单列出 NTP 服务器的地址（每行一个）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="2-3-主要区别对比"><a href="#2-3-主要区别对比" class="headerlink" title="2.3 主要区别对比"></a>2.3 主要区别对比</h4><table>
-<thead>
-<tr>
-<th align="left">特性</th>
-<th align="left"><code>/etc/ntp.conf</code></th>
-<th align="left"><code>/etc/ntp/step-tickers</code></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>用途</strong></td>
-<td align="left">定义 <code>ntpd</code> 的长期运行行为</td>
-<td align="left">仅在启动时用于快速初始化时间</td>
-</tr>
-<tr>
-<td align="left"><strong>生效阶段</strong></td>
-<td align="left"><code>ntpd</code> 运行时持续生效</td>
-<td align="left"><code>ntpd</code> 启动前通过 <code>ntpdate</code> 使用</td>
-</tr>
-<tr>
-<td align="left"><strong>时间同步方式</strong></td>
-<td align="left">渐进式校准（默认）</td>
-<td align="left">立即大步调整（若时间偏差大）</td>
-</tr>
-<tr>
-<td align="left"><strong>依赖关系</strong></td>
-<td align="left">必需</td>
-<td align="left">可选（部分旧系统可能不需要）</td>
-</tr>
-</tbody></table>
-<h2 id="五、检查NTP同步情况"><a href="#五、检查NTP同步情况" class="headerlink" title="五、检查NTP同步情况"></a>五、检查NTP同步情况</h2><h3 id="ntpq-p"><a href="#ntpq-p" class="headerlink" title="ntpq -p"></a>ntpq -p</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ntpq -p</span><br><span class="line">     remote           refid      st t when poll reach   delay   offset  jitter</span><br><span class="line">==============================================================================</span><br><span class="line">*10.252.17.10    10.252.15.2      2 u   15   16  377    3.129   -0.022   0.063</span><br><span class="line">+10.252.17.11    10.252.15.1      2 u    5   16  377    3.092   -0.928   0.027</span><br></pre></td></tr></table></figure>
-
-<p>* 号代理首选NTP服务器</p>
-<p>+号代理备选的可用NTP服务器</p>
-<p>offset的绝对值越接近0越精准</p>
-<h3 id="ntpstat"><a href="#ntpstat" class="headerlink" title="ntpstat"></a>ntpstat</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ntpstat</span><br><span class="line">synchronised to NTP server (10.252.17.10) at stratum 3 </span><br><span class="line">   time correct to within 20 ms</span><br><span class="line">   polling server every 16 s</span><br></pre></td></tr></table></figure>
-
-<p>一般生产环境要求time correct小于 100ms 即合格</p>
 ]]></content>
       <categories>
-        <category>Linux</category>
-        <category>服务部署</category>
-        <category>NTP</category>
+        <category>Linux文件系统</category>
+        <category>inode</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
-        <tag>NTP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>NTP服务处理手册</title>
-    <url>/2025/04/03/NTP%E6%9C%8D%E5%8A%A1%E5%A4%84%E7%90%86%E6%89%8B%E5%86%8C/</url>
-    <content><![CDATA[<h1 id="NTP服务处理手册"><a href="#NTP服务处理手册" class="headerlink" title="NTP服务处理手册"></a>NTP服务处理手册</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-DeploymentService-NTPProcManual.jpg" alt="Linux-DeploymentService-NTPProcManual"></p>
-<h2 id="一、服务状态管理"><a href="#一、服务状态管理" class="headerlink" title="一、服务状态管理"></a>一、服务状态管理</h2><h3 id="1-快速检查服务状态"><a href="#1-快速检查服务状态" class="headerlink" title="1. 快速检查服务状态"></a>1. 快速检查服务状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl is-active ntpd</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>输出说明</strong>：<br><code>active</code>：服务运行中<br><code>inactive</code>：服务未启动<br><code>failed</code>：服务启动失败  </li>
-<li><strong>脚本适用性</strong>：✅ 直接返回状态码，适合自动化脚本调用</li>
-</ul>
-<hr>
-<h3 id="2-查看详细服务状态"><a href="#2-查看详细服务状态" class="headerlink" title="2. 查看详细服务状态"></a>2. 查看详细服务状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl status ntpd</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>输出内容</strong>：  <ul>
-<li>服务启停状态  </li>
-<li>进程ID及资源占用  </li>
-<li>最近日志片段（关键错误会在此显示）  </li>
-<li>开机自启配置状态</li>
-</ul>
-</li>
-</ul>
-<p><strong>正常状态示例</strong>：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Active: active (running) since 三 2025-04-16 20:03:48 CST; 2s ago</span><br><span class="line">Main PID: 1318 (ntpd)</span><br></pre></td></tr></table></figure>
-
-<p><strong>异常状态示例</strong>：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Active: failed (Result: exit-code) since ...</span><br><span class="line">Process: 1317 ExecStart=... (code=exited, status=1/FAILURE)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>解决方案</strong>：  <ol>
-<li>查看完整日志：<code>journalctl -u ntpd</code>  </li>
-<li>检查配置文件语法：<code>ntpd -p</code>  </li>
-<li>重启服务：<code>systemctl restart ntpd</code></li>
-</ol>
-</li>
-</ul>
-<hr>
-<h2 id="二、时间同步状态诊断"><a href="#二、时间同步状态诊断" class="headerlink" title="二、时间同步状态诊断"></a>二、时间同步状态诊断</h2><h3 id="1-快速同步状态检查（ntpstat）"><a href="#1-快速同步状态检查（ntpstat）" class="headerlink" title="1. 快速同步状态检查（ntpstat）"></a>1. 快速同步状态检查（ntpstat）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ntpstat</span><br></pre></td></tr></table></figure>
-<p><strong>正常输出示例</strong>：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">synchronised to NTP server (10.252.17.10) at stratum 3</span><br><span class="line">time correct to within 20 ms</span><br><span class="line">polling server every 16 s</span><br></pre></td></tr></table></figure>
-
-<p><strong>异常场景及处理</strong>：  </p>
-<table>
-<thead>
-<tr>
-<th>异常输出</th>
-<th>原因</th>
-<th>解决方案</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>unsynchronised</code></td>
-<td>未同步任何服务器</td>
-<td>1. 检查NTP服务状态<br>2. 验证防火墙是否放行UDP 123端口</td>
-</tr>
-<tr>
-<td><code>time offset exceeds tolerance</code></td>
-<td>时间偏差过大</td>
-<td>1. 强制同步：<code>ntpd -gq</code><br>2. 检查时区设置：<code>timedatectl</code></td>
-</tr>
-<tr>
-<td><code>no server suitable</code></td>
-<td>所有服务器不可达</td>
-<td>1. 更换NTP服务器地址<br>2. 检查网络连通性：<code>ping 10.252.17.10</code></td>
-</tr>
-</tbody></table>
-<hr>
-<h3 id="2-详细对等体分析（ntpq-p）"><a href="#2-详细对等体分析（ntpq-p）" class="headerlink" title="2. 详细对等体分析（ntpq -p）"></a>2. 详细对等体分析（ntpq -p）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ntpq -pn</span><br></pre></td></tr></table></figure>
-<p><strong>正常状态示例</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">*10.252.17.10    10.252.15.2      2 u   15   16  377    3.129   -0.022   0.063</span><br><span class="line">+10.252.17.11    10.252.15.1      2 u    5   16  377    3.092   -0.928   0.027</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>关键指标</strong>：  <ul>
-<li><code>offset</code> &lt; 100ms  </li>
-<li><code>jitter</code> &lt; 1ms  </li>
-<li><code>reach</code> &#x3D; 377（全成功）</li>
-</ul>
-</li>
-</ul>
-<p><strong>常见异常及处理</strong>：  </p>
-<table>
-<thead>
-<tr>
-<th>异常现象</th>
-<th>诊断</th>
-<th>修复动作</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>所有节点标记为<code>-</code>或<code>x</code></td>
-<td>网络隔离或配置错误</td>
-<td>1. 检查<code>/etc/ntp.conf</code>的server条目<br>2. 执行<code>ntpdate -d &lt;server&gt;</code>测试连通性</td>
-</tr>
-<tr>
-<td><code>st=16</code></td>
-<td>节点自身未同步</td>
-<td>更换更高层级的NTP服务器</td>
-</tr>
-<tr>
-<td><code>delay &gt; 1000ms</code></td>
-<td>网络延迟过高</td>
-<td>1. 切换低延迟服务器<br>2. 检查本地网络QoS配置</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="三、配置文件管理"><a href="#三、配置文件管理" class="headerlink" title="三、配置文件管理"></a>三、配置文件管理</h2><h3 id="1-查看有效配置"><a href="#1-查看有效配置" class="headerlink" title="1. 查看有效配置"></a>1. 查看有效配置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">grep -v <span class="string">&quot;^#\|^$&quot;</span> /etc/ntp.conf</span><br></pre></td></tr></table></figure>
-<p><strong>标准配置示例</strong>：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">driftfile /var/lib/ntp/drift</span><br><span class="line">restrict default noquery</span><br><span class="line">restrict default kod nomodify notrap nopeer noquery</span><br><span class="line">restrict -6 default kod nomodify notrap nopeer noquery</span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict -6 ::1</span><br><span class="line">includefile /etc/ntp/crypto/pw</span><br><span class="line">keys /etc/ntp/keys</span><br><span class="line">server 10.252.17.10 prefer minpoll 4 maxpoll 4</span><br><span class="line">server 10.252.17.11 minpoll 4 maxpoll 4</span><br><span class="line"><span class="built_in">disable</span> monitor</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-配置修改规范"><a href="#2-配置修改规范" class="headerlink" title="2. 配置修改规范"></a>2. 配置修改规范</h3><ol>
-<li><strong>备份原配置</strong>：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> -p /etc/ntp.conf /etc/ntp.conf.bak</span><br></pre></td></tr></table></figure></li>
-<li><strong>关键参数说明</strong>：  <ul>
-<li><code>prefer</code>：优先使用该服务器  </li>
-<li><code>minpoll/maxpoll</code>：调整轮询间隔（2^4&#x3D;16秒 ~ 2^14&#x3D;16384秒）</li>
-</ul>
-</li>
-<li><strong>配置后操作</strong>：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart ntpd &amp;&amp; <span class="built_in">sleep</span> 5 &amp;&amp; ntpstat</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="四、工具对比与场景指南"><a href="#四、工具对比与场景指南" class="headerlink" title="四、工具对比与场景指南"></a>四、工具对比与场景指南</h2><table>
-<thead>
-<tr>
-<th>工具</th>
-<th>适用场景</th>
-<th>自动化支持</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>systemctl</code></td>
-<td>服务启停&#x2F;状态监控</td>
-<td>✅</td>
-</tr>
-<tr>
-<td><code>ntpstat</code></td>
-<td>快速同步状态检查</td>
-<td>✅</td>
-</tr>
-<tr>
-<td><code>ntpq -p</code></td>
-<td>深度网络与偏移分析</td>
-<td>❌</td>
-</tr>
-<tr>
-<td><code>ntpdate</code></td>
-<td>强制单次同步（服务停止时）</td>
-<td>✅</td>
-</tr>
-</tbody></table>
-<hr>
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>服务部署</category>
-        <category>NTP</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>NTP</tag>
+        <tag>文件系统</tag>
+        <tag>inode</tag>
       </tags>
   </entry>
 </search>
