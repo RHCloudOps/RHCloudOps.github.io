@@ -713,6 +713,154 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux主机网卡（Bond）状态异常处理</title>
+    <url>/2025/03/12/Linux%E4%B8%BB%E6%9C%BA%E7%BD%91%E5%8D%A1%EF%BC%88Bond%EF%BC%89%E7%8A%B6%E6%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="Linux主机网卡（Bond）状态异常处理"><a href="#Linux主机网卡（Bond）状态异常处理" class="headerlink" title="Linux主机网卡（Bond）状态异常处理"></a>Linux主机网卡（Bond）状态异常处理</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-NetworkCard-bond.jpg" alt="Hardware-NetworkCard-bond"></p>
+<h3 id="一、问题定位与关键命令解析"><a href="#一、问题定位与关键命令解析" class="headerlink" title="一、问题定位与关键命令解析"></a>一、问题定位与关键命令解析</h3><p>当Linux主机的Bond网卡出现非<code>up</code>状态时，可通过以下命令快速定位问题：</p>
+<h4 id="1-统计非up状态的从属接口数量"><a href="#1-统计非up状态的从属接口数量" class="headerlink" title="1. 统计非up状态的从属接口数量"></a>1. 统计非<code>up</code>状态的从属接口数量</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span> | awk <span class="string">&#x27;/Status/&#123;print $NF&#125;&#x27;</span> | grep -vc up</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：统计所有Bond接口中状态非<code>up</code>的从属网卡数量。</li>
+<li><strong>输出示例</strong>：<code>1</code>（表示有1个从属网卡异常）。</li>
+<li><strong>说明</strong>：  <ul>
+<li><code>cat /proc/net/bonding/bond*</code>：读取所有Bond接口的配置信息。  </li>
+<li><code>grep -A 1 &#39;Slave Interface&#39;</code>：匹配包含<code>Slave Interface</code>的行，并输出该行及下一行（<code>-A 1</code>）。  </li>
+<li><code>awk &#39;/Status/&#123;print $NF&#125;&#39;</code>：提取状态字段（<code>Status</code>行的最后一个值，即<code>up</code>或<code>down</code>）。  </li>
+<li><code>grep -vc up</code>：统计非<code>up</code>状态的数量（<code>-v</code>反向匹配，<code>-c</code>计数）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-定位具体异常的从属网卡"><a href="#2-定位具体异常的从属网卡" class="headerlink" title="2. 定位具体异常的从属网卡"></a>2. 定位具体异常的从属网卡</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>输出示例</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Slave Interface: eth3</span><br><span class="line">MII Status: down</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关键字段</strong>：  </p>
+<ul>
+<li><code>Slave Interface</code>：异常网卡名称（如 <code>eth3</code>）。  </li>
+<li><code>MII Status</code>：物理链路状态（<code>down</code> 表示断开）。  </li>
+<li><code>Link Failure Count</code>：链路故障次数（数值增加表明反复断开）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="3-查看详细Bond接口配置"><a href="#3-查看详细Bond接口配置" class="headerlink" title="3. 查看详细Bond接口配置"></a>3. 查看详细Bond接口配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond*</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>输出关键字段解析</strong>：  </p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Bonding Mode</strong></td>
+<td>Bond模式（如<code>802.3ad</code>动态链路聚合、<code>active-backup</code>主备模式）。</td>
+</tr>
+<tr>
+<td><strong>MII Status</strong></td>
+<td>Bond接口整体状态（<code>up</code>表示可用）。</td>
+</tr>
+<tr>
+<td><strong>Slave Interface</strong></td>
+<td>从属网卡名称及状态（重点关注<code>MII Status</code>）。</td>
+</tr>
+<tr>
+<td><strong>Link Failure Count</strong></td>
+<td>链路故障次数（非零值表示发生过故障）。</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h3 id="二、收集故障网卡信息"><a href="#二、收集故障网卡信息" class="headerlink" title="二、收集故障网卡信息"></a>二、收集故障网卡信息</h3><h4 id="1-获取网卡MAC地址"><a href="#1-获取网卡MAC地址" class="headerlink" title="1. 获取网卡MAC地址"></a>1. 获取网卡MAC地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a | grep eth3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>输出示例</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4: eth3: &lt;NO-CARRIER,BROADCAST,MULTICAST,SLAVE,UP&gt; ... link/ether 48:dc:2d:01:66:a5 ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关键字段</strong>：<code>link/ether</code> 后为MAC地址（如 <code>48:dc:2d:01:66:a5</code>）。</p>
+</li>
+</ul>
+<h4 id="2-获取Bond组IP地址"><a href="#2-获取Bond组IP地址" class="headerlink" title="2. 获取Bond组IP地址"></a>2. 获取Bond组IP地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a | grep bond1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>输出示例</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">9: bond1: ... inet 192.168.142.43/24 ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关键字段</strong>：<code>inet</code> 后为Bond组的IP地址（如 <code>192.168.142.43/24</code>）。</p>
+</li>
+</ul>
+<h4 id="3-资产信息核对"><a href="#3-资产信息核对" class="headerlink" title="3. 资产信息核对"></a>3. 资产信息核对</h4><ul>
+<li>根据主机IP或主机名，在资产表中确认设备地址和位置信息。</li>
+</ul>
+<hr>
+<h3 id="三、信息提交网络组的模板"><a href="#三、信息提交网络组的模板" class="headerlink" title="三、信息提交网络组的模板"></a>三、信息提交网络组的模板</h3><p><strong>需包含以下信息</strong>：  </p>
+<ol>
+<li><strong>异常网卡</strong>：<code>eth3</code>  </li>
+<li><strong>MAC地址</strong>：<code>48:dc:2d:01:66:a5</code>  </li>
+<li><strong>所属Bond组</strong>：<code>bond1</code>  </li>
+<li><strong>Bond组IP</strong>：<code>192.168.142.43/24</code>  </li>
+<li><strong>物理位置</strong>：根据资产表提供设备地址和位置信息。</li>
+</ol>
+<hr>
+<h3 id="四、故障原因分析与处理建议"><a href="#四、故障原因分析与处理建议" class="headerlink" title="四、故障原因分析与处理建议"></a>四、故障原因分析与处理建议</h3><h4 id="可能原因"><a href="#可能原因" class="headerlink" title="可能原因"></a>可能原因</h4><ol>
+<li><strong>物理层问题</strong>：  <ul>
+<li>网线松动、光模块故障、交换机端口异常。  </li>
+<li><strong>操作建议</strong>：检查网线连接，更换光模块，验证交换机端口状态。</li>
+</ul>
+</li>
+<li><strong>驱动或配置问题</strong>：  <ul>
+<li>网卡驱动异常、Bond模式与交换机配置不匹配（如LACP未启用）。  </li>
+<li><strong>操作建议</strong>：更新网卡驱动，确认交换机聚合组配置。</li>
+</ul>
+</li>
+<li><strong>硬件故障</strong>：  <ul>
+<li>网卡或主板接口损坏。  </li>
+<li><strong>操作建议</strong>：更换网卡或主板。</li>
+</ul>
+</li>
+</ol>
+<h4 id="应急处理"><a href="#应急处理" class="headerlink" title="应急处理"></a>应急处理</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifdown eth3 &amp;&amp; ifup eth3   <span class="comment"># 重启异常网卡（临时恢复）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="五、Bond模式说明"><a href="#五、Bond模式说明" class="headerlink" title="五、Bond模式说明"></a>五、Bond模式说明</h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>802.3ad（动态链路聚合）</strong></td>
+<td>多网卡负载均衡，需交换机支持LACP。</td>
+<td>高带宽需求、冗余要求高的场景。</td>
+</tr>
+<tr>
+<td><strong>active-backup（主备模式）</strong></td>
+<td>仅主接口工作，备用接口在主接口故障时切换。</td>
+<td>高可用性要求，对带宽需求不高。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h3><ul>
+<li><strong>核心流程</strong>：定位异常网卡 → 收集MAC&#x2F;IP → 提交网络组 → 物理&#x2F;配置排查。  </li>
+<li><strong>关键命令</strong>：<code>grep -A 1</code> 过滤上下文，<code>ip a</code> 查看网络配置。  </li>
+<li><strong>预防措施</strong>：定期检查Bond状态，确保驱动和固件为最新版本。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>硬件运维</category>
+        <category>网卡</category>
+      </categories>
+      <tags>
+        <tag>硬件运维</tag>
+        <tag>网卡</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux man命令手册使用指南</title>
     <url>/2025/03/20/Linux%20man%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[<h1 id="Linux-man命令手册使用指南"><a href="#Linux-man命令手册使用指南" class="headerlink" title="Linux man命令手册使用指南"></a>Linux man命令手册使用指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
@@ -889,154 +1037,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux主机网卡（Bond）状态异常处理</title>
-    <url>/2025/03/12/Linux%E4%B8%BB%E6%9C%BA%E7%BD%91%E5%8D%A1%EF%BC%88Bond%EF%BC%89%E7%8A%B6%E6%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="Linux主机网卡（Bond）状态异常处理"><a href="#Linux主机网卡（Bond）状态异常处理" class="headerlink" title="Linux主机网卡（Bond）状态异常处理"></a>Linux主机网卡（Bond）状态异常处理</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-NetworkCard-bond.jpg" alt="Hardware-NetworkCard-bond"></p>
-<h3 id="一、问题定位与关键命令解析"><a href="#一、问题定位与关键命令解析" class="headerlink" title="一、问题定位与关键命令解析"></a>一、问题定位与关键命令解析</h3><p>当Linux主机的Bond网卡出现非<code>up</code>状态时，可通过以下命令快速定位问题：</p>
-<h4 id="1-统计非up状态的从属接口数量"><a href="#1-统计非up状态的从属接口数量" class="headerlink" title="1. 统计非up状态的从属接口数量"></a>1. 统计非<code>up</code>状态的从属接口数量</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span> | awk <span class="string">&#x27;/Status/&#123;print $NF&#125;&#x27;</span> | grep -vc up</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：统计所有Bond接口中状态非<code>up</code>的从属网卡数量。</li>
-<li><strong>输出示例</strong>：<code>1</code>（表示有1个从属网卡异常）。</li>
-<li><strong>说明</strong>：  <ul>
-<li><code>cat /proc/net/bonding/bond*</code>：读取所有Bond接口的配置信息。  </li>
-<li><code>grep -A 1 &#39;Slave Interface&#39;</code>：匹配包含<code>Slave Interface</code>的行，并输出该行及下一行（<code>-A 1</code>）。  </li>
-<li><code>awk &#39;/Status/&#123;print $NF&#125;&#39;</code>：提取状态字段（<code>Status</code>行的最后一个值，即<code>up</code>或<code>down</code>）。  </li>
-<li><code>grep -vc up</code>：统计非<code>up</code>状态的数量（<code>-v</code>反向匹配，<code>-c</code>计数）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="2-定位具体异常的从属网卡"><a href="#2-定位具体异常的从属网卡" class="headerlink" title="2. 定位具体异常的从属网卡"></a>2. 定位具体异常的从属网卡</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p><strong>输出示例</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Slave Interface: eth3</span><br><span class="line">MII Status: down</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>关键字段</strong>：  </p>
-<ul>
-<li><code>Slave Interface</code>：异常网卡名称（如 <code>eth3</code>）。  </li>
-<li><code>MII Status</code>：物理链路状态（<code>down</code> 表示断开）。  </li>
-<li><code>Link Failure Count</code>：链路故障次数（数值增加表明反复断开）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="3-查看详细Bond接口配置"><a href="#3-查看详细Bond接口配置" class="headerlink" title="3. 查看详细Bond接口配置"></a>3. 查看详细Bond接口配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond*</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p><strong>输出关键字段解析</strong>：  </p>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Bonding Mode</strong></td>
-<td>Bond模式（如<code>802.3ad</code>动态链路聚合、<code>active-backup</code>主备模式）。</td>
-</tr>
-<tr>
-<td><strong>MII Status</strong></td>
-<td>Bond接口整体状态（<code>up</code>表示可用）。</td>
-</tr>
-<tr>
-<td><strong>Slave Interface</strong></td>
-<td>从属网卡名称及状态（重点关注<code>MII Status</code>）。</td>
-</tr>
-<tr>
-<td><strong>Link Failure Count</strong></td>
-<td>链路故障次数（非零值表示发生过故障）。</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<hr>
-<h3 id="二、收集故障网卡信息"><a href="#二、收集故障网卡信息" class="headerlink" title="二、收集故障网卡信息"></a>二、收集故障网卡信息</h3><h4 id="1-获取网卡MAC地址"><a href="#1-获取网卡MAC地址" class="headerlink" title="1. 获取网卡MAC地址"></a>1. 获取网卡MAC地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a | grep eth3</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>输出示例</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4: eth3: &lt;NO-CARRIER,BROADCAST,MULTICAST,SLAVE,UP&gt; ... link/ether 48:dc:2d:01:66:a5 ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>关键字段</strong>：<code>link/ether</code> 后为MAC地址（如 <code>48:dc:2d:01:66:a5</code>）。</p>
-</li>
-</ul>
-<h4 id="2-获取Bond组IP地址"><a href="#2-获取Bond组IP地址" class="headerlink" title="2. 获取Bond组IP地址"></a>2. 获取Bond组IP地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a | grep bond1</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>输出示例</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">9: bond1: ... inet 192.168.142.43/24 ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>关键字段</strong>：<code>inet</code> 后为Bond组的IP地址（如 <code>192.168.142.43/24</code>）。</p>
-</li>
-</ul>
-<h4 id="3-资产信息核对"><a href="#3-资产信息核对" class="headerlink" title="3. 资产信息核对"></a>3. 资产信息核对</h4><ul>
-<li>根据主机IP或主机名，在资产表中确认设备地址和位置信息。</li>
-</ul>
-<hr>
-<h3 id="三、信息提交网络组的模板"><a href="#三、信息提交网络组的模板" class="headerlink" title="三、信息提交网络组的模板"></a>三、信息提交网络组的模板</h3><p><strong>需包含以下信息</strong>：  </p>
-<ol>
-<li><strong>异常网卡</strong>：<code>eth3</code>  </li>
-<li><strong>MAC地址</strong>：<code>48:dc:2d:01:66:a5</code>  </li>
-<li><strong>所属Bond组</strong>：<code>bond1</code>  </li>
-<li><strong>Bond组IP</strong>：<code>192.168.142.43/24</code>  </li>
-<li><strong>物理位置</strong>：根据资产表提供设备地址和位置信息。</li>
-</ol>
-<hr>
-<h3 id="四、故障原因分析与处理建议"><a href="#四、故障原因分析与处理建议" class="headerlink" title="四、故障原因分析与处理建议"></a>四、故障原因分析与处理建议</h3><h4 id="可能原因"><a href="#可能原因" class="headerlink" title="可能原因"></a>可能原因</h4><ol>
-<li><strong>物理层问题</strong>：  <ul>
-<li>网线松动、光模块故障、交换机端口异常。  </li>
-<li><strong>操作建议</strong>：检查网线连接，更换光模块，验证交换机端口状态。</li>
-</ul>
-</li>
-<li><strong>驱动或配置问题</strong>：  <ul>
-<li>网卡驱动异常、Bond模式与交换机配置不匹配（如LACP未启用）。  </li>
-<li><strong>操作建议</strong>：更新网卡驱动，确认交换机聚合组配置。</li>
-</ul>
-</li>
-<li><strong>硬件故障</strong>：  <ul>
-<li>网卡或主板接口损坏。  </li>
-<li><strong>操作建议</strong>：更换网卡或主板。</li>
-</ul>
-</li>
-</ol>
-<h4 id="应急处理"><a href="#应急处理" class="headerlink" title="应急处理"></a>应急处理</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifdown eth3 &amp;&amp; ifup eth3   <span class="comment"># 重启异常网卡（临时恢复）</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="五、Bond模式说明"><a href="#五、Bond模式说明" class="headerlink" title="五、Bond模式说明"></a>五、Bond模式说明</h3><table>
-<thead>
-<tr>
-<th>模式</th>
-<th>特点</th>
-<th>适用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>802.3ad（动态链路聚合）</strong></td>
-<td>多网卡负载均衡，需交换机支持LACP。</td>
-<td>高带宽需求、冗余要求高的场景。</td>
-</tr>
-<tr>
-<td><strong>active-backup（主备模式）</strong></td>
-<td>仅主接口工作，备用接口在主接口故障时切换。</td>
-<td>高可用性要求，对带宽需求不高。</td>
-</tr>
-</tbody></table>
-<hr>
-<h3 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h3><ul>
-<li><strong>核心流程</strong>：定位异常网卡 → 收集MAC&#x2F;IP → 提交网络组 → 物理&#x2F;配置排查。  </li>
-<li><strong>关键命令</strong>：<code>grep -A 1</code> 过滤上下文，<code>ip a</code> 查看网络配置。  </li>
-<li><strong>预防措施</strong>：定期检查Bond状态，确保驱动和固件为最新版本。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>硬件运维</category>
-        <category>网卡</category>
-      </categories>
-      <tags>
-        <tag>硬件运维</tag>
-        <tag>网卡</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>NTP服务配置与管理指南</title>
     <url>/2025/04/02/NTP%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE%E4%B8%8E%E7%AE%A1%E7%90%86%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[<h1 id="NTP服务配置与管理指南"><a href="#NTP服务配置与管理指南" class="headerlink" title="NTP服务配置与管理指南"></a>NTP服务配置与管理指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-DeploymentService-NTPConfig.jpg" alt="Linux-DeploymentService-NTPConfig"></p>
@@ -1209,241 +1209,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Vim编辑器入门指南</title>
-    <url>/2025/03/27/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
-<h2 id="一、Vim模式与切换"><a href="#一、Vim模式与切换" class="headerlink" title="一、Vim模式与切换"></a>一、Vim模式与切换</h2><h3 id="1-命令模式"><a href="#1-命令模式" class="headerlink" title="1.命令模式"></a>1.命令模式</h3><ul>
-<li><strong>进入方式</strong>：通过<code>vi/vim</code>打开文件后的默认模式。  </li>
-<li><strong>功能</strong>：执行快捷键操作（如复制、删除、移动光标等），不可直接编辑文本。</li>
-</ul>
-<h3 id="2-编辑模式（插入模式）"><a href="#2-编辑模式（插入模式）" class="headerlink" title="2.编辑模式（插入模式）"></a>2.编辑模式（插入模式）</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>i</code>（插入）、<code>a</code>（追加）、<code>o</code>（新行）等。  </li>
-<li><strong>退出方式</strong>：按 <code>Esc</code> 返回命令模式。  </li>
-<li><strong>功能</strong>：直接编辑文本内容。</li>
-</ul>
-<h3 id="3-底行模式"><a href="#3-底行模式" class="headerlink" title="3.底行模式"></a>3.底行模式</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>:</code>。  </li>
-<li><strong>功能</strong>：执行保存、退出、搜索、设置等操作（如 <code>:wq</code> 保存退出）。</li>
-</ul>
-<h3 id="4-可视块模式"><a href="#4-可视块模式" class="headerlink" title="4.可视块模式"></a>4.可视块模式</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>Ctrl + v</code>。  </li>
-<li><strong>功能</strong>：批量选择文本块进行编辑（如删除、复制多行）。</li>
-</ul>
-<hr>
-<h2 id="二、常用快捷键"><a href="#二、常用快捷键" class="headerlink" title="二、常用快捷键"></a>二、常用快捷键</h2><h3 id="1-光标移动"><a href="#1-光标移动" class="headerlink" title="1. 光标移动"></a><strong>1. 光标移动</strong></h3><ul>
-<li><strong>行内移动</strong>：  <ul>
-<li><code>^</code>（数字 <code>6</code>）：移动到行首（首个非空字符）。  </li>
-<li><code>$</code>（数字 <code>4</code>）：移动到行尾。</li>
-</ul>
-</li>
-<li><strong>跨行移动</strong>：  <ul>
-<li><code>gg</code>：移动到文件第一行。  </li>
-<li><code>G</code>（<code>Shift + g</code>）：移动到文件最后一行。  </li>
-<li><code>100gg</code>：跳转到第100行。</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-复制、删除（剪切）、粘贴"><a href="#2-复制、删除（剪切）、粘贴" class="headerlink" title="2. 复制、删除（剪切）、粘贴"></a><strong>2. 复制、删除（剪切）、粘贴</strong></h3><ul>
-<li><code>yy</code>：复制当前行。  </li>
-<li><code>dd</code>：删除（剪切）当前行。  </li>
-<li><code>p</code>：粘贴到当前行下方。  </li>
-<li><code>P</code>（大写）：粘贴到当前行上方。</li>
-</ul>
-<h3 id="3-撤销与恢复"><a href="#3-撤销与恢复" class="headerlink" title="3. 撤销与恢复"></a><strong>3. 撤销与恢复</strong></h3><ul>
-<li><code>u</code>（undo）：撤销上一次操作。  </li>
-<li><code>Ctrl + r</code>（redo）：恢复被撤销的操作。</li>
-</ul>
-<h3 id="4-行号显示与搜索"><a href="#4-行号显示与搜索" class="headerlink" title="4. 行号显示与搜索"></a><strong>4. 行号显示与搜索</strong></h3><ul>
-<li><strong>显示行号</strong>：  <ul>
-<li><code>:set nu</code> 或 <code>:set number</code>：显示行号。  </li>
-<li><code>:set nonu</code>：隐藏行号。</li>
-</ul>
-</li>
-<li><strong>搜索功能</strong>：  <ul>
-<li><code>/keyword</code>：向下搜索指定内容（如 <code>/error</code>）。  </li>
-<li><code>n</code>：继续向下搜索。  </li>
-<li><code>N</code>：继续向上搜索。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="三、高级操作"><a href="#三、高级操作" class="headerlink" title="三、高级操作"></a>三、高级操作</h2><h3 id="1-批量编辑（可视块模式）"><a href="#1-批量编辑（可视块模式）" class="headerlink" title="1. 批量编辑（可视块模式）"></a><strong>1. 批量编辑（可视块模式）</strong></h3><ol>
-<li>按 <code>Ctrl + v</code> 进入可视块模式。  </li>
-<li>使用方向键选择多行文本块。  </li>
-<li>执行操作：  <ul>
-<li><code>d</code>：删除选中块。  </li>
-<li><code>y</code>：复制选中块。  </li>
-<li><code>I</code> 或 <code>A</code>：在块前&#x2F;后插入内容（按 <code>Esc</code> 完成批量插入）。</li>
-</ul>
-</li>
-</ol>
-<h3 id="2-行调整"><a href="#2-行调整" class="headerlink" title="2. 行调整"></a><strong>2. 行调整</strong></h3><ul>
-<li><strong>上下移动行</strong>：  <ul>
-<li>命令模式下按 <code>dd</code> 剪切当前行，再按 <code>p</code> 或 <code>P</code> 粘贴到目标位置。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="四、常用命令速查表"><a href="#四、常用命令速查表" class="headerlink" title="四、常用命令速查表"></a>四、<strong>常用命令速查表</strong></h2><table>
-<thead>
-<tr>
-<th>操作</th>
-<th>快捷键&#x2F;命令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>保存退出</td>
-<td><code>:wq</code></td>
-</tr>
-<tr>
-<td>强制退出不保存</td>
-<td><code>:q!</code></td>
-</tr>
-<tr>
-<td>复制行</td>
-<td><code>yy</code></td>
-</tr>
-<tr>
-<td>删除行</td>
-<td><code>dd</code></td>
-</tr>
-<tr>
-<td>撤销操作</td>
-<td><code>u</code></td>
-</tr>
-<tr>
-<td>跳转到行首</td>
-<td><code>^</code></td>
-</tr>
-<tr>
-<td>跳转到行尾</td>
-<td><code>$</code></td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>基础命令</category>
-        <category>vim</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>vim</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sas3ircu &amp; storcli64工具定位故障硬盘位置</title>
-    <url>/2025/03/17/sas3ircu%20&amp;%20storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98%E4%BD%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircu.jpg" alt="Hardware-Disk-sas3ircu"></p>
-<h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：  <ul>
-<li><code>cd /home/ansible/</code>：进入服务器管理工具目录。  </li>
-<li><code>ls</code>：列出目录中的文件，确认工具（如 <code>storcli64</code> 和 <code>sas3ircu</code>）存在。</li>
-</ul>
-</li>
-<li><strong>输出关键信息</strong>：<br>目录中包含多个管理脚本和工具，例如 <code>storcli64</code>（RAID管理工具）、<code>sas3ircu</code>（SAS控制器工具）等。</li>
-</ul>
-<hr>
-<h4 id="命令-2：检查-RAID-控制器状态"><a href="#命令-2：检查-RAID-控制器状态" class="headerlink" title="命令 2：检查 RAID 控制器状态"></a>命令 2：检查 RAID 控制器状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 show all  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：使用 <code>storcli64</code> 工具查看控制器 0 的详细信息（包括磁盘组、物理磁盘状态等）。  </li>
-<li><strong>输出关键信息</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Status = Failure  </span><br><span class="line">Description = Controller 0 not found  </span><br></pre></td></tr></table></figure></li>
-<li><strong>结论</strong>：  <ul>
-<li><strong>RAID控制器 0 未被识别</strong>，可能原因包括：  <ul>
-<li>控制器硬件故障或未正确连接。  </li>
-<li>驱动未安装或工具版本不兼容。  </li>
-<li>命令路径或参数错误。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="命令-3：检查-SAS-控制器与磁盘阵列状态"><a href="#命令-3：检查-SAS-控制器与磁盘阵列状态" class="headerlink" title="命令 3：检查 SAS 控制器与磁盘阵列状态"></a>命令 3：检查 SAS 控制器与磁盘阵列状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./sas3ircu 0 display  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：使用 <code>sas3ircu</code> 工具查看 SAS 控制器 0 的配置信息，包括 RAID 卷状态和物理磁盘详情。  </li>
-<li><strong>输出关键信息</strong>：  <ul>
-<li><strong>IR Volume 1</strong>：  <ul>
-<li>RAID 级别：RAID10  </li>
-<li>状态：**Degraded (DGD)**（降级）  </li>
-<li>关联物理硬盘位置：<code>Enclosure#/Slot#</code> 如 <code>1:2</code>, <code>0:0</code> 等。</li>
-</ul>
-</li>
-<li><strong>IR Volume 2</strong>：  <ul>
-<li>RAID 级别：RAID1  </li>
-<li>状态：**Okay (OKY)**（正常）。</li>
-</ul>
-</li>
-<li><strong>错误提示</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SAS3IRCU: Error executing command DISPLAY.  </span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><strong>结论</strong>：  <ul>
-<li>RAID10 卷处于降级状态，表明 <strong>至少一块硬盘失效</strong>，需定位具体故障盘。  </li>
-<li>最后的错误提示可能因部分物理设备信息无法读取（如硬盘掉线或通信故障）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="二、故障定位与可能原因"><a href="#二、故障定位与可能原因" class="headerlink" title="二、故障定位与可能原因"></a>二、故障定位与可能原因</h3><h4 id="1-RAID-控制器问题："><a href="#1-RAID-控制器问题：" class="headerlink" title="1.RAID 控制器问题："></a>1.RAID 控制器问题：</h4><ul>
-<li><code>storcli64</code> 无法识别控制器 0，可能为硬件故障或驱动问题。</li>
-</ul>
-<h4 id="2-RAID-卷降级："><a href="#2-RAID-卷降级：" class="headerlink" title="2.RAID 卷降级："></a>2.RAID 卷降级：</h4><ul>
-<li>RAID10 卷降级说明部分硬盘失效，需根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>, <code>0:0</code>）定位具体槽位。</li>
-</ul>
-<h4 id="3-物理硬盘故障："><a href="#3-物理硬盘故障：" class="headerlink" title="3.物理硬盘故障："></a>3.物理硬盘故障：</h4><ul>
-<li>降级卷关联的硬盘可能存在物理损坏、连接松动或电源问题。</li>
-</ul>
-<h4 id="4-工具兼容性或权限问题："><a href="#4-工具兼容性或权限问题：" class="headerlink" title="4.工具兼容性或权限问题："></a>4.工具兼容性或权限问题：</h4><ul>
-<li><code>storcli64</code> 和 <code>sas3ircu</code> 版本与当前系统或硬件不兼容，或执行权限不足。</li>
-</ul>
-<hr>
-<h3 id="三、-建议操作步骤"><a href="#三、-建议操作步骤" class="headerlink" title="三、 建议操作步骤"></a>三、 建议操作步骤</h3><h4 id="1-检查-RAID-控制器硬件："><a href="#1-检查-RAID-控制器硬件：" class="headerlink" title="1.检查 RAID 控制器硬件："></a>1.检查 RAID 控制器硬件：</h4><ul>
-<li>确认控制器 0 的物理连接（如 PCIe插槽、电源线）。  </li>
-<li>更新 RAID 控制器驱动或固件。</li>
-</ul>
-<h4 id="2-定位故障硬盘："><a href="#2-定位故障硬盘：" class="headerlink" title="2.定位故障硬盘："></a>2.定位故障硬盘：</h4><ul>
-<li>根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>），找到对应槽位的硬盘，检查其状态灯（通常故障盘会亮红灯）。  </li>
-<li>使用 <code>smartctl</code> 检查硬盘 SMART 健康状态：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">smartctl -a /dev/sdX  </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="3-修复-RAID-卷："><a href="#3-修复-RAID-卷：" class="headerlink" title="3.修复 RAID 卷："></a>3.修复 RAID 卷：</h4><ul>
-<li>更换故障硬盘后，通过 <code>sas3ircu</code> 或 RAID 管理界面重建阵列。</li>
-</ul>
-<h4 id="4-排查工具问题："><a href="#4-排查工具问题：" class="headerlink" title="4.排查工具问题："></a>4.排查工具问题：</h4><ul>
-<li>确认 <code>storcli64</code> 和 <code>sas3ircu</code> 版本与硬件兼容。  </li>
-<li>以 <code>root</code> 权限执行命令，或检查文件执行权限：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /home/ansible/storcli64  </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="5-查看系统日志："><a href="#5-查看系统日志：" class="headerlink" title="5.查看系统日志："></a>5.查看系统日志：</h4><ul>
-<li>检查 <code>/var/log/messages</code> 或 <code>dmesg</code> 输出，获取更多硬件错误信息。</li>
-</ul>
-<hr>
-<h3 id="四-总结"><a href="#四-总结" class="headerlink" title="四. 总结"></a>四. 总结</h3><ul>
-<li><strong>当前问题</strong>：  <ul>
-<li>RAID 控制器 0 无法识别，RAID10 卷降级，存在硬盘故障风险。  </li>
-<li>SAS 控制器工具报错，可能因部分硬盘通信异常。</li>
-</ul>
-</li>
-<li><strong>风险等级</strong>：<br><strong>高</strong>（降级卷可能导致数据丢失，需立即处理）。  </li>
-<li><strong>处理优先级</strong>：  <ol>
-<li>定位并更换故障硬盘，修复降级卷。  </li>
-<li>排查 RAID 控制器硬件或驱动问题。  </li>
-<li>验证工具兼容性，确保后续管理操作正常。</li>
-</ol>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>硬件运维</category>
-        <category>硬盘</category>
-      </categories>
-      <tags>
-        <tag>硬件运维</tag>
-        <tag>sas3ircu</tag>
-        <tag>storcli64</tag>
-        <tag>硬盘</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>NTP服务处理手册</title>
     <url>/2025/04/03/NTP%E6%9C%8D%E5%8A%A1%E5%A4%84%E7%90%86%E6%89%8B%E5%86%8C/</url>
     <content><![CDATA[<h1 id="NTP服务处理手册"><a href="#NTP服务处理手册" class="headerlink" title="NTP服务处理手册"></a>NTP服务处理手册</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-DeploymentService-NTPProcManual.jpg" alt="Linux-DeploymentService-NTPProcManual"></p>
@@ -1601,6 +1366,129 @@
       </tags>
   </entry>
   <entry>
+    <title>Vim编辑器入门指南</title>
+    <url>/2025/03/27/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
+<h2 id="一、Vim模式与切换"><a href="#一、Vim模式与切换" class="headerlink" title="一、Vim模式与切换"></a>一、Vim模式与切换</h2><h3 id="1-命令模式"><a href="#1-命令模式" class="headerlink" title="1.命令模式"></a>1.命令模式</h3><ul>
+<li><strong>进入方式</strong>：通过<code>vi/vim</code>打开文件后的默认模式。  </li>
+<li><strong>功能</strong>：执行快捷键操作（如复制、删除、移动光标等），不可直接编辑文本。</li>
+</ul>
+<h3 id="2-编辑模式（插入模式）"><a href="#2-编辑模式（插入模式）" class="headerlink" title="2.编辑模式（插入模式）"></a>2.编辑模式（插入模式）</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>i</code>（插入）、<code>a</code>（追加）、<code>o</code>（新行）等。  </li>
+<li><strong>退出方式</strong>：按 <code>Esc</code> 返回命令模式。  </li>
+<li><strong>功能</strong>：直接编辑文本内容。</li>
+</ul>
+<h3 id="3-底行模式"><a href="#3-底行模式" class="headerlink" title="3.底行模式"></a>3.底行模式</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>:</code>。  </li>
+<li><strong>功能</strong>：执行保存、退出、搜索、设置等操作（如 <code>:wq</code> 保存退出）。</li>
+</ul>
+<h3 id="4-可视块模式"><a href="#4-可视块模式" class="headerlink" title="4.可视块模式"></a>4.可视块模式</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>Ctrl + v</code>。  </li>
+<li><strong>功能</strong>：批量选择文本块进行编辑（如删除、复制多行）。</li>
+</ul>
+<hr>
+<h2 id="二、常用快捷键"><a href="#二、常用快捷键" class="headerlink" title="二、常用快捷键"></a>二、常用快捷键</h2><h3 id="1-光标移动"><a href="#1-光标移动" class="headerlink" title="1. 光标移动"></a><strong>1. 光标移动</strong></h3><ul>
+<li><strong>行内移动</strong>：  <ul>
+<li><code>^</code>（数字 <code>6</code>）：移动到行首（首个非空字符）。  </li>
+<li><code>$</code>（数字 <code>4</code>）：移动到行尾。</li>
+</ul>
+</li>
+<li><strong>跨行移动</strong>：  <ul>
+<li><code>gg</code>：移动到文件第一行。  </li>
+<li><code>G</code>（<code>Shift + g</code>）：移动到文件最后一行。  </li>
+<li><code>100gg</code>：跳转到第100行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-复制、删除（剪切）、粘贴"><a href="#2-复制、删除（剪切）、粘贴" class="headerlink" title="2. 复制、删除（剪切）、粘贴"></a><strong>2. 复制、删除（剪切）、粘贴</strong></h3><ul>
+<li><code>yy</code>：复制当前行。  </li>
+<li><code>dd</code>：删除（剪切）当前行。  </li>
+<li><code>p</code>：粘贴到当前行下方。  </li>
+<li><code>P</code>（大写）：粘贴到当前行上方。</li>
+</ul>
+<h3 id="3-撤销与恢复"><a href="#3-撤销与恢复" class="headerlink" title="3. 撤销与恢复"></a><strong>3. 撤销与恢复</strong></h3><ul>
+<li><code>u</code>（undo）：撤销上一次操作。  </li>
+<li><code>Ctrl + r</code>（redo）：恢复被撤销的操作。</li>
+</ul>
+<h3 id="4-行号显示与搜索"><a href="#4-行号显示与搜索" class="headerlink" title="4. 行号显示与搜索"></a><strong>4. 行号显示与搜索</strong></h3><ul>
+<li><strong>显示行号</strong>：  <ul>
+<li><code>:set nu</code> 或 <code>:set number</code>：显示行号。  </li>
+<li><code>:set nonu</code>：隐藏行号。</li>
+</ul>
+</li>
+<li><strong>搜索功能</strong>：  <ul>
+<li><code>/keyword</code>：向下搜索指定内容（如 <code>/error</code>）。  </li>
+<li><code>n</code>：继续向下搜索。  </li>
+<li><code>N</code>：继续向上搜索。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="三、高级操作"><a href="#三、高级操作" class="headerlink" title="三、高级操作"></a>三、高级操作</h2><h3 id="1-批量编辑（可视块模式）"><a href="#1-批量编辑（可视块模式）" class="headerlink" title="1. 批量编辑（可视块模式）"></a><strong>1. 批量编辑（可视块模式）</strong></h3><ol>
+<li>按 <code>Ctrl + v</code> 进入可视块模式。  </li>
+<li>使用方向键选择多行文本块。  </li>
+<li>执行操作：  <ul>
+<li><code>d</code>：删除选中块。  </li>
+<li><code>y</code>：复制选中块。  </li>
+<li><code>I</code> 或 <code>A</code>：在块前&#x2F;后插入内容（按 <code>Esc</code> 完成批量插入）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-行调整"><a href="#2-行调整" class="headerlink" title="2. 行调整"></a><strong>2. 行调整</strong></h3><ul>
+<li><strong>上下移动行</strong>：  <ul>
+<li>命令模式下按 <code>dd</code> 剪切当前行，再按 <code>p</code> 或 <code>P</code> 粘贴到目标位置。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="四、常用命令速查表"><a href="#四、常用命令速查表" class="headerlink" title="四、常用命令速查表"></a>四、<strong>常用命令速查表</strong></h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>快捷键&#x2F;命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>保存退出</td>
+<td><code>:wq</code></td>
+</tr>
+<tr>
+<td>强制退出不保存</td>
+<td><code>:q!</code></td>
+</tr>
+<tr>
+<td>复制行</td>
+<td><code>yy</code></td>
+</tr>
+<tr>
+<td>删除行</td>
+<td><code>dd</code></td>
+</tr>
+<tr>
+<td>撤销操作</td>
+<td><code>u</code></td>
+</tr>
+<tr>
+<td>跳转到行首</td>
+<td><code>^</code></td>
+</tr>
+<tr>
+<td>跳转到行尾</td>
+<td><code>$</code></td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>基础命令</category>
+        <category>vim</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>vim</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ipmitool常用命令及用法详解</title>
     <url>/2025/03/24/ipmitool%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="ipmitool常用命令及用法详解"><a href="#ipmitool常用命令及用法详解" class="headerlink" title="ipmitool常用命令及用法详解"></a>ipmitool常用命令及用法详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-IPMItoolCommon.jpg" alt="Linux-ManagementTools-IPMItoolCommon"></p>
@@ -1656,6 +1544,185 @@
       <tags>
         <tag>Linux管理工具</tag>
         <tag>ipmitool</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ipmitool工具查找管理口ip</title>
+    <url>/2025/03/14/ipmitool%E5%B7%A5%E5%85%B7%E6%9F%A5%E6%89%BE%E7%AE%A1%E7%90%86%E5%8F%A3ip/</url>
+    <content><![CDATA[<h1 id="ipmitool工具查找管理口ip"><a href="#ipmitool工具查找管理口ip" class="headerlink" title="ipmitool工具查找管理口ip"></a>ipmitool工具查找管理口ip</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-ipmitool.jpg" alt="Linux-ManagementTools-ipmitool"></p>
+<h2 id="一、查看服务器管理口的网络配置信息"><a href="#一、查看服务器管理口的网络配置信息" class="headerlink" title="一、查看服务器管理口的网络配置信息"></a>一、查看服务器管理口的网络配置信息</h2><h3 id="1-命令：ipmitool-lan-print"><a href="#1-命令：ipmitool-lan-print" class="headerlink" title="1.命令：ipmitool lan print"></a>1.命令：ipmitool lan print</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：<br>查看服务器管理口（BMC&#x2F;iLO&#x2F;iDRAC）的网络配置信息，包括IP地址、子网掩码、网关等。  </li>
+<li><strong>适用场景</strong>：<br>当服务器管理口IP丢失、配置错误或无法通过常规方式访问时，通过该命令可快速确认当前管理口的网络状态。</li>
+</ul>
+<hr>
+<h3 id="2-命令输出关键信息解析"><a href="#2-命令输出关键信息解析" class="headerlink" title="2. 命令输出关键信息解析"></a>2. 命令输出关键信息解析</h3><p>执行 <code>ipmitool lan print</code> 后输出如下：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Set in Progress         : Set Complete        # 配置已生效  </span><br><span class="line">IP Address Source       : Static Address     # IP地址来源为静态分配  </span><br><span class="line">IP Address              : 192.168.141.78     # 管理口当前IP地址  </span><br><span class="line">Subnet Mask             : 255.255.255.0      # 子网掩码  </span><br><span class="line">MAC Address             : 48:dc:2d:01:66:a0  # 管理口MAC地址  </span><br><span class="line">Default Gateway IP      : 192.168.141.254    # 默认网关  </span><br><span class="line">802.1q VLAN ID          : Disabled           # VLAN未启用  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>结论</strong>：  <ul>
+<li>当前管理口已配置静态IP <code>192.168.141.78</code>，子网掩码和网关正常。  </li>
+<li>若无法通过该IP访问管理口，可能原因包括：  <ul>
+<li>网络物理连接故障（如网线未插或交换机端口问题）。  </li>
+<li>IP地址冲突或被防火墙拦截。  </li>
+<li>管理口硬件故障（如BMC模块异常）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二、管理口IP问题的排查步骤"><a href="#二、管理口IP问题的排查步骤" class="headerlink" title="二、管理口IP问题的排查步骤"></a>二、管理口IP问题的排查步骤</h2><h3 id="1-确认管理口网络配置："><a href="#1-确认管理口网络配置：" class="headerlink" title="1.确认管理口网络配置："></a>1.确认管理口网络配置：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span>  <span class="comment"># 检查IP、子网掩码、网关是否配置正确</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若IP为 <code>0.0.0.0</code>，说明未分配，需手动设置静态IP或启用DHCP。</li>
+</ul>
+<h3 id="2-测试网络连通性："><a href="#2-测试网络连通性：" class="headerlink" title="2.测试网络连通性："></a>2.测试网络连通性：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping 192.168.141.78       <span class="comment"># 测试管理口IP是否可达  </span></span><br><span class="line">arp -n | grep 48:dc:2d    <span class="comment"># 根据MAC地址确认IP是否在局域网中可见  </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-检查硬件与驱动："><a href="#3-检查硬件与驱动：" class="headerlink" title="3.检查硬件与驱动："></a>3.检查硬件与驱动：</h3><ul>
+<li>确认服务器BMC模块已启用（部分服务器需在BIOS中开启IPMI功能）。  </li>
+<li>检查网线连接和管理口指示灯状态。</li>
+</ul>
+<h2 id="三、常见问题与解决方案"><a href="#三、常见问题与解决方案" class="headerlink" title="三、常见问题与解决方案"></a>三、常见问题与解决方案</h2><h3 id="1-命令执行失败的可能原因"><a href="#1-命令执行失败的可能原因" class="headerlink" title="1. 命令执行失败的可能原因"></a>1. 命令执行失败的可能原因</h3><ul>
+<li><p><strong>问题</strong>：执行<code>ipmitool</code>命令时提示<code>Could not open device</code>或<code>No such file or directory</code>。<br><strong>解决方案</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 检查IPMI内核模块是否加载</span></span><br><span class="line">lsmod | grep ipmi</span><br><span class="line"><span class="comment"># 若未加载，手动加载模块</span></span><br><span class="line">modprobe ipmi_devintf</span><br><span class="line">modprobe ipmi_si</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="2-动态获取IP地址"><a href="#2-动态获取IP地址" class="headerlink" title="2. 动态获取IP地址"></a>2. 动态获取IP地址</h3><p>如果管理口配置为DHCP但未获取到IP，可以强制更新DHCP租约：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc dhcp  <span class="comment"># 设置为DHCP模式</span></span><br><span class="line">ipmitool lan dhcp 1            <span class="comment"># 强制更新DHCP</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-修改管理口IP地址"><a href="#3-修改管理口IP地址" class="headerlink" title="3. 修改管理口IP地址"></a>3. 修改管理口IP地址</h3><p>如需修改静态IP，执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc static</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipaddr 192.168.1.100</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 netmask 255.255.255.0</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 defgw ipaddr 192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-跨网段访问管理口"><a href="#4-跨网段访问管理口" class="headerlink" title="4. 跨网段访问管理口"></a>4. 跨网段访问管理口</h3><p>若管理口与本地网络不在同一子网，可通过以下方式临时访问：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加临时路由（Linux）</span></span><br><span class="line">ip route add 192.168.141.0/24 via 192.168.1.254 dev eth0</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-其他实用命令"><a href="#5-其他实用命令" class="headerlink" title="5. 其他实用命令"></a>5. 其他实用命令</h3><ul>
+<li><p>查看BMC硬件状态：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool mc info</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启BMC模块（谨慎操作）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool mc reset cold</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux管理工具</category>
+        <category>ipmitool</category>
+      </categories>
+      <tags>
+        <tag>Linux管理工具</tag>
+        <tag>ipmitool</tag>
+        <tag>服务器管理口</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sas3ircu &amp; storcli64工具定位故障硬盘位置</title>
+    <url>/2025/03/17/sas3ircu%20&amp;%20storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98%E4%BD%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircu.jpg" alt="Hardware-Disk-sas3ircu"></p>
+<h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：  <ul>
+<li><code>cd /home/ansible/</code>：进入服务器管理工具目录。  </li>
+<li><code>ls</code>：列出目录中的文件，确认工具（如 <code>storcli64</code> 和 <code>sas3ircu</code>）存在。</li>
+</ul>
+</li>
+<li><strong>输出关键信息</strong>：<br>目录中包含多个管理脚本和工具，例如 <code>storcli64</code>（RAID管理工具）、<code>sas3ircu</code>（SAS控制器工具）等。</li>
+</ul>
+<hr>
+<h4 id="命令-2：检查-RAID-控制器状态"><a href="#命令-2：检查-RAID-控制器状态" class="headerlink" title="命令 2：检查 RAID 控制器状态"></a>命令 2：检查 RAID 控制器状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 show all  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：使用 <code>storcli64</code> 工具查看控制器 0 的详细信息（包括磁盘组、物理磁盘状态等）。  </li>
+<li><strong>输出关键信息</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Status = Failure  </span><br><span class="line">Description = Controller 0 not found  </span><br></pre></td></tr></table></figure></li>
+<li><strong>结论</strong>：  <ul>
+<li><strong>RAID控制器 0 未被识别</strong>，可能原因包括：  <ul>
+<li>控制器硬件故障或未正确连接。  </li>
+<li>驱动未安装或工具版本不兼容。  </li>
+<li>命令路径或参数错误。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="命令-3：检查-SAS-控制器与磁盘阵列状态"><a href="#命令-3：检查-SAS-控制器与磁盘阵列状态" class="headerlink" title="命令 3：检查 SAS 控制器与磁盘阵列状态"></a>命令 3：检查 SAS 控制器与磁盘阵列状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./sas3ircu 0 display  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：使用 <code>sas3ircu</code> 工具查看 SAS 控制器 0 的配置信息，包括 RAID 卷状态和物理磁盘详情。  </li>
+<li><strong>输出关键信息</strong>：  <ul>
+<li><strong>IR Volume 1</strong>：  <ul>
+<li>RAID 级别：RAID10  </li>
+<li>状态：**Degraded (DGD)**（降级）  </li>
+<li>关联物理硬盘位置：<code>Enclosure#/Slot#</code> 如 <code>1:2</code>, <code>0:0</code> 等。</li>
+</ul>
+</li>
+<li><strong>IR Volume 2</strong>：  <ul>
+<li>RAID 级别：RAID1  </li>
+<li>状态：**Okay (OKY)**（正常）。</li>
+</ul>
+</li>
+<li><strong>错误提示</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SAS3IRCU: Error executing command DISPLAY.  </span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><strong>结论</strong>：  <ul>
+<li>RAID10 卷处于降级状态，表明 <strong>至少一块硬盘失效</strong>，需定位具体故障盘。  </li>
+<li>最后的错误提示可能因部分物理设备信息无法读取（如硬盘掉线或通信故障）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="二、故障定位与可能原因"><a href="#二、故障定位与可能原因" class="headerlink" title="二、故障定位与可能原因"></a>二、故障定位与可能原因</h3><h4 id="1-RAID-控制器问题："><a href="#1-RAID-控制器问题：" class="headerlink" title="1.RAID 控制器问题："></a>1.RAID 控制器问题：</h4><ul>
+<li><code>storcli64</code> 无法识别控制器 0，可能为硬件故障或驱动问题。</li>
+</ul>
+<h4 id="2-RAID-卷降级："><a href="#2-RAID-卷降级：" class="headerlink" title="2.RAID 卷降级："></a>2.RAID 卷降级：</h4><ul>
+<li>RAID10 卷降级说明部分硬盘失效，需根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>, <code>0:0</code>）定位具体槽位。</li>
+</ul>
+<h4 id="3-物理硬盘故障："><a href="#3-物理硬盘故障：" class="headerlink" title="3.物理硬盘故障："></a>3.物理硬盘故障：</h4><ul>
+<li>降级卷关联的硬盘可能存在物理损坏、连接松动或电源问题。</li>
+</ul>
+<h4 id="4-工具兼容性或权限问题："><a href="#4-工具兼容性或权限问题：" class="headerlink" title="4.工具兼容性或权限问题："></a>4.工具兼容性或权限问题：</h4><ul>
+<li><code>storcli64</code> 和 <code>sas3ircu</code> 版本与当前系统或硬件不兼容，或执行权限不足。</li>
+</ul>
+<hr>
+<h3 id="三、-建议操作步骤"><a href="#三、-建议操作步骤" class="headerlink" title="三、 建议操作步骤"></a>三、 建议操作步骤</h3><h4 id="1-检查-RAID-控制器硬件："><a href="#1-检查-RAID-控制器硬件：" class="headerlink" title="1.检查 RAID 控制器硬件："></a>1.检查 RAID 控制器硬件：</h4><ul>
+<li>确认控制器 0 的物理连接（如 PCIe插槽、电源线）。  </li>
+<li>更新 RAID 控制器驱动或固件。</li>
+</ul>
+<h4 id="2-定位故障硬盘："><a href="#2-定位故障硬盘：" class="headerlink" title="2.定位故障硬盘："></a>2.定位故障硬盘：</h4><ul>
+<li>根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>），找到对应槽位的硬盘，检查其状态灯（通常故障盘会亮红灯）。  </li>
+<li>使用 <code>smartctl</code> 检查硬盘 SMART 健康状态：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">smartctl -a /dev/sdX  </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-修复-RAID-卷："><a href="#3-修复-RAID-卷：" class="headerlink" title="3.修复 RAID 卷："></a>3.修复 RAID 卷：</h4><ul>
+<li>更换故障硬盘后，通过 <code>sas3ircu</code> 或 RAID 管理界面重建阵列。</li>
+</ul>
+<h4 id="4-排查工具问题："><a href="#4-排查工具问题：" class="headerlink" title="4.排查工具问题："></a>4.排查工具问题：</h4><ul>
+<li>确认 <code>storcli64</code> 和 <code>sas3ircu</code> 版本与硬件兼容。  </li>
+<li>以 <code>root</code> 权限执行命令，或检查文件执行权限：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /home/ansible/storcli64  </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="5-查看系统日志："><a href="#5-查看系统日志：" class="headerlink" title="5.查看系统日志："></a>5.查看系统日志：</h4><ul>
+<li>检查 <code>/var/log/messages</code> 或 <code>dmesg</code> 输出，获取更多硬件错误信息。</li>
+</ul>
+<hr>
+<h3 id="四-总结"><a href="#四-总结" class="headerlink" title="四. 总结"></a>四. 总结</h3><ul>
+<li><strong>当前问题</strong>：  <ul>
+<li>RAID 控制器 0 无法识别，RAID10 卷降级，存在硬盘故障风险。  </li>
+<li>SAS 控制器工具报错，可能因部分硬盘通信异常。</li>
+</ul>
+</li>
+<li><strong>风险等级</strong>：<br><strong>高</strong>（降级卷可能导致数据丢失，需立即处理）。  </li>
+<li><strong>处理优先级</strong>：  <ol>
+<li>定位并更换故障硬盘，修复降级卷。  </li>
+<li>排查 RAID 控制器硬件或驱动问题。  </li>
+<li>验证工具兼容性，确保后续管理操作正常。</li>
+</ol>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>硬件运维</category>
+        <category>硬盘</category>
+      </categories>
+      <tags>
+        <tag>硬件运维</tag>
+        <tag>sas3ircu</tag>
+        <tag>storcli64</tag>
+        <tag>硬盘</tag>
       </tags>
   </entry>
   <entry>
@@ -1928,73 +1995,6 @@
         <tag>硬件运维</tag>
         <tag>storcli64</tag>
         <tag>RAID</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ipmitool工具查找管理口ip</title>
-    <url>/2025/03/14/ipmitool%E5%B7%A5%E5%85%B7%E6%9F%A5%E6%89%BE%E7%AE%A1%E7%90%86%E5%8F%A3ip/</url>
-    <content><![CDATA[<h1 id="ipmitool工具查找管理口ip"><a href="#ipmitool工具查找管理口ip" class="headerlink" title="ipmitool工具查找管理口ip"></a>ipmitool工具查找管理口ip</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-ipmitool.jpg" alt="Linux-ManagementTools-ipmitool"></p>
-<h2 id="一、查看服务器管理口的网络配置信息"><a href="#一、查看服务器管理口的网络配置信息" class="headerlink" title="一、查看服务器管理口的网络配置信息"></a>一、查看服务器管理口的网络配置信息</h2><h3 id="1-命令：ipmitool-lan-print"><a href="#1-命令：ipmitool-lan-print" class="headerlink" title="1.命令：ipmitool lan print"></a>1.命令：ipmitool lan print</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：<br>查看服务器管理口（BMC&#x2F;iLO&#x2F;iDRAC）的网络配置信息，包括IP地址、子网掩码、网关等。  </li>
-<li><strong>适用场景</strong>：<br>当服务器管理口IP丢失、配置错误或无法通过常规方式访问时，通过该命令可快速确认当前管理口的网络状态。</li>
-</ul>
-<hr>
-<h3 id="2-命令输出关键信息解析"><a href="#2-命令输出关键信息解析" class="headerlink" title="2. 命令输出关键信息解析"></a>2. 命令输出关键信息解析</h3><p>执行 <code>ipmitool lan print</code> 后输出如下：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Set in Progress         : Set Complete        # 配置已生效  </span><br><span class="line">IP Address Source       : Static Address     # IP地址来源为静态分配  </span><br><span class="line">IP Address              : 192.168.141.78     # 管理口当前IP地址  </span><br><span class="line">Subnet Mask             : 255.255.255.0      # 子网掩码  </span><br><span class="line">MAC Address             : 48:dc:2d:01:66:a0  # 管理口MAC地址  </span><br><span class="line">Default Gateway IP      : 192.168.141.254    # 默认网关  </span><br><span class="line">802.1q VLAN ID          : Disabled           # VLAN未启用  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>结论</strong>：  <ul>
-<li>当前管理口已配置静态IP <code>192.168.141.78</code>，子网掩码和网关正常。  </li>
-<li>若无法通过该IP访问管理口，可能原因包括：  <ul>
-<li>网络物理连接故障（如网线未插或交换机端口问题）。  </li>
-<li>IP地址冲突或被防火墙拦截。  </li>
-<li>管理口硬件故障（如BMC模块异常）。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="二、管理口IP问题的排查步骤"><a href="#二、管理口IP问题的排查步骤" class="headerlink" title="二、管理口IP问题的排查步骤"></a>二、管理口IP问题的排查步骤</h2><h3 id="1-确认管理口网络配置："><a href="#1-确认管理口网络配置：" class="headerlink" title="1.确认管理口网络配置："></a>1.确认管理口网络配置：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">print</span>  <span class="comment"># 检查IP、子网掩码、网关是否配置正确</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>若IP为 <code>0.0.0.0</code>，说明未分配，需手动设置静态IP或启用DHCP。</li>
-</ul>
-<h3 id="2-测试网络连通性："><a href="#2-测试网络连通性：" class="headerlink" title="2.测试网络连通性："></a>2.测试网络连通性：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping 192.168.141.78       <span class="comment"># 测试管理口IP是否可达  </span></span><br><span class="line">arp -n | grep 48:dc:2d    <span class="comment"># 根据MAC地址确认IP是否在局域网中可见  </span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-检查硬件与驱动："><a href="#3-检查硬件与驱动：" class="headerlink" title="3.检查硬件与驱动："></a>3.检查硬件与驱动：</h3><ul>
-<li>确认服务器BMC模块已启用（部分服务器需在BIOS中开启IPMI功能）。  </li>
-<li>检查网线连接和管理口指示灯状态。</li>
-</ul>
-<h2 id="三、常见问题与解决方案"><a href="#三、常见问题与解决方案" class="headerlink" title="三、常见问题与解决方案"></a>三、常见问题与解决方案</h2><h3 id="1-命令执行失败的可能原因"><a href="#1-命令执行失败的可能原因" class="headerlink" title="1. 命令执行失败的可能原因"></a>1. 命令执行失败的可能原因</h3><ul>
-<li><p><strong>问题</strong>：执行<code>ipmitool</code>命令时提示<code>Could not open device</code>或<code>No such file or directory</code>。<br><strong>解决方案</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 检查IPMI内核模块是否加载</span></span><br><span class="line">lsmod | grep ipmi</span><br><span class="line"><span class="comment"># 若未加载，手动加载模块</span></span><br><span class="line">modprobe ipmi_devintf</span><br><span class="line">modprobe ipmi_si</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="2-动态获取IP地址"><a href="#2-动态获取IP地址" class="headerlink" title="2. 动态获取IP地址"></a>2. 动态获取IP地址</h3><p>如果管理口配置为DHCP但未获取到IP，可以强制更新DHCP租约：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc dhcp  <span class="comment"># 设置为DHCP模式</span></span><br><span class="line">ipmitool lan dhcp 1            <span class="comment"># 强制更新DHCP</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-修改管理口IP地址"><a href="#3-修改管理口IP地址" class="headerlink" title="3. 修改管理口IP地址"></a>3. 修改管理口IP地址</h3><p>如需修改静态IP，执行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipsrc static</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 ipaddr 192.168.1.100</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 netmask 255.255.255.0</span><br><span class="line">ipmitool lan <span class="built_in">set</span> 1 defgw ipaddr 192.168.1.1</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-跨网段访问管理口"><a href="#4-跨网段访问管理口" class="headerlink" title="4. 跨网段访问管理口"></a>4. 跨网段访问管理口</h3><p>若管理口与本地网络不在同一子网，可通过以下方式临时访问：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加临时路由（Linux）</span></span><br><span class="line">ip route add 192.168.141.0/24 via 192.168.1.254 dev eth0</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-其他实用命令"><a href="#5-其他实用命令" class="headerlink" title="5. 其他实用命令"></a>5. 其他实用命令</h3><ul>
-<li><p>查看BMC硬件状态：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool mc info</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重启BMC模块（谨慎操作）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ipmitool mc reset cold</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Linux管理工具</category>
-        <category>ipmitool</category>
-      </categories>
-      <tags>
-        <tag>Linux管理工具</tag>
-        <tag>ipmitool</tag>
-        <tag>服务器管理口</tag>
       </tags>
   </entry>
   <entry>
