@@ -863,7 +863,7 @@
   <entry>
     <title>Linux man命令手册使用指南</title>
     <url>/2025/03/20/Linux%20man%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="Linux-man命令手册使用指南"><a href="#Linux-man命令手册使用指南" class="headerlink" title="Linux man命令手册使用指南"></a>Linux man命令手册使用指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
+    <content><![CDATA[<h1 id="Linux-man命令手册使用指南"><a href="#Linux-man命令手册使用指南" class="headerlink" title="Linux man命令手册使用指南"></a>Linux man命令手册使用指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-manTOP.jpg" alt="Linux-Basic-manTOP"></p>
 <h2 id="一、Linux-的man命令手册页"><a href="#一、Linux-的man命令手册页" class="headerlink" title="一、Linux 的man命令手册页"></a>一、Linux 的man命令手册页</h2><blockquote>
 <p><a href="https://man7.org/linux/man-pages/index.html">https://man7.org/linux/man-pages/index.html</a></p>
 </blockquote>
@@ -1426,7 +1426,7 @@
   <entry>
     <title>Vim编辑器入门指南</title>
     <url>/2025/03/27/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
+    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vimTOP.jpg" alt="Linux-Basic-vimTOP"></p>
 <h2 id="一、Vim模式与切换"><a href="#一、Vim模式与切换" class="headerlink" title="一、Vim模式与切换"></a>一、Vim模式与切换</h2><h3 id="1-命令模式"><a href="#1-命令模式" class="headerlink" title="1.命令模式"></a>1.命令模式</h3><ul>
 <li><strong>进入方式</strong>：通过<code>vi/vim</code>打开文件后的默认模式。  </li>
 <li><strong>功能</strong>：执行快捷键操作（如复制、删除、移动光标等），不可直接编辑文本。</li>
@@ -1445,6 +1445,7 @@
 <li><strong>功能</strong>：批量选择文本块进行编辑（如删除、复制多行）。</li>
 </ul>
 <hr>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
 <h2 id="二、常用快捷键"><a href="#二、常用快捷键" class="headerlink" title="二、常用快捷键"></a>二、常用快捷键</h2><h3 id="1-光标移动"><a href="#1-光标移动" class="headerlink" title="1. 光标移动"></a><strong>1. 光标移动</strong></h3><ul>
 <li><strong>行内移动</strong>：  <ul>
 <li><code>^</code>（数字 <code>6</code>）：移动到行首（首个非空字符）。  </li>
@@ -1549,7 +1550,7 @@
   <entry>
     <title>sas3ircu &amp; storcli64工具定位故障硬盘位置</title>
     <url>/2025/03/17/sas3ircu%20&amp;%20storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98%E4%BD%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircu.jpg" alt="Hardware-Disk-sas3ircu"></p>
+    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircuTOP.jpg" alt="Hardware-Disk-sas3ircuTOP"></p>
 <h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>作用</strong>：  <ul>
