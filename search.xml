@@ -587,8 +587,9 @@
 
 ]]></content>
       <categories>
-        <category>CentOS7</category>
+        <category>Linux</category>
         <category>系统初始化</category>
+        <category>CentOS7</category>
       </categories>
       <tags>
         <tag>CentOS7</tag>
@@ -1375,11 +1376,11 @@
 </ul>
 ]]></content>
       <categories>
-        <category>Linux管理工具</category>
+        <category>硬件运维</category>
         <category>ipmitool</category>
       </categories>
       <tags>
-        <tag>Linux管理工具</tag>
+        <tag>硬件运维</tag>
         <tag>ipmitool</tag>
         <tag>服务器管理口</tag>
       </tags>
@@ -2059,11 +2060,11 @@
 </ol>
 ]]></content>
       <categories>
-        <category>Linux管理工具</category>
+        <category>硬件运维</category>
         <category>ipmitool</category>
       </categories>
       <tags>
-        <tag>Linux管理工具</tag>
+        <tag>硬件运维</tag>
         <tag>ipmitool</tag>
       </tags>
   </entry>
