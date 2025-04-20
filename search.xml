@@ -130,489 +130,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux man命令手册使用指南</title>
-    <url>/2025/03/20/Linux%20man%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="Linux-man命令手册使用指南"><a href="#Linux-man命令手册使用指南" class="headerlink" title="Linux man命令手册使用指南"></a>Linux man命令手册使用指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-manTOP.jpg" alt="Linux-Basic-manTOP"></p>
-<h2 id="一、Linux-的man命令手册页"><a href="#一、Linux-的man命令手册页" class="headerlink" title="一、Linux 的man命令手册页"></a>一、Linux 的man命令手册页</h2><blockquote>
-<p><a href="https://man7.org/linux/man-pages/index.html">https://man7.org/linux/man-pages/index.html</a></p>
-</blockquote>
-<h2 id="二、man命令使用方法"><a href="#二、man命令使用方法" class="headerlink" title="二、man命令使用方法"></a>二、man命令使用方法</h2><h3 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h3><h4 id="1-1-查看命令手册"><a href="#1-1-查看命令手册" class="headerlink" title="1.1 查看命令手册"></a>1.1 查看命令手册</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man [章节] &lt;命令名&gt;</span><br><span class="line"><span class="comment"># 示例：查看 ls 命令的手册</span></span><br><span class="line">man <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="1-2-查看指定章节的手册"><a href="#1-2-查看指定章节的手册" class="headerlink" title="1.2 查看指定章节的手册"></a>1.2 查看指定章节的手册</h4><p>某些关键词（如<code>passwd</code>）可能存在于多个章节：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man 1 passwd   <span class="comment"># 查看 passwd 命令的手册（用户命令）</span></span><br><span class="line">man 5 passwd   <span class="comment"># 查看 passwd 文件格式的手册（配置文件）</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="2-常用操作快捷键"><a href="#2-常用操作快捷键" class="headerlink" title="2. 常用操作快捷键"></a>2. 常用操作快捷键</h3><ul>
-<li><strong>导航</strong>：<ul>
-<li><code>↑</code>&#x2F;<code>↓</code>：逐行滚动。</li>
-<li><code>Page Up</code>&#x2F;<code>Page Down</code>：翻页。</li>
-<li><code>Home</code>&#x2F;<code>End</code>：跳转至开头&#x2F;结尾。</li>
-</ul>
-</li>
-<li><strong>搜索</strong>：<ul>
-<li><code>/关键字</code>：向前搜索（如 <code>/--help</code>）。</li>
-<li><code>n</code>：跳转到下一个匹配项。</li>
-<li><code>N</code>：跳转到上一个匹配项。</li>
-</ul>
-</li>
-<li><strong>退出</strong>：<ul>
-<li><code>q</code>：退出手册。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="3-常用命令选项"><a href="#3-常用命令选项" class="headerlink" title="3. 常用命令选项"></a>3. 常用命令选项</h3><h4 id="3-1-搜索相关手册"><a href="#3-1-搜索相关手册" class="headerlink" title="3.1 搜索相关手册"></a>3.1 搜索相关手册</h4><ul>
-<li><p>**<code>-k</code> 或 <code>--apropos</code>**：按关键字搜索手册（类似<code>apropos</code>）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -k network    <span class="comment"># 查找所有包含 &quot;network&quot; 的手册页</span></span><br><span class="line">apropos network   <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>**<code>-f</code> 或 <code>--whatis</code>**：显示命令的简短描述（类似<code>whatis</code>）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -f passwd     <span class="comment"># 列出 passwd 的所有相关手册章节</span></span><br><span class="line">whatis passwd     <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="3-2其他选项"><a href="#3-2其他选项" class="headerlink" title="3.2其他选项"></a>3.2其他选项</h4><ul>
-<li><p>**<code>-a</code>**：显示所有匹配章节的手册（按<code>q</code>后继续下一章节）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -a passwd</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>**<code>-w</code>**：显示手册页的路径：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -w <span class="built_in">ls</span>         <span class="comment"># 输出 /usr/share/man/man1/ls.1.gz</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h2 id="三、Linux彩色man-page设置方法"><a href="#三、Linux彩色man-page设置方法" class="headerlink" title="三、Linux彩色man page设置方法"></a>三、Linux彩色man page设置方法</h2><blockquote>
-<p>原文: <a href="https://gaomf.cn/2017/01/13/Linux_Colourful_Man/">https://gaomf.cn/2017/01/13/Linux_Colourful_Man/</a>　　作者: 高明飞</p>
-</blockquote>
-<h3 id="1-在-bashrc文件中添加less的相关设置参数"><a href="#1-在-bashrc文件中添加less的相关设置参数" class="headerlink" title="1. 在 .bashrc文件中添加less的相关设置参数"></a>1. 在 .bashrc文件中添加less的相关设置参数</h3><p>Linux下<code>man page</code>的显示默认是通过<code>less</code>来完成的，故在<code>.bashrc</code>文件中添加<code>less</code>的相关设置参数即可使<code>man page</code>变成彩色的:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># colourful man page</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_mb=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_md=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_me=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_us=$<span class="string">&#x27;\E[01;32m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_ue=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_so=$<span class="string">&#x27;\E[01;33;44m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_se=$<span class="string">&#x27;\E[0m&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>更改完<code>.bashrc</code>文件后要重新载入一下配置：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-
-<p>之后重启终端才会生效，以上配置显示效果如下：</p>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
-<h3 id="2-less的相关设置参数的含义"><a href="#2-less的相关设置参数的含义" class="headerlink" title="2. less的相关设置参数的含义"></a>2. less的相关设置参数的含义</h3><p>其中<code>LESS_TERMCAP_xx</code>的含义如下：</p>
-<table>
-<thead>
-<tr>
-<th align="center"><code>termcap</code></th>
-<th align="center">含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>mb</code></td>
-<td align="center">start blink 开始闪烁</td>
-</tr>
-<tr>
-<td align="center"><code>md</code></td>
-<td align="center">start bold 开始加粗</td>
-</tr>
-<tr>
-<td align="center"><code>me</code></td>
-<td align="center">turn off bold, blink and underline 关闭粗体、闪烁和下划线</td>
-</tr>
-<tr>
-<td align="center"><code>us</code></td>
-<td align="center">start underline 开始下划线</td>
-</tr>
-<tr>
-<td align="center"><code>ue</code></td>
-<td align="center">stop underline 停止下划线</td>
-</tr>
-<tr>
-<td align="center"><code>so</code></td>
-<td align="center">start standout 开始脱颖而出</td>
-</tr>
-<tr>
-<td align="center"><code>se</code></td>
-<td align="center">stop standout 停止突出</td>
-</tr>
-</tbody></table>
-<p>对照上面实际的<code>man page</code>页面可以看到：<code>md</code>对应蓝色部分；<code>us</code>对应绿色部分；<code>so</code>对应底部黄色状态栏。</p>
-<h3 id="3-具体颜色设置方法，参考以下页面："><a href="#3-具体颜色设置方法，参考以下页面：" class="headerlink" title="3.具体颜色设置方法，参考以下页面："></a>3.具体颜色设置方法，参考以下页面：</h3><blockquote>
-<p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">https://en.wikipedia.org/wiki/ANSI_escape_code#Colors</a></p>
-</blockquote>
-<p>简而言之，在<code>&#39;\E[0x;3y;4zm&#39;</code>中：<code>x</code>代表是否加粗，<code>1</code>为加粗，<code>2</code>为正常；<code>y</code>和<code>z</code>分别代表文字前景色和背景色，使用默认值的话可省略，颜色列表如下：</p>
-<table>
-<thead>
-<tr>
-<th align="center">Intensity</th>
-<th align="center">0</th>
-<th align="center">1</th>
-<th align="center">2</th>
-<th align="center">3</th>
-<th align="center">4</th>
-<th align="center">5</th>
-<th align="center">6</th>
-<th align="center">7</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Normal</td>
-<td align="center">Black</td>
-<td align="center">Red</td>
-<td align="center">Green</td>
-<td align="center">Yellow</td>
-<td align="center">Blue</td>
-<td align="center">Magenta</td>
-<td align="center">Cyan</td>
-<td align="center">White</td>
-</tr>
-<tr>
-<td align="center">Bright</td>
-<td align="center">Black</td>
-<td align="center">Red</td>
-<td align="center">Green</td>
-<td align="center">Yellow</td>
-<td align="center">Blue</td>
-<td align="center">Magenta</td>
-<td align="center">Cyan</td>
-<td align="center">White</td>
-</tr>
-</tbody></table>
-<h2 id="四、man-pages手册页设置中文"><a href="#四、man-pages手册页设置中文" class="headerlink" title="四、man pages手册页设置中文"></a>四、man pages手册页设置中文</h2><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-manCN.jpg" alt="Linux-Basic-manCN"></p>
-<h3 id="1-通过包管理器进行安装"><a href="#1-通过包管理器进行安装" class="headerlink" title="1. 通过包管理器进行安装"></a>1. 通过包管理器进行安装</h3><p>在 CentOS&#x2F;RHEL 上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum -y install man-pages-zh-CN</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-临时设置语言环境"><a href="#2-临时设置语言环境" class="headerlink" title="2. 临时设置语言环境"></a>2. 临时设置语言环境</h3><p>在终端中，可以通过以下命令设置环境变量来使用中文手册页：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-修改man命令的配置文件"><a href="#3-修改man命令的配置文件" class="headerlink" title="3. 修改man命令的配置文件"></a>3. 修改man命令的配置文件</h3><p>您还可以修改<code>~/.bashrc</code>或<code>~/.zshrc</code>文件，以便每次打开终端时自动加载这些环境变量。</p>
-<ol>
-<li>打开配置文件（以 <code>~/.bashrc</code> 为例）：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在文件末尾添加以下内容：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>保存文件并重新加载：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="五、man-pages手册页未安装"><a href="#五、man-pages手册页未安装" class="headerlink" title="五、man pages手册页未安装"></a>五、man pages手册页未安装</h2><p>某些命令的手册可能需要单独安装：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 man-pages（系统调用/库函数手册）</span></span><br><span class="line"><span class="built_in">sudo</span> yum -y install man-pages</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>基础命令</category>
-        <category>man</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>man-pages</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS7更换国内YUM源及初始化配置</title>
-    <url>/2025/03/19/CentOS7%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85YUM%E6%BA%90%E5%8F%8A%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="CentOS-7-更换国内YUM源及初始化配置"><a href="#CentOS-7-更换国内YUM源及初始化配置" class="headerlink" title="CentOS 7 更换国内YUM源及初始化配置"></a>CentOS 7 更换国内YUM源及初始化配置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/CentOS7-YUM-Initialization.jpg" alt="CentOS7-YUM-Initialization"></p>
-<h2 id="一、备份原有YUM源"><a href="#一、备份原有YUM源" class="headerlink" title="一、备份原有YUM源"></a>一、备份原有YUM源</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="二、更换为国内YUM源"><a href="#二、更换为国内YUM源" class="headerlink" title="二、更换为国内YUM源"></a>二、更换为国内YUM源</h2><h3 id="1-阿里云源"><a href="#1-阿里云源" class="headerlink" title="1. 阿里云源"></a>1. 阿里云源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-或者使用清华源"><a href="#2-或者使用清华源" class="headerlink" title="2. 或者使用清华源"></a>2. 或者使用清华源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.tuna.tsinghua.edu.cn/help/centos/centos7.repo</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="三、清理并重建YUM缓存"><a href="#三、清理并重建YUM缓存" class="headerlink" title="三、清理并重建YUM缓存"></a>三、清理并重建YUM缓存</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum clean all</span><br><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="四、更新系统软件包（可选但推荐）"><a href="#四、更新系统软件包（可选但推荐）" class="headerlink" title="四、更新系统软件包（可选但推荐）"></a>四、更新系统软件包（可选但推荐）</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update -y</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="五、其他常用初始化操作"><a href="#五、其他常用初始化操作" class="headerlink" title="五、其他常用初始化操作"></a>五、其他常用初始化操作</h2><h3 id="1-安装常用工具集"><a href="#1-安装常用工具集" class="headerlink" title="1. 安装常用工具集"></a>1. 安装常用工具集</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y wget vim net-tools tree</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-安装EPEL源（额外软件包）"><a href="#2-安装EPEL源（额外软件包）" class="headerlink" title="2. 安装EPEL源（额外软件包）"></a>2. 安装EPEL源（额外软件包）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y epel-release</span><br><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-设置时区（如设置为亚洲-上海）"><a href="#3-设置时区（如设置为亚洲-上海）" class="headerlink" title="3. 设置时区（如设置为亚洲&#x2F;上海）"></a>3. 设置时区（如设置为亚洲&#x2F;上海）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> timedatectl set-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-关闭防火墙（仅用于测试环境）"><a href="#4-关闭防火墙（仅用于测试环境）" class="headerlink" title="4. 关闭防火墙（仅用于测试环境）"></a>4. 关闭防火墙（仅用于测试环境）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl stop firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-禁用SELinux（可选）"><a href="#5-禁用SELinux（可选）" class="headerlink" title="5. 禁用SELinux（可选）"></a>5. 禁用SELinux（可选）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> setenforce 0</span><br><span class="line"><span class="built_in">sudo</span> sed -i <span class="string">&#x27;s/SELINUX=enforcing/SELINUX=disabled/g&#x27;</span> /etc/selinux/config</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>CentOS7</category>
-        <category>系统初始化</category>
-      </categories>
-      <tags>
-        <tag>CentOS7</tag>
-        <tag>YUM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux软硬链接详解</title>
-    <url>/2025/03/26/Linux%E8%BD%AF%E7%A1%AC%E9%93%BE%E6%8E%A5%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="Linux软硬链接详解"><a href="#Linux软硬链接详解" class="headerlink" title="Linux软硬链接详解"></a>Linux软硬链接详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-FileSystem-SymbolicHardLink.jpg" alt="Linux-FileSystem-SymbolicHardLink"></p>
-<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><h3 id="1-1-软链接（符号链接）"><a href="#1-1-软链接（符号链接）" class="headerlink" title="1.1 软链接（符号链接）"></a>1.1 软链接（符号链接）</h3><ul>
-<li><strong>类比</strong>：类似于Windows中的快捷方式。</li>
-<li><strong>本质</strong>：是一个特殊文件，内容为源文件的路径（位置+文件名）。</li>
-<li><strong>特点</strong>：<ul>
-<li>可跨文件系统&#x2F;分区。</li>
-<li>可对文件和目录创建。</li>
-<li>源文件删除后，软链接失效（显示红底白字闪烁）。</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-2-硬链接"><a href="#1-2-硬链接" class="headerlink" title="1.2 硬链接"></a>1.2 硬链接</h3><ul>
-<li><strong>本质</strong>：同一分区中多个文件名指向同一个inode，互为硬链接。</li>
-<li><strong>特点</strong>：<ul>
-<li>仅限文件，不能对目录创建。</li>
-<li>不能跨分区。</li>
-<li>删除硬链接或源文件不影响其他硬链接。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="2-创建方法"><a href="#2-创建方法" class="headerlink" title="2. 创建方法"></a>2. 创建方法</h2><h3 id="2-1-软链接创建"><a href="#2-1-软链接创建" class="headerlink" title="2.1 软链接创建"></a>2.1 软链接创建</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s 源文件 软链接文件名</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建源文件</span></span><br><span class="line"><span class="built_in">touch</span> xiao.txt</span><br><span class="line"><span class="comment"># 创建软链接</span></span><br><span class="line"><span class="built_in">ln</span> -s xiao.txt xiao_soft</span><br></pre></td></tr></table></figure>
-<p><strong>绝对路径软链接</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s /path/to/source /path/to/link</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-硬链接创建"><a href="#2-2-硬链接创建" class="headerlink" title="2.2 硬链接创建"></a>2.2 硬链接创建</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> 源文件 硬链接文件名</span><br></pre></td></tr></table></figure>
-<p><strong>示例</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> xiao.txt xiao_hard</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="3-核心区别"><a href="#3-核心区别" class="headerlink" title="3. 核心区别"></a>3. 核心区别</h2><table>
-<thead>
-<tr>
-<th><strong>特性</strong></th>
-<th><strong>软链接</strong></th>
-<th><strong>硬链接</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>本质</strong></td>
-<td>存储源文件路径的独立文件</td>
-<td>与源文件共享inode的多个文件名</td>
-</tr>
-<tr>
-<td><strong>跨分区</strong></td>
-<td>支持</td>
-<td>不支持</td>
-</tr>
-<tr>
-<td><strong>目录支持</strong></td>
-<td>支持</td>
-<td>不支持</td>
-</tr>
-<tr>
-<td><strong>源文件删除</strong></td>
-<td>软链接失效（红底白字闪烁）</td>
-<td>不影响其他硬链接</td>
-</tr>
-<tr>
-<td><strong>文件大小</strong></td>
-<td>软链接文件大小&#x3D;路径字符长度</td>
-<td>硬链接与源文件大小相同</td>
-</tr>
-<tr>
-<td><strong>inode号</strong></td>
-<td>与源文件不同</td>
-<td>与源文件相同</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="4-使用场景"><a href="#4-使用场景" class="headerlink" title="4. 使用场景"></a>4. 使用场景</h2><h3 id="4-1-软链接适用场景"><a href="#4-1-软链接适用场景" class="headerlink" title="4.1 软链接适用场景"></a>4.1 软链接适用场景</h3><ul>
-<li>需要跨分区或文件系统引用文件&#x2F;目录。</li>
-<li>为目录创建快捷访问路径。</li>
-<li>动态链接库文件（如<code>/usr/lib</code>中的库文件）。</li>
-</ul>
-<h3 id="4-2-硬链接适用场景"><a href="#4-2-硬链接适用场景" class="headerlink" title="4.2 硬链接适用场景"></a>4.2 硬链接适用场景</h3><ul>
-<li>需要多个文件名指向同一文件数据（如备份或日志轮转）。</li>
-<li>确保文件删除后数据仍可通过其他硬链接访问。</li>
-</ul>
-<hr>
-<h2 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h2><ol>
-<li><strong>软链接路径</strong>：  <ul>
-<li>推荐使用绝对路径，避免移动源文件后链接失效。</li>
-</ul>
-</li>
-<li><strong>硬链接限制</strong>：  <ul>
-<li>不能对目录或跨分区文件创建硬链接。</li>
-</ul>
-</li>
-<li><strong>删除影响</strong>：  <ul>
-<li>删除软链接：<code>rm 软链接名</code>（不影响源文件）。  </li>
-<li>删除硬链接：仅减少inode引用计数，数据未真正删除直至所有硬链接被移除。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="6-示例验证"><a href="#6-示例验证" class="headerlink" title="6. 示例验证"></a>6. 示例验证</h2><h3 id="6-1-软链接操作"><a href="#6-1-软链接操作" class="headerlink" title="6.1 软链接操作"></a>6.1 软链接操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建源文件并写入内容</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Hello&quot;</span> &gt; source.txt</span><br><span class="line"><span class="comment"># 创建软链接</span></span><br><span class="line"><span class="built_in">ln</span> -s source.txt soft_link</span><br><span class="line"><span class="comment"># 通过软链接查看内容</span></span><br><span class="line"><span class="built_in">cat</span> soft_link  <span class="comment"># 输出: Hello</span></span><br><span class="line"><span class="comment"># 删除源文件后验证</span></span><br><span class="line"><span class="built_in">rm</span> source.txt</span><br><span class="line"><span class="built_in">cat</span> soft_link  <span class="comment"># 提示&quot;无效文件&quot;，链接闪烁</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="6-2-硬链接操作"><a href="#6-2-硬链接操作" class="headerlink" title="6.2 硬链接操作"></a>6.2 硬链接操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建硬链接</span></span><br><span class="line"><span class="built_in">ln</span> source.txt hard_link</span><br><span class="line"><span class="comment"># 查看inode号（相同）</span></span><br><span class="line"><span class="built_in">ls</span> -i source.txt hard_link</span><br><span class="line"><span class="comment"># 修改硬链接内容</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;World&quot;</span> &gt;&gt; hard_link</span><br><span class="line"><span class="comment"># 源文件同步更新</span></span><br><span class="line"><span class="built_in">cat</span> source.txt  <span class="comment"># 输出: Hello\nWorld</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux文件系统</category>
-        <category>Link</category>
-      </categories>
-      <tags>
-        <tag>文件系统</tag>
-        <tag>Symbolic-Link</tag>
-        <tag>Hard-Link</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux主机网卡（Bond）状态异常处理</title>
-    <url>/2025/03/12/Linux%E4%B8%BB%E6%9C%BA%E7%BD%91%E5%8D%A1%EF%BC%88Bond%EF%BC%89%E7%8A%B6%E6%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="Linux主机网卡（Bond）状态异常处理"><a href="#Linux主机网卡（Bond）状态异常处理" class="headerlink" title="Linux主机网卡（Bond）状态异常处理"></a>Linux主机网卡（Bond）状态异常处理</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-NetworkCard-bond.jpg" alt="Hardware-NetworkCard-bond"></p>
-<h3 id="一、问题定位与关键命令解析"><a href="#一、问题定位与关键命令解析" class="headerlink" title="一、问题定位与关键命令解析"></a>一、问题定位与关键命令解析</h3><p>当Linux主机的Bond网卡出现非<code>up</code>状态时，可通过以下命令快速定位问题：</p>
-<h4 id="1-统计非up状态的从属接口数量"><a href="#1-统计非up状态的从属接口数量" class="headerlink" title="1. 统计非up状态的从属接口数量"></a>1. 统计非<code>up</code>状态的从属接口数量</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span> | awk <span class="string">&#x27;/Status/&#123;print $NF&#125;&#x27;</span> | grep -vc up</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：统计所有Bond接口中状态非<code>up</code>的从属网卡数量。</li>
-<li><strong>输出示例</strong>：<code>1</code>（表示有1个从属网卡异常）。</li>
-<li><strong>说明</strong>：  <ul>
-<li><code>cat /proc/net/bonding/bond*</code>：读取所有Bond接口的配置信息。  </li>
-<li><code>grep -A 1 &#39;Slave Interface&#39;</code>：匹配包含<code>Slave Interface</code>的行，并输出该行及下一行（<code>-A 1</code>）。  </li>
-<li><code>awk &#39;/Status/&#123;print $NF&#125;&#39;</code>：提取状态字段（<code>Status</code>行的最后一个值，即<code>up</code>或<code>down</code>）。  </li>
-<li><code>grep -vc up</code>：统计非<code>up</code>状态的数量（<code>-v</code>反向匹配，<code>-c</code>计数）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="2-定位具体异常的从属网卡"><a href="#2-定位具体异常的从属网卡" class="headerlink" title="2. 定位具体异常的从属网卡"></a>2. 定位具体异常的从属网卡</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p><strong>输出示例</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Slave Interface: eth3</span><br><span class="line">MII Status: down</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>关键字段</strong>：  </p>
-<ul>
-<li><code>Slave Interface</code>：异常网卡名称（如 <code>eth3</code>）。  </li>
-<li><code>MII Status</code>：物理链路状态（<code>down</code> 表示断开）。  </li>
-<li><code>Link Failure Count</code>：链路故障次数（数值增加表明反复断开）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="3-查看详细Bond接口配置"><a href="#3-查看详细Bond接口配置" class="headerlink" title="3. 查看详细Bond接口配置"></a>3. 查看详细Bond接口配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond*</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p><strong>输出关键字段解析</strong>：  </p>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Bonding Mode</strong></td>
-<td>Bond模式（如<code>802.3ad</code>动态链路聚合、<code>active-backup</code>主备模式）。</td>
-</tr>
-<tr>
-<td><strong>MII Status</strong></td>
-<td>Bond接口整体状态（<code>up</code>表示可用）。</td>
-</tr>
-<tr>
-<td><strong>Slave Interface</strong></td>
-<td>从属网卡名称及状态（重点关注<code>MII Status</code>）。</td>
-</tr>
-<tr>
-<td><strong>Link Failure Count</strong></td>
-<td>链路故障次数（非零值表示发生过故障）。</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<hr>
-<h3 id="二、收集故障网卡信息"><a href="#二、收集故障网卡信息" class="headerlink" title="二、收集故障网卡信息"></a>二、收集故障网卡信息</h3><h4 id="1-获取网卡MAC地址"><a href="#1-获取网卡MAC地址" class="headerlink" title="1. 获取网卡MAC地址"></a>1. 获取网卡MAC地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a | grep eth3</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>输出示例</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4: eth3: &lt;NO-CARRIER,BROADCAST,MULTICAST,SLAVE,UP&gt; ... link/ether 48:dc:2d:01:66:a5 ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>关键字段</strong>：<code>link/ether</code> 后为MAC地址（如 <code>48:dc:2d:01:66:a5</code>）。</p>
-</li>
-</ul>
-<h4 id="2-获取Bond组IP地址"><a href="#2-获取Bond组IP地址" class="headerlink" title="2. 获取Bond组IP地址"></a>2. 获取Bond组IP地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a | grep bond1</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>输出示例</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">9: bond1: ... inet 192.168.142.43/24 ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>关键字段</strong>：<code>inet</code> 后为Bond组的IP地址（如 <code>192.168.142.43/24</code>）。</p>
-</li>
-</ul>
-<h4 id="3-资产信息核对"><a href="#3-资产信息核对" class="headerlink" title="3. 资产信息核对"></a>3. 资产信息核对</h4><ul>
-<li>根据主机IP或主机名，在资产表中确认设备地址和位置信息。</li>
-</ul>
-<hr>
-<h3 id="三、信息提交网络组的模板"><a href="#三、信息提交网络组的模板" class="headerlink" title="三、信息提交网络组的模板"></a>三、信息提交网络组的模板</h3><p><strong>需包含以下信息</strong>：  </p>
-<ol>
-<li><strong>异常网卡</strong>：<code>eth3</code>  </li>
-<li><strong>MAC地址</strong>：<code>48:dc:2d:01:66:a5</code>  </li>
-<li><strong>所属Bond组</strong>：<code>bond1</code>  </li>
-<li><strong>Bond组IP</strong>：<code>192.168.142.43/24</code>  </li>
-<li><strong>物理位置</strong>：根据资产表提供设备地址和位置信息。</li>
-</ol>
-<hr>
-<h3 id="四、故障原因分析与处理建议"><a href="#四、故障原因分析与处理建议" class="headerlink" title="四、故障原因分析与处理建议"></a>四、故障原因分析与处理建议</h3><h4 id="可能原因"><a href="#可能原因" class="headerlink" title="可能原因"></a>可能原因</h4><ol>
-<li><strong>物理层问题</strong>：  <ul>
-<li>网线松动、光模块故障、交换机端口异常。  </li>
-<li><strong>操作建议</strong>：检查网线连接，更换光模块，验证交换机端口状态。</li>
-</ul>
-</li>
-<li><strong>驱动或配置问题</strong>：  <ul>
-<li>网卡驱动异常、Bond模式与交换机配置不匹配（如LACP未启用）。  </li>
-<li><strong>操作建议</strong>：更新网卡驱动，确认交换机聚合组配置。</li>
-</ul>
-</li>
-<li><strong>硬件故障</strong>：  <ul>
-<li>网卡或主板接口损坏。  </li>
-<li><strong>操作建议</strong>：更换网卡或主板。</li>
-</ul>
-</li>
-</ol>
-<h4 id="应急处理"><a href="#应急处理" class="headerlink" title="应急处理"></a>应急处理</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifdown eth3 &amp;&amp; ifup eth3   <span class="comment"># 重启异常网卡（临时恢复）</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="五、Bond模式说明"><a href="#五、Bond模式说明" class="headerlink" title="五、Bond模式说明"></a>五、Bond模式说明</h3><table>
-<thead>
-<tr>
-<th>模式</th>
-<th>特点</th>
-<th>适用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>802.3ad（动态链路聚合）</strong></td>
-<td>多网卡负载均衡，需交换机支持LACP。</td>
-<td>高带宽需求、冗余要求高的场景。</td>
-</tr>
-<tr>
-<td><strong>active-backup（主备模式）</strong></td>
-<td>仅主接口工作，备用接口在主接口故障时切换。</td>
-<td>高可用性要求，对带宽需求不高。</td>
-</tr>
-</tbody></table>
-<hr>
-<h3 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h3><ul>
-<li><strong>核心流程</strong>：定位异常网卡 → 收集MAC&#x2F;IP → 提交网络组 → 物理&#x2F;配置排查。  </li>
-<li><strong>关键命令</strong>：<code>grep -A 1</code> 过滤上下文，<code>ip a</code> 查看网络配置。  </li>
-<li><strong>预防措施</strong>：定期检查Bond状态，确保驱动和固件为最新版本。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>硬件运维</category>
-        <category>网卡</category>
-      </categories>
-      <tags>
-        <tag>硬件运维</tag>
-        <tag>网卡</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux man-pages手册常用命令表格化总结</title>
     <url>/2025/03/21/Linux%20man-pages%E6%89%8B%E5%86%8C%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%A8%E6%A0%BC%E5%8C%96%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h1 id="Linux-man-pages-手册常用命令表格化总结"><a href="#Linux-man-pages-手册常用命令表格化总结" class="headerlink" title="Linux man-pages 手册常用命令表格化总结"></a>Linux man-pages 手册常用命令表格化总结</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-ManTable.jpg" alt="Linux-Basic-ManTable"></p>
@@ -1037,6 +554,489 @@
       </tags>
   </entry>
   <entry>
+    <title>CentOS7更换国内YUM源及初始化配置</title>
+    <url>/2025/03/19/CentOS7%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85YUM%E6%BA%90%E5%8F%8A%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="CentOS-7-更换国内YUM源及初始化配置"><a href="#CentOS-7-更换国内YUM源及初始化配置" class="headerlink" title="CentOS 7 更换国内YUM源及初始化配置"></a>CentOS 7 更换国内YUM源及初始化配置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/CentOS7-YUM-Initialization.jpg" alt="CentOS7-YUM-Initialization"></p>
+<h2 id="一、备份原有YUM源"><a href="#一、备份原有YUM源" class="headerlink" title="一、备份原有YUM源"></a>一、备份原有YUM源</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、更换为国内YUM源"><a href="#二、更换为国内YUM源" class="headerlink" title="二、更换为国内YUM源"></a>二、更换为国内YUM源</h2><h3 id="1-阿里云源"><a href="#1-阿里云源" class="headerlink" title="1. 阿里云源"></a>1. 阿里云源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-或者使用清华源"><a href="#2-或者使用清华源" class="headerlink" title="2. 或者使用清华源"></a>2. 或者使用清华源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.tuna.tsinghua.edu.cn/help/centos/centos7.repo</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、清理并重建YUM缓存"><a href="#三、清理并重建YUM缓存" class="headerlink" title="三、清理并重建YUM缓存"></a>三、清理并重建YUM缓存</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum clean all</span><br><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、更新系统软件包（可选但推荐）"><a href="#四、更新系统软件包（可选但推荐）" class="headerlink" title="四、更新系统软件包（可选但推荐）"></a>四、更新系统软件包（可选但推荐）</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update -y</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、其他常用初始化操作"><a href="#五、其他常用初始化操作" class="headerlink" title="五、其他常用初始化操作"></a>五、其他常用初始化操作</h2><h3 id="1-安装常用工具集"><a href="#1-安装常用工具集" class="headerlink" title="1. 安装常用工具集"></a>1. 安装常用工具集</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y wget vim net-tools tree</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-安装EPEL源（额外软件包）"><a href="#2-安装EPEL源（额外软件包）" class="headerlink" title="2. 安装EPEL源（额外软件包）"></a>2. 安装EPEL源（额外软件包）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y epel-release</span><br><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-设置时区（如设置为亚洲-上海）"><a href="#3-设置时区（如设置为亚洲-上海）" class="headerlink" title="3. 设置时区（如设置为亚洲&#x2F;上海）"></a>3. 设置时区（如设置为亚洲&#x2F;上海）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> timedatectl set-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-关闭防火墙（仅用于测试环境）"><a href="#4-关闭防火墙（仅用于测试环境）" class="headerlink" title="4. 关闭防火墙（仅用于测试环境）"></a>4. 关闭防火墙（仅用于测试环境）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl stop firewalld</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-禁用SELinux（可选）"><a href="#5-禁用SELinux（可选）" class="headerlink" title="5. 禁用SELinux（可选）"></a>5. 禁用SELinux（可选）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> setenforce 0</span><br><span class="line"><span class="built_in">sudo</span> sed -i <span class="string">&#x27;s/SELINUX=enforcing/SELINUX=disabled/g&#x27;</span> /etc/selinux/config</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>CentOS7</category>
+        <category>系统初始化</category>
+      </categories>
+      <tags>
+        <tag>CentOS7</tag>
+        <tag>YUM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux man命令手册使用指南</title>
+    <url>/2025/03/20/Linux%20man%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="Linux-man命令手册使用指南"><a href="#Linux-man命令手册使用指南" class="headerlink" title="Linux man命令手册使用指南"></a>Linux man命令手册使用指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-manTOP.jpg" alt="Linux-Basic-manTOP"></p>
+<h2 id="一、Linux-的man命令手册页"><a href="#一、Linux-的man命令手册页" class="headerlink" title="一、Linux 的man命令手册页"></a>一、Linux 的man命令手册页</h2><blockquote>
+<p><a href="https://man7.org/linux/man-pages/index.html">https://man7.org/linux/man-pages/index.html</a></p>
+</blockquote>
+<h2 id="二、man命令使用方法"><a href="#二、man命令使用方法" class="headerlink" title="二、man命令使用方法"></a>二、man命令使用方法</h2><h3 id="1-基本使用"><a href="#1-基本使用" class="headerlink" title="1. 基本使用"></a>1. 基本使用</h3><h4 id="1-1-查看命令手册"><a href="#1-1-查看命令手册" class="headerlink" title="1.1 查看命令手册"></a>1.1 查看命令手册</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man [章节] &lt;命令名&gt;</span><br><span class="line"><span class="comment"># 示例：查看 ls 命令的手册</span></span><br><span class="line">man <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-查看指定章节的手册"><a href="#1-2-查看指定章节的手册" class="headerlink" title="1.2 查看指定章节的手册"></a>1.2 查看指定章节的手册</h4><p>某些关键词（如<code>passwd</code>）可能存在于多个章节：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man 1 passwd   <span class="comment"># 查看 passwd 命令的手册（用户命令）</span></span><br><span class="line">man 5 passwd   <span class="comment"># 查看 passwd 文件格式的手册（配置文件）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2-常用操作快捷键"><a href="#2-常用操作快捷键" class="headerlink" title="2. 常用操作快捷键"></a>2. 常用操作快捷键</h3><ul>
+<li><strong>导航</strong>：<ul>
+<li><code>↑</code>&#x2F;<code>↓</code>：逐行滚动。</li>
+<li><code>Page Up</code>&#x2F;<code>Page Down</code>：翻页。</li>
+<li><code>Home</code>&#x2F;<code>End</code>：跳转至开头&#x2F;结尾。</li>
+</ul>
+</li>
+<li><strong>搜索</strong>：<ul>
+<li><code>/关键字</code>：向前搜索（如 <code>/--help</code>）。</li>
+<li><code>n</code>：跳转到下一个匹配项。</li>
+<li><code>N</code>：跳转到上一个匹配项。</li>
+</ul>
+</li>
+<li><strong>退出</strong>：<ul>
+<li><code>q</code>：退出手册。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-常用命令选项"><a href="#3-常用命令选项" class="headerlink" title="3. 常用命令选项"></a>3. 常用命令选项</h3><h4 id="3-1-搜索相关手册"><a href="#3-1-搜索相关手册" class="headerlink" title="3.1 搜索相关手册"></a>3.1 搜索相关手册</h4><ul>
+<li><p>**<code>-k</code> 或 <code>--apropos</code>**：按关键字搜索手册（类似<code>apropos</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -k network    <span class="comment"># 查找所有包含 &quot;network&quot; 的手册页</span></span><br><span class="line">apropos network   <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>**<code>-f</code> 或 <code>--whatis</code>**：显示命令的简短描述（类似<code>whatis</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -f passwd     <span class="comment"># 列出 passwd 的所有相关手册章节</span></span><br><span class="line">whatis passwd     <span class="comment"># 同上</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-2其他选项"><a href="#3-2其他选项" class="headerlink" title="3.2其他选项"></a>3.2其他选项</h4><ul>
+<li><p>**<code>-a</code>**：显示所有匹配章节的手册（按<code>q</code>后继续下一章节）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -a passwd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>**<code>-w</code>**：显示手册页的路径：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man -w <span class="built_in">ls</span>         <span class="comment"># 输出 /usr/share/man/man1/ls.1.gz</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="三、Linux彩色man-page设置方法"><a href="#三、Linux彩色man-page设置方法" class="headerlink" title="三、Linux彩色man page设置方法"></a>三、Linux彩色man page设置方法</h2><blockquote>
+<p>原文: <a href="https://gaomf.cn/2017/01/13/Linux_Colourful_Man/">https://gaomf.cn/2017/01/13/Linux_Colourful_Man/</a>　　作者: 高明飞</p>
+</blockquote>
+<h3 id="1-在-bashrc文件中添加less的相关设置参数"><a href="#1-在-bashrc文件中添加less的相关设置参数" class="headerlink" title="1. 在 .bashrc文件中添加less的相关设置参数"></a>1. 在 .bashrc文件中添加less的相关设置参数</h3><p>Linux下<code>man page</code>的显示默认是通过<code>less</code>来完成的，故在<code>.bashrc</code>文件中添加<code>less</code>的相关设置参数即可使<code>man page</code>变成彩色的:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># colourful man page</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_mb=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_md=$<span class="string">&#x27;\E[01;34m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_me=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_us=$<span class="string">&#x27;\E[01;32m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_ue=$<span class="string">&#x27;\E[0m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_so=$<span class="string">&#x27;\E[01;33;44m&#x27;</span></span><br><span class="line"><span class="built_in">export</span> LESS_TERMCAP_se=$<span class="string">&#x27;\E[0m&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>更改完<code>.bashrc</code>文件后要重新载入一下配置：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>之后重启终端才会生效，以上配置显示效果如下：</p>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-man.jpg" alt="Linux-Basic-man"></p>
+<h3 id="2-less的相关设置参数的含义"><a href="#2-less的相关设置参数的含义" class="headerlink" title="2. less的相关设置参数的含义"></a>2. less的相关设置参数的含义</h3><p>其中<code>LESS_TERMCAP_xx</code>的含义如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><code>termcap</code></th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>mb</code></td>
+<td align="center">start blink 开始闪烁</td>
+</tr>
+<tr>
+<td align="center"><code>md</code></td>
+<td align="center">start bold 开始加粗</td>
+</tr>
+<tr>
+<td align="center"><code>me</code></td>
+<td align="center">turn off bold, blink and underline 关闭粗体、闪烁和下划线</td>
+</tr>
+<tr>
+<td align="center"><code>us</code></td>
+<td align="center">start underline 开始下划线</td>
+</tr>
+<tr>
+<td align="center"><code>ue</code></td>
+<td align="center">stop underline 停止下划线</td>
+</tr>
+<tr>
+<td align="center"><code>so</code></td>
+<td align="center">start standout 开始脱颖而出</td>
+</tr>
+<tr>
+<td align="center"><code>se</code></td>
+<td align="center">stop standout 停止突出</td>
+</tr>
+</tbody></table>
+<p>对照上面实际的<code>man page</code>页面可以看到：<code>md</code>对应蓝色部分；<code>us</code>对应绿色部分；<code>so</code>对应底部黄色状态栏。</p>
+<h3 id="3-具体颜色设置方法，参考以下页面："><a href="#3-具体颜色设置方法，参考以下页面：" class="headerlink" title="3.具体颜色设置方法，参考以下页面："></a>3.具体颜色设置方法，参考以下页面：</h3><blockquote>
+<p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">https://en.wikipedia.org/wiki/ANSI_escape_code#Colors</a></p>
+</blockquote>
+<p>简而言之，在<code>&#39;\E[0x;3y;4zm&#39;</code>中：<code>x</code>代表是否加粗，<code>1</code>为加粗，<code>2</code>为正常；<code>y</code>和<code>z</code>分别代表文字前景色和背景色，使用默认值的话可省略，颜色列表如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Intensity</th>
+<th align="center">0</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+<th align="center">6</th>
+<th align="center">7</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Normal</td>
+<td align="center">Black</td>
+<td align="center">Red</td>
+<td align="center">Green</td>
+<td align="center">Yellow</td>
+<td align="center">Blue</td>
+<td align="center">Magenta</td>
+<td align="center">Cyan</td>
+<td align="center">White</td>
+</tr>
+<tr>
+<td align="center">Bright</td>
+<td align="center">Black</td>
+<td align="center">Red</td>
+<td align="center">Green</td>
+<td align="center">Yellow</td>
+<td align="center">Blue</td>
+<td align="center">Magenta</td>
+<td align="center">Cyan</td>
+<td align="center">White</td>
+</tr>
+</tbody></table>
+<h2 id="四、man-pages手册页设置中文"><a href="#四、man-pages手册页设置中文" class="headerlink" title="四、man pages手册页设置中文"></a>四、man pages手册页设置中文</h2><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-manCN.jpg" alt="Linux-Basic-manCN"></p>
+<h3 id="1-通过包管理器进行安装"><a href="#1-通过包管理器进行安装" class="headerlink" title="1. 通过包管理器进行安装"></a>1. 通过包管理器进行安装</h3><p>在 CentOS&#x2F;RHEL 上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum -y install man-pages-zh-CN</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-临时设置语言环境"><a href="#2-临时设置语言环境" class="headerlink" title="2. 临时设置语言环境"></a>2. 临时设置语言环境</h3><p>在终端中，可以通过以下命令设置环境变量来使用中文手册页：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-修改man命令的配置文件"><a href="#3-修改man命令的配置文件" class="headerlink" title="3. 修改man命令的配置文件"></a>3. 修改man命令的配置文件</h3><p>您还可以修改<code>~/.bashrc</code>或<code>~/.zshrc</code>文件，以便每次打开终端时自动加载这些环境变量。</p>
+<ol>
+<li>打开配置文件（以 <code>~/.bashrc</code> 为例）：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在文件末尾添加以下内容：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=zh_CN.UTF-8</span><br><span class="line"><span class="built_in">export</span> LANGUAGE=zh_CN:zh:en</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>保存文件并重新加载：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、man-pages手册页未安装"><a href="#五、man-pages手册页未安装" class="headerlink" title="五、man pages手册页未安装"></a>五、man pages手册页未安装</h2><p>某些命令的手册可能需要单独安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 man-pages（系统调用/库函数手册）</span></span><br><span class="line"><span class="built_in">sudo</span> yum -y install man-pages</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>基础命令</category>
+        <category>man</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>man-pages</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux软硬链接详解</title>
+    <url>/2025/03/26/Linux%E8%BD%AF%E7%A1%AC%E9%93%BE%E6%8E%A5%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="Linux软硬链接详解"><a href="#Linux软硬链接详解" class="headerlink" title="Linux软硬链接详解"></a>Linux软硬链接详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-FileSystem-SymbolicHardLink.jpg" alt="Linux-FileSystem-SymbolicHardLink"></p>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><h3 id="1-1-软链接（符号链接）"><a href="#1-1-软链接（符号链接）" class="headerlink" title="1.1 软链接（符号链接）"></a>1.1 软链接（符号链接）</h3><ul>
+<li><strong>类比</strong>：类似于Windows中的快捷方式。</li>
+<li><strong>本质</strong>：是一个特殊文件，内容为源文件的路径（位置+文件名）。</li>
+<li><strong>特点</strong>：<ul>
+<li>可跨文件系统&#x2F;分区。</li>
+<li>可对文件和目录创建。</li>
+<li>源文件删除后，软链接失效（显示红底白字闪烁）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-硬链接"><a href="#1-2-硬链接" class="headerlink" title="1.2 硬链接"></a>1.2 硬链接</h3><ul>
+<li><strong>本质</strong>：同一分区中多个文件名指向同一个inode，互为硬链接。</li>
+<li><strong>特点</strong>：<ul>
+<li>仅限文件，不能对目录创建。</li>
+<li>不能跨分区。</li>
+<li>删除硬链接或源文件不影响其他硬链接。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2-创建方法"><a href="#2-创建方法" class="headerlink" title="2. 创建方法"></a>2. 创建方法</h2><h3 id="2-1-软链接创建"><a href="#2-1-软链接创建" class="headerlink" title="2.1 软链接创建"></a>2.1 软链接创建</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s 源文件 软链接文件名</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建源文件</span></span><br><span class="line"><span class="built_in">touch</span> xiao.txt</span><br><span class="line"><span class="comment"># 创建软链接</span></span><br><span class="line"><span class="built_in">ln</span> -s xiao.txt xiao_soft</span><br></pre></td></tr></table></figure>
+<p><strong>绝对路径软链接</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s /path/to/source /path/to/link</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-硬链接创建"><a href="#2-2-硬链接创建" class="headerlink" title="2.2 硬链接创建"></a>2.2 硬链接创建</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> 源文件 硬链接文件名</span><br></pre></td></tr></table></figure>
+<p><strong>示例</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> xiao.txt xiao_hard</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-核心区别"><a href="#3-核心区别" class="headerlink" title="3. 核心区别"></a>3. 核心区别</h2><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>软链接</strong></th>
+<th><strong>硬链接</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>本质</strong></td>
+<td>存储源文件路径的独立文件</td>
+<td>与源文件共享inode的多个文件名</td>
+</tr>
+<tr>
+<td><strong>跨分区</strong></td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td><strong>目录支持</strong></td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td><strong>源文件删除</strong></td>
+<td>软链接失效（红底白字闪烁）</td>
+<td>不影响其他硬链接</td>
+</tr>
+<tr>
+<td><strong>文件大小</strong></td>
+<td>软链接文件大小&#x3D;路径字符长度</td>
+<td>硬链接与源文件大小相同</td>
+</tr>
+<tr>
+<td><strong>inode号</strong></td>
+<td>与源文件不同</td>
+<td>与源文件相同</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-使用场景"><a href="#4-使用场景" class="headerlink" title="4. 使用场景"></a>4. 使用场景</h2><h3 id="4-1-软链接适用场景"><a href="#4-1-软链接适用场景" class="headerlink" title="4.1 软链接适用场景"></a>4.1 软链接适用场景</h3><ul>
+<li>需要跨分区或文件系统引用文件&#x2F;目录。</li>
+<li>为目录创建快捷访问路径。</li>
+<li>动态链接库文件（如<code>/usr/lib</code>中的库文件）。</li>
+</ul>
+<h3 id="4-2-硬链接适用场景"><a href="#4-2-硬链接适用场景" class="headerlink" title="4.2 硬链接适用场景"></a>4.2 硬链接适用场景</h3><ul>
+<li>需要多个文件名指向同一文件数据（如备份或日志轮转）。</li>
+<li>确保文件删除后数据仍可通过其他硬链接访问。</li>
+</ul>
+<hr>
+<h2 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h2><ol>
+<li><strong>软链接路径</strong>：  <ul>
+<li>推荐使用绝对路径，避免移动源文件后链接失效。</li>
+</ul>
+</li>
+<li><strong>硬链接限制</strong>：  <ul>
+<li>不能对目录或跨分区文件创建硬链接。</li>
+</ul>
+</li>
+<li><strong>删除影响</strong>：  <ul>
+<li>删除软链接：<code>rm 软链接名</code>（不影响源文件）。  </li>
+<li>删除硬链接：仅减少inode引用计数，数据未真正删除直至所有硬链接被移除。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="6-示例验证"><a href="#6-示例验证" class="headerlink" title="6. 示例验证"></a>6. 示例验证</h2><h3 id="6-1-软链接操作"><a href="#6-1-软链接操作" class="headerlink" title="6.1 软链接操作"></a>6.1 软链接操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建源文件并写入内容</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Hello&quot;</span> &gt; source.txt</span><br><span class="line"><span class="comment"># 创建软链接</span></span><br><span class="line"><span class="built_in">ln</span> -s source.txt soft_link</span><br><span class="line"><span class="comment"># 通过软链接查看内容</span></span><br><span class="line"><span class="built_in">cat</span> soft_link  <span class="comment"># 输出: Hello</span></span><br><span class="line"><span class="comment"># 删除源文件后验证</span></span><br><span class="line"><span class="built_in">rm</span> source.txt</span><br><span class="line"><span class="built_in">cat</span> soft_link  <span class="comment"># 提示&quot;无效文件&quot;，链接闪烁</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-硬链接操作"><a href="#6-2-硬链接操作" class="headerlink" title="6.2 硬链接操作"></a>6.2 硬链接操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建硬链接</span></span><br><span class="line"><span class="built_in">ln</span> source.txt hard_link</span><br><span class="line"><span class="comment"># 查看inode号（相同）</span></span><br><span class="line"><span class="built_in">ls</span> -i source.txt hard_link</span><br><span class="line"><span class="comment"># 修改硬链接内容</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;World&quot;</span> &gt;&gt; hard_link</span><br><span class="line"><span class="comment"># 源文件同步更新</span></span><br><span class="line"><span class="built_in">cat</span> source.txt  <span class="comment"># 输出: Hello\nWorld</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux文件系统</category>
+        <category>Link</category>
+      </categories>
+      <tags>
+        <tag>文件系统</tag>
+        <tag>Symbolic-Link</tag>
+        <tag>Hard-Link</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux主机网卡（Bond）状态异常处理</title>
+    <url>/2025/03/12/Linux%E4%B8%BB%E6%9C%BA%E7%BD%91%E5%8D%A1%EF%BC%88Bond%EF%BC%89%E7%8A%B6%E6%80%81%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<h1 id="Linux主机网卡（Bond）状态异常处理"><a href="#Linux主机网卡（Bond）状态异常处理" class="headerlink" title="Linux主机网卡（Bond）状态异常处理"></a>Linux主机网卡（Bond）状态异常处理</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-NetworkCard-bond.jpg" alt="Hardware-NetworkCard-bond"></p>
+<h3 id="一、问题定位与关键命令解析"><a href="#一、问题定位与关键命令解析" class="headerlink" title="一、问题定位与关键命令解析"></a>一、问题定位与关键命令解析</h3><p>当Linux主机的Bond网卡出现非<code>up</code>状态时，可通过以下命令快速定位问题：</p>
+<h4 id="1-统计非up状态的从属接口数量"><a href="#1-统计非up状态的从属接口数量" class="headerlink" title="1. 统计非up状态的从属接口数量"></a>1. 统计非<code>up</code>状态的从属接口数量</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span> | awk <span class="string">&#x27;/Status/&#123;print $NF&#125;&#x27;</span> | grep -vc up</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：统计所有Bond接口中状态非<code>up</code>的从属网卡数量。</li>
+<li><strong>输出示例</strong>：<code>1</code>（表示有1个从属网卡异常）。</li>
+<li><strong>说明</strong>：  <ul>
+<li><code>cat /proc/net/bonding/bond*</code>：读取所有Bond接口的配置信息。  </li>
+<li><code>grep -A 1 &#39;Slave Interface&#39;</code>：匹配包含<code>Slave Interface</code>的行，并输出该行及下一行（<code>-A 1</code>）。  </li>
+<li><code>awk &#39;/Status/&#123;print $NF&#125;&#39;</code>：提取状态字段（<code>Status</code>行的最后一个值，即<code>up</code>或<code>down</code>）。  </li>
+<li><code>grep -vc up</code>：统计非<code>up</code>状态的数量（<code>-v</code>反向匹配，<code>-c</code>计数）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-定位具体异常的从属网卡"><a href="#2-定位具体异常的从属网卡" class="headerlink" title="2. 定位具体异常的从属网卡"></a>2. 定位具体异常的从属网卡</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond* | grep -A 1 <span class="string">&#x27;Slave Interface&#x27;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>输出示例</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Slave Interface: eth3</span><br><span class="line">MII Status: down</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关键字段</strong>：  </p>
+<ul>
+<li><code>Slave Interface</code>：异常网卡名称（如 <code>eth3</code>）。  </li>
+<li><code>MII Status</code>：物理链路状态（<code>down</code> 表示断开）。  </li>
+<li><code>Link Failure Count</code>：链路故障次数（数值增加表明反复断开）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="3-查看详细Bond接口配置"><a href="#3-查看详细Bond接口配置" class="headerlink" title="3. 查看详细Bond接口配置"></a>3. 查看详细Bond接口配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/net/bonding/bond*</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>输出关键字段解析</strong>：  </p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Bonding Mode</strong></td>
+<td>Bond模式（如<code>802.3ad</code>动态链路聚合、<code>active-backup</code>主备模式）。</td>
+</tr>
+<tr>
+<td><strong>MII Status</strong></td>
+<td>Bond接口整体状态（<code>up</code>表示可用）。</td>
+</tr>
+<tr>
+<td><strong>Slave Interface</strong></td>
+<td>从属网卡名称及状态（重点关注<code>MII Status</code>）。</td>
+</tr>
+<tr>
+<td><strong>Link Failure Count</strong></td>
+<td>链路故障次数（非零值表示发生过故障）。</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h3 id="二、收集故障网卡信息"><a href="#二、收集故障网卡信息" class="headerlink" title="二、收集故障网卡信息"></a>二、收集故障网卡信息</h3><h4 id="1-获取网卡MAC地址"><a href="#1-获取网卡MAC地址" class="headerlink" title="1. 获取网卡MAC地址"></a>1. 获取网卡MAC地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a | grep eth3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>输出示例</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4: eth3: &lt;NO-CARRIER,BROADCAST,MULTICAST,SLAVE,UP&gt; ... link/ether 48:dc:2d:01:66:a5 ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关键字段</strong>：<code>link/ether</code> 后为MAC地址（如 <code>48:dc:2d:01:66:a5</code>）。</p>
+</li>
+</ul>
+<h4 id="2-获取Bond组IP地址"><a href="#2-获取Bond组IP地址" class="headerlink" title="2. 获取Bond组IP地址"></a>2. 获取Bond组IP地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a | grep bond1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>输出示例</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">9: bond1: ... inet 192.168.142.43/24 ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>关键字段</strong>：<code>inet</code> 后为Bond组的IP地址（如 <code>192.168.142.43/24</code>）。</p>
+</li>
+</ul>
+<h4 id="3-资产信息核对"><a href="#3-资产信息核对" class="headerlink" title="3. 资产信息核对"></a>3. 资产信息核对</h4><ul>
+<li>根据主机IP或主机名，在资产表中确认设备地址和位置信息。</li>
+</ul>
+<hr>
+<h3 id="三、信息提交网络组的模板"><a href="#三、信息提交网络组的模板" class="headerlink" title="三、信息提交网络组的模板"></a>三、信息提交网络组的模板</h3><p><strong>需包含以下信息</strong>：  </p>
+<ol>
+<li><strong>异常网卡</strong>：<code>eth3</code>  </li>
+<li><strong>MAC地址</strong>：<code>48:dc:2d:01:66:a5</code>  </li>
+<li><strong>所属Bond组</strong>：<code>bond1</code>  </li>
+<li><strong>Bond组IP</strong>：<code>192.168.142.43/24</code>  </li>
+<li><strong>物理位置</strong>：根据资产表提供设备地址和位置信息。</li>
+</ol>
+<hr>
+<h3 id="四、故障原因分析与处理建议"><a href="#四、故障原因分析与处理建议" class="headerlink" title="四、故障原因分析与处理建议"></a>四、故障原因分析与处理建议</h3><h4 id="可能原因"><a href="#可能原因" class="headerlink" title="可能原因"></a>可能原因</h4><ol>
+<li><strong>物理层问题</strong>：  <ul>
+<li>网线松动、光模块故障、交换机端口异常。  </li>
+<li><strong>操作建议</strong>：检查网线连接，更换光模块，验证交换机端口状态。</li>
+</ul>
+</li>
+<li><strong>驱动或配置问题</strong>：  <ul>
+<li>网卡驱动异常、Bond模式与交换机配置不匹配（如LACP未启用）。  </li>
+<li><strong>操作建议</strong>：更新网卡驱动，确认交换机聚合组配置。</li>
+</ul>
+</li>
+<li><strong>硬件故障</strong>：  <ul>
+<li>网卡或主板接口损坏。  </li>
+<li><strong>操作建议</strong>：更换网卡或主板。</li>
+</ul>
+</li>
+</ol>
+<h4 id="应急处理"><a href="#应急处理" class="headerlink" title="应急处理"></a>应急处理</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifdown eth3 &amp;&amp; ifup eth3   <span class="comment"># 重启异常网卡（临时恢复）</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="五、Bond模式说明"><a href="#五、Bond模式说明" class="headerlink" title="五、Bond模式说明"></a>五、Bond模式说明</h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>802.3ad（动态链路聚合）</strong></td>
+<td>多网卡负载均衡，需交换机支持LACP。</td>
+<td>高带宽需求、冗余要求高的场景。</td>
+</tr>
+<tr>
+<td><strong>active-backup（主备模式）</strong></td>
+<td>仅主接口工作，备用接口在主接口故障时切换。</td>
+<td>高可用性要求，对带宽需求不高。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h3><ul>
+<li><strong>核心流程</strong>：定位异常网卡 → 收集MAC&#x2F;IP → 提交网络组 → 物理&#x2F;配置排查。  </li>
+<li><strong>关键命令</strong>：<code>grep -A 1</code> 过滤上下文，<code>ip a</code> 查看网络配置。  </li>
+<li><strong>预防措施</strong>：定期检查Bond状态，确保驱动和固件为最新版本。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>硬件运维</category>
+        <category>网卡</category>
+      </categories>
+      <tags>
+        <tag>硬件运维</tag>
+        <tag>网卡</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>NTP服务处理手册</title>
     <url>/2025/04/03/NTP%E6%9C%8D%E5%8A%A1%E5%A4%84%E7%90%86%E6%89%8B%E5%86%8C/</url>
     <content><![CDATA[<h1 id="NTP服务处理手册"><a href="#NTP服务处理手册" class="headerlink" title="NTP服务处理手册"></a>NTP服务处理手册</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-DeploymentService-NTPProcManual.jpg" alt="Linux-DeploymentService-NTPProcManual"></p>
@@ -1194,6 +1194,130 @@
       </tags>
   </entry>
   <entry>
+    <title>Vim编辑器入门指南</title>
+    <url>/2025/03/27/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vimTOP.jpg" alt="Linux-Basic-vimTOP"></p>
+<h2 id="一、Vim模式与切换"><a href="#一、Vim模式与切换" class="headerlink" title="一、Vim模式与切换"></a>一、Vim模式与切换</h2><h3 id="1-命令模式"><a href="#1-命令模式" class="headerlink" title="1.命令模式"></a>1.命令模式</h3><ul>
+<li><strong>进入方式</strong>：通过<code>vi/vim</code>打开文件后的默认模式。  </li>
+<li><strong>功能</strong>：执行快捷键操作（如复制、删除、移动光标等），不可直接编辑文本。</li>
+</ul>
+<h3 id="2-编辑模式（插入模式）"><a href="#2-编辑模式（插入模式）" class="headerlink" title="2.编辑模式（插入模式）"></a>2.编辑模式（插入模式）</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>i</code>（插入）、<code>a</code>（追加）、<code>o</code>（新行）等。  </li>
+<li><strong>退出方式</strong>：按 <code>Esc</code> 返回命令模式。  </li>
+<li><strong>功能</strong>：直接编辑文本内容。</li>
+</ul>
+<h3 id="3-底行模式"><a href="#3-底行模式" class="headerlink" title="3.底行模式"></a>3.底行模式</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>:</code>。  </li>
+<li><strong>功能</strong>：执行保存、退出、搜索、设置等操作（如 <code>:wq</code> 保存退出）。</li>
+</ul>
+<h3 id="4-可视块模式"><a href="#4-可视块模式" class="headerlink" title="4.可视块模式"></a>4.可视块模式</h3><ul>
+<li><strong>进入方式</strong>：在命令模式下按 <code>Ctrl + v</code>。  </li>
+<li><strong>功能</strong>：批量选择文本块进行编辑（如删除、复制多行）。</li>
+</ul>
+<hr>
+<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
+<h2 id="二、常用快捷键"><a href="#二、常用快捷键" class="headerlink" title="二、常用快捷键"></a>二、常用快捷键</h2><h3 id="1-光标移动"><a href="#1-光标移动" class="headerlink" title="1. 光标移动"></a><strong>1. 光标移动</strong></h3><ul>
+<li><strong>行内移动</strong>：  <ul>
+<li><code>^</code>（数字 <code>6</code>）：移动到行首（首个非空字符）。  </li>
+<li><code>$</code>（数字 <code>4</code>）：移动到行尾。</li>
+</ul>
+</li>
+<li><strong>跨行移动</strong>：  <ul>
+<li><code>gg</code>：移动到文件第一行。  </li>
+<li><code>G</code>（<code>Shift + g</code>）：移动到文件最后一行。  </li>
+<li><code>100gg</code>：跳转到第100行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-复制、删除（剪切）、粘贴"><a href="#2-复制、删除（剪切）、粘贴" class="headerlink" title="2. 复制、删除（剪切）、粘贴"></a><strong>2. 复制、删除（剪切）、粘贴</strong></h3><ul>
+<li><code>yy</code>：复制当前行。  </li>
+<li><code>dd</code>：删除（剪切）当前行。  </li>
+<li><code>p</code>：粘贴到当前行下方。  </li>
+<li><code>P</code>（大写）：粘贴到当前行上方。</li>
+</ul>
+<h3 id="3-撤销与恢复"><a href="#3-撤销与恢复" class="headerlink" title="3. 撤销与恢复"></a><strong>3. 撤销与恢复</strong></h3><ul>
+<li><code>u</code>（undo）：撤销上一次操作。  </li>
+<li><code>Ctrl + r</code>（redo）：恢复被撤销的操作。</li>
+</ul>
+<h3 id="4-行号显示与搜索"><a href="#4-行号显示与搜索" class="headerlink" title="4. 行号显示与搜索"></a><strong>4. 行号显示与搜索</strong></h3><ul>
+<li><strong>显示行号</strong>：  <ul>
+<li><code>:set nu</code> 或 <code>:set number</code>：显示行号。  </li>
+<li><code>:set nonu</code>：隐藏行号。</li>
+</ul>
+</li>
+<li><strong>搜索功能</strong>：  <ul>
+<li><code>/keyword</code>：向下搜索指定内容（如 <code>/error</code>）。  </li>
+<li><code>n</code>：继续向下搜索。  </li>
+<li><code>N</code>：继续向上搜索。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="三、高级操作"><a href="#三、高级操作" class="headerlink" title="三、高级操作"></a>三、高级操作</h2><h3 id="1-批量编辑（可视块模式）"><a href="#1-批量编辑（可视块模式）" class="headerlink" title="1. 批量编辑（可视块模式）"></a><strong>1. 批量编辑（可视块模式）</strong></h3><ol>
+<li>按 <code>Ctrl + v</code> 进入可视块模式。  </li>
+<li>使用方向键选择多行文本块。  </li>
+<li>执行操作：  <ul>
+<li><code>d</code>：删除选中块。  </li>
+<li><code>y</code>：复制选中块。  </li>
+<li><code>I</code> 或 <code>A</code>：在块前&#x2F;后插入内容（按 <code>Esc</code> 完成批量插入）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-行调整"><a href="#2-行调整" class="headerlink" title="2. 行调整"></a><strong>2. 行调整</strong></h3><ul>
+<li><strong>上下移动行</strong>：  <ul>
+<li>命令模式下按 <code>dd</code> 剪切当前行，再按 <code>p</code> 或 <code>P</code> 粘贴到目标位置。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="四、常用命令速查表"><a href="#四、常用命令速查表" class="headerlink" title="四、常用命令速查表"></a>四、<strong>常用命令速查表</strong></h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>快捷键&#x2F;命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>保存退出</td>
+<td><code>:wq</code></td>
+</tr>
+<tr>
+<td>强制退出不保存</td>
+<td><code>:q!</code></td>
+</tr>
+<tr>
+<td>复制行</td>
+<td><code>yy</code></td>
+</tr>
+<tr>
+<td>删除行</td>
+<td><code>dd</code></td>
+</tr>
+<tr>
+<td>撤销操作</td>
+<td><code>u</code></td>
+</tr>
+<tr>
+<td>跳转到行首</td>
+<td><code>^</code></td>
+</tr>
+<tr>
+<td>跳转到行尾</td>
+<td><code>$</code></td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>基础命令</category>
+        <category>vim</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>vim</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ipmitool常用命令及用法详解</title>
     <url>/2025/03/24/ipmitool%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="ipmitool常用命令及用法详解"><a href="#ipmitool常用命令及用法详解" class="headerlink" title="ipmitool常用命令及用法详解"></a>ipmitool常用命令及用法详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-ManagementTools-IPMItoolCommon.jpg" alt="Linux-ManagementTools-IPMItoolCommon"></p>
@@ -1316,6 +1440,118 @@
         <tag>Linux管理工具</tag>
         <tag>ipmitool</tag>
         <tag>服务器管理口</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sas3ircu &amp; storcli64工具定位故障硬盘位置</title>
+    <url>/2025/03/17/sas3ircu%20&amp;%20storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98%E4%BD%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircuTOP.jpg" alt="Hardware-Disk-sas3ircuTOP"></p>
+<h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：  <ul>
+<li><code>cd /home/ansible/</code>：进入服务器管理工具目录。  </li>
+<li><code>ls</code>：列出目录中的文件，确认工具（如 <code>storcli64</code> 和 <code>sas3ircu</code>）存在。</li>
+</ul>
+</li>
+<li><strong>输出关键信息</strong>：<br>目录中包含多个管理脚本和工具，例如 <code>storcli64</code>（RAID管理工具）、<code>sas3ircu</code>（SAS控制器工具）等。</li>
+</ul>
+<hr>
+<h4 id="命令-2：检查-RAID-控制器状态"><a href="#命令-2：检查-RAID-控制器状态" class="headerlink" title="命令 2：检查 RAID 控制器状态"></a>命令 2：检查 RAID 控制器状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 show all  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：使用 <code>storcli64</code> 工具查看控制器 0 的详细信息（包括磁盘组、物理磁盘状态等）。  </li>
+<li><strong>输出关键信息</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Status = Failure  </span><br><span class="line">Description = Controller 0 not found  </span><br></pre></td></tr></table></figure></li>
+<li><strong>结论</strong>：  <ul>
+<li><strong>RAID控制器 0 未被识别</strong>，可能原因包括：  <ul>
+<li>控制器硬件故障或未正确连接。  </li>
+<li>驱动未安装或工具版本不兼容。  </li>
+<li>命令路径或参数错误。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="命令-3：检查-SAS-控制器与磁盘阵列状态"><a href="#命令-3：检查-SAS-控制器与磁盘阵列状态" class="headerlink" title="命令 3：检查 SAS 控制器与磁盘阵列状态"></a>命令 3：检查 SAS 控制器与磁盘阵列状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./sas3ircu 0 display  </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：使用 <code>sas3ircu</code> 工具查看 SAS 控制器 0 的配置信息，包括 RAID 卷状态和物理磁盘详情。  </li>
+<li><strong>输出关键信息</strong>：  <ul>
+<li><strong>IR Volume 1</strong>：  <ul>
+<li>RAID 级别：RAID10  </li>
+<li>状态：**Degraded (DGD)**（降级）  </li>
+<li>关联物理硬盘位置：<code>Enclosure#/Slot#</code> 如 <code>1:2</code>, <code>0:0</code> 等。</li>
+</ul>
+</li>
+<li><strong>IR Volume 2</strong>：  <ul>
+<li>RAID 级别：RAID1  </li>
+<li>状态：**Okay (OKY)**（正常）。</li>
+</ul>
+</li>
+<li><strong>错误提示</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SAS3IRCU: Error executing command DISPLAY.  </span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><strong>结论</strong>：  <ul>
+<li>RAID10 卷处于降级状态，表明 <strong>至少一块硬盘失效</strong>，需定位具体故障盘。  </li>
+<li>最后的错误提示可能因部分物理设备信息无法读取（如硬盘掉线或通信故障）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="二、故障定位与可能原因"><a href="#二、故障定位与可能原因" class="headerlink" title="二、故障定位与可能原因"></a>二、故障定位与可能原因</h3><h4 id="1-RAID-控制器问题："><a href="#1-RAID-控制器问题：" class="headerlink" title="1.RAID 控制器问题："></a>1.RAID 控制器问题：</h4><ul>
+<li><code>storcli64</code> 无法识别控制器 0，可能为硬件故障或驱动问题。</li>
+</ul>
+<h4 id="2-RAID-卷降级："><a href="#2-RAID-卷降级：" class="headerlink" title="2.RAID 卷降级："></a>2.RAID 卷降级：</h4><ul>
+<li>RAID10 卷降级说明部分硬盘失效，需根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>, <code>0:0</code>）定位具体槽位。</li>
+</ul>
+<h4 id="3-物理硬盘故障："><a href="#3-物理硬盘故障：" class="headerlink" title="3.物理硬盘故障："></a>3.物理硬盘故障：</h4><ul>
+<li>降级卷关联的硬盘可能存在物理损坏、连接松动或电源问题。</li>
+</ul>
+<h4 id="4-工具兼容性或权限问题："><a href="#4-工具兼容性或权限问题：" class="headerlink" title="4.工具兼容性或权限问题："></a>4.工具兼容性或权限问题：</h4><ul>
+<li><code>storcli64</code> 和 <code>sas3ircu</code> 版本与当前系统或硬件不兼容，或执行权限不足。</li>
+</ul>
+<hr>
+<h3 id="三、-建议操作步骤"><a href="#三、-建议操作步骤" class="headerlink" title="三、 建议操作步骤"></a>三、 建议操作步骤</h3><h4 id="1-检查-RAID-控制器硬件："><a href="#1-检查-RAID-控制器硬件：" class="headerlink" title="1.检查 RAID 控制器硬件："></a>1.检查 RAID 控制器硬件：</h4><ul>
+<li>确认控制器 0 的物理连接（如 PCIe插槽、电源线）。  </li>
+<li>更新 RAID 控制器驱动或固件。</li>
+</ul>
+<h4 id="2-定位故障硬盘："><a href="#2-定位故障硬盘：" class="headerlink" title="2.定位故障硬盘："></a>2.定位故障硬盘：</h4><ul>
+<li>根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>），找到对应槽位的硬盘，检查其状态灯（通常故障盘会亮红灯）。  </li>
+<li>使用 <code>smartctl</code> 检查硬盘 SMART 健康状态：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">smartctl -a /dev/sdX  </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-修复-RAID-卷："><a href="#3-修复-RAID-卷：" class="headerlink" title="3.修复 RAID 卷："></a>3.修复 RAID 卷：</h4><ul>
+<li>更换故障硬盘后，通过 <code>sas3ircu</code> 或 RAID 管理界面重建阵列。</li>
+</ul>
+<h4 id="4-排查工具问题："><a href="#4-排查工具问题：" class="headerlink" title="4.排查工具问题："></a>4.排查工具问题：</h4><ul>
+<li>确认 <code>storcli64</code> 和 <code>sas3ircu</code> 版本与硬件兼容。  </li>
+<li>以 <code>root</code> 权限执行命令，或检查文件执行权限：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /home/ansible/storcli64  </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="5-查看系统日志："><a href="#5-查看系统日志：" class="headerlink" title="5.查看系统日志："></a>5.查看系统日志：</h4><ul>
+<li>检查 <code>/var/log/messages</code> 或 <code>dmesg</code> 输出，获取更多硬件错误信息。</li>
+</ul>
+<hr>
+<h3 id="四-总结"><a href="#四-总结" class="headerlink" title="四. 总结"></a>四. 总结</h3><ul>
+<li><strong>当前问题</strong>：  <ul>
+<li>RAID 控制器 0 无法识别，RAID10 卷降级，存在硬盘故障风险。  </li>
+<li>SAS 控制器工具报错，可能因部分硬盘通信异常。</li>
+</ul>
+</li>
+<li><strong>风险等级</strong>：<br><strong>高</strong>（降级卷可能导致数据丢失，需立即处理）。  </li>
+<li><strong>处理优先级</strong>：  <ol>
+<li>定位并更换故障硬盘，修复降级卷。  </li>
+<li>排查 RAID 控制器硬件或驱动问题。  </li>
+<li>验证工具兼容性，确保后续管理操作正常。</li>
+</ol>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>硬件运维</category>
+        <category>硬盘</category>
+      </categories>
+      <tags>
+        <tag>硬件运维</tag>
+        <tag>sas3ircu</tag>
+        <tag>storcli64</tag>
+        <tag>硬盘</tag>
       </tags>
   </entry>
   <entry>
@@ -1488,242 +1724,6 @@
       <tags>
         <tag>Linux</tag>
         <tag>NTP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vim编辑器入门指南</title>
-    <url>/2025/03/27/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="Vim编辑器入门指南"><a href="#Vim编辑器入门指南" class="headerlink" title="Vim编辑器入门指南"></a>Vim编辑器入门指南</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vimTOP.jpg" alt="Linux-Basic-vimTOP"></p>
-<h2 id="一、Vim模式与切换"><a href="#一、Vim模式与切换" class="headerlink" title="一、Vim模式与切换"></a>一、Vim模式与切换</h2><h3 id="1-命令模式"><a href="#1-命令模式" class="headerlink" title="1.命令模式"></a>1.命令模式</h3><ul>
-<li><strong>进入方式</strong>：通过<code>vi/vim</code>打开文件后的默认模式。  </li>
-<li><strong>功能</strong>：执行快捷键操作（如复制、删除、移动光标等），不可直接编辑文本。</li>
-</ul>
-<h3 id="2-编辑模式（插入模式）"><a href="#2-编辑模式（插入模式）" class="headerlink" title="2.编辑模式（插入模式）"></a>2.编辑模式（插入模式）</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>i</code>（插入）、<code>a</code>（追加）、<code>o</code>（新行）等。  </li>
-<li><strong>退出方式</strong>：按 <code>Esc</code> 返回命令模式。  </li>
-<li><strong>功能</strong>：直接编辑文本内容。</li>
-</ul>
-<h3 id="3-底行模式"><a href="#3-底行模式" class="headerlink" title="3.底行模式"></a>3.底行模式</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>:</code>。  </li>
-<li><strong>功能</strong>：执行保存、退出、搜索、设置等操作（如 <code>:wq</code> 保存退出）。</li>
-</ul>
-<h3 id="4-可视块模式"><a href="#4-可视块模式" class="headerlink" title="4.可视块模式"></a>4.可视块模式</h3><ul>
-<li><strong>进入方式</strong>：在命令模式下按 <code>Ctrl + v</code>。  </li>
-<li><strong>功能</strong>：批量选择文本块进行编辑（如删除、复制多行）。</li>
-</ul>
-<hr>
-<p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Basic-vim.jpg" alt="Linux-Basic-vim"></p>
-<h2 id="二、常用快捷键"><a href="#二、常用快捷键" class="headerlink" title="二、常用快捷键"></a>二、常用快捷键</h2><h3 id="1-光标移动"><a href="#1-光标移动" class="headerlink" title="1. 光标移动"></a><strong>1. 光标移动</strong></h3><ul>
-<li><strong>行内移动</strong>：  <ul>
-<li><code>^</code>（数字 <code>6</code>）：移动到行首（首个非空字符）。  </li>
-<li><code>$</code>（数字 <code>4</code>）：移动到行尾。</li>
-</ul>
-</li>
-<li><strong>跨行移动</strong>：  <ul>
-<li><code>gg</code>：移动到文件第一行。  </li>
-<li><code>G</code>（<code>Shift + g</code>）：移动到文件最后一行。  </li>
-<li><code>100gg</code>：跳转到第100行。</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-复制、删除（剪切）、粘贴"><a href="#2-复制、删除（剪切）、粘贴" class="headerlink" title="2. 复制、删除（剪切）、粘贴"></a><strong>2. 复制、删除（剪切）、粘贴</strong></h3><ul>
-<li><code>yy</code>：复制当前行。  </li>
-<li><code>dd</code>：删除（剪切）当前行。  </li>
-<li><code>p</code>：粘贴到当前行下方。  </li>
-<li><code>P</code>（大写）：粘贴到当前行上方。</li>
-</ul>
-<h3 id="3-撤销与恢复"><a href="#3-撤销与恢复" class="headerlink" title="3. 撤销与恢复"></a><strong>3. 撤销与恢复</strong></h3><ul>
-<li><code>u</code>（undo）：撤销上一次操作。  </li>
-<li><code>Ctrl + r</code>（redo）：恢复被撤销的操作。</li>
-</ul>
-<h3 id="4-行号显示与搜索"><a href="#4-行号显示与搜索" class="headerlink" title="4. 行号显示与搜索"></a><strong>4. 行号显示与搜索</strong></h3><ul>
-<li><strong>显示行号</strong>：  <ul>
-<li><code>:set nu</code> 或 <code>:set number</code>：显示行号。  </li>
-<li><code>:set nonu</code>：隐藏行号。</li>
-</ul>
-</li>
-<li><strong>搜索功能</strong>：  <ul>
-<li><code>/keyword</code>：向下搜索指定内容（如 <code>/error</code>）。  </li>
-<li><code>n</code>：继续向下搜索。  </li>
-<li><code>N</code>：继续向上搜索。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="三、高级操作"><a href="#三、高级操作" class="headerlink" title="三、高级操作"></a>三、高级操作</h2><h3 id="1-批量编辑（可视块模式）"><a href="#1-批量编辑（可视块模式）" class="headerlink" title="1. 批量编辑（可视块模式）"></a><strong>1. 批量编辑（可视块模式）</strong></h3><ol>
-<li>按 <code>Ctrl + v</code> 进入可视块模式。  </li>
-<li>使用方向键选择多行文本块。  </li>
-<li>执行操作：  <ul>
-<li><code>d</code>：删除选中块。  </li>
-<li><code>y</code>：复制选中块。  </li>
-<li><code>I</code> 或 <code>A</code>：在块前&#x2F;后插入内容（按 <code>Esc</code> 完成批量插入）。</li>
-</ul>
-</li>
-</ol>
-<h3 id="2-行调整"><a href="#2-行调整" class="headerlink" title="2. 行调整"></a><strong>2. 行调整</strong></h3><ul>
-<li><strong>上下移动行</strong>：  <ul>
-<li>命令模式下按 <code>dd</code> 剪切当前行，再按 <code>p</code> 或 <code>P</code> 粘贴到目标位置。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="四、常用命令速查表"><a href="#四、常用命令速查表" class="headerlink" title="四、常用命令速查表"></a>四、<strong>常用命令速查表</strong></h2><table>
-<thead>
-<tr>
-<th>操作</th>
-<th>快捷键&#x2F;命令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>保存退出</td>
-<td><code>:wq</code></td>
-</tr>
-<tr>
-<td>强制退出不保存</td>
-<td><code>:q!</code></td>
-</tr>
-<tr>
-<td>复制行</td>
-<td><code>yy</code></td>
-</tr>
-<tr>
-<td>删除行</td>
-<td><code>dd</code></td>
-</tr>
-<tr>
-<td>撤销操作</td>
-<td><code>u</code></td>
-</tr>
-<tr>
-<td>跳转到行首</td>
-<td><code>^</code></td>
-</tr>
-<tr>
-<td>跳转到行尾</td>
-<td><code>$</code></td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>基础命令</category>
-        <category>vim</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>vim</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sas3ircu &amp; storcli64工具定位故障硬盘位置</title>
-    <url>/2025/03/17/sas3ircu%20&amp;%20storcli64%E5%B7%A5%E5%85%B7%E5%AE%9A%E4%BD%8D%E6%95%85%E9%9A%9C%E7%A1%AC%E7%9B%98%E4%BD%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="sas3ircu-storcli64工具定位故障硬盘位置"><a href="#sas3ircu-storcli64工具定位故障硬盘位置" class="headerlink" title="sas3ircu &amp; storcli64工具定位故障硬盘位置"></a>sas3ircu &amp; storcli64工具定位故障硬盘位置</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Hardware-Disk-sas3ircuTOP.jpg" alt="Hardware-Disk-sas3ircuTOP"></p>
-<h3 id="一、进入ansible目录找到服务器管理工具"><a href="#一、进入ansible目录找到服务器管理工具" class="headerlink" title="一、进入ansible目录找到服务器管理工具"></a>一、进入ansible目录找到服务器管理工具</h3><h4 id="命令-1：切换到-home-ansible-目录并列出文件"><a href="#命令-1：切换到-home-ansible-目录并列出文件" class="headerlink" title="命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件"></a>命令 1：切换到 &#x2F;home&#x2F;ansible&#x2F; 目录并列出文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ansible/  </span><br><span class="line"><span class="built_in">ls</span>  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：  <ul>
-<li><code>cd /home/ansible/</code>：进入服务器管理工具目录。  </li>
-<li><code>ls</code>：列出目录中的文件，确认工具（如 <code>storcli64</code> 和 <code>sas3ircu</code>）存在。</li>
-</ul>
-</li>
-<li><strong>输出关键信息</strong>：<br>目录中包含多个管理脚本和工具，例如 <code>storcli64</code>（RAID管理工具）、<code>sas3ircu</code>（SAS控制器工具）等。</li>
-</ul>
-<hr>
-<h4 id="命令-2：检查-RAID-控制器状态"><a href="#命令-2：检查-RAID-控制器状态" class="headerlink" title="命令 2：检查 RAID 控制器状态"></a>命令 2：检查 RAID 控制器状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/ansible/storcli64 /c0 show all  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：使用 <code>storcli64</code> 工具查看控制器 0 的详细信息（包括磁盘组、物理磁盘状态等）。  </li>
-<li><strong>输出关键信息</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Status = Failure  </span><br><span class="line">Description = Controller 0 not found  </span><br></pre></td></tr></table></figure></li>
-<li><strong>结论</strong>：  <ul>
-<li><strong>RAID控制器 0 未被识别</strong>，可能原因包括：  <ul>
-<li>控制器硬件故障或未正确连接。  </li>
-<li>驱动未安装或工具版本不兼容。  </li>
-<li>命令路径或参数错误。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="命令-3：检查-SAS-控制器与磁盘阵列状态"><a href="#命令-3：检查-SAS-控制器与磁盘阵列状态" class="headerlink" title="命令 3：检查 SAS 控制器与磁盘阵列状态"></a>命令 3：检查 SAS 控制器与磁盘阵列状态</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./sas3ircu 0 display  </span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：使用 <code>sas3ircu</code> 工具查看 SAS 控制器 0 的配置信息，包括 RAID 卷状态和物理磁盘详情。  </li>
-<li><strong>输出关键信息</strong>：  <ul>
-<li><strong>IR Volume 1</strong>：  <ul>
-<li>RAID 级别：RAID10  </li>
-<li>状态：**Degraded (DGD)**（降级）  </li>
-<li>关联物理硬盘位置：<code>Enclosure#/Slot#</code> 如 <code>1:2</code>, <code>0:0</code> 等。</li>
-</ul>
-</li>
-<li><strong>IR Volume 2</strong>：  <ul>
-<li>RAID 级别：RAID1  </li>
-<li>状态：**Okay (OKY)**（正常）。</li>
-</ul>
-</li>
-<li><strong>错误提示</strong>：  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SAS3IRCU: Error executing command DISPLAY.  </span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><strong>结论</strong>：  <ul>
-<li>RAID10 卷处于降级状态，表明 <strong>至少一块硬盘失效</strong>，需定位具体故障盘。  </li>
-<li>最后的错误提示可能因部分物理设备信息无法读取（如硬盘掉线或通信故障）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="二、故障定位与可能原因"><a href="#二、故障定位与可能原因" class="headerlink" title="二、故障定位与可能原因"></a>二、故障定位与可能原因</h3><h4 id="1-RAID-控制器问题："><a href="#1-RAID-控制器问题：" class="headerlink" title="1.RAID 控制器问题："></a>1.RAID 控制器问题：</h4><ul>
-<li><code>storcli64</code> 无法识别控制器 0，可能为硬件故障或驱动问题。</li>
-</ul>
-<h4 id="2-RAID-卷降级："><a href="#2-RAID-卷降级：" class="headerlink" title="2.RAID 卷降级："></a>2.RAID 卷降级：</h4><ul>
-<li>RAID10 卷降级说明部分硬盘失效，需根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>, <code>0:0</code>）定位具体槽位。</li>
-</ul>
-<h4 id="3-物理硬盘故障："><a href="#3-物理硬盘故障：" class="headerlink" title="3.物理硬盘故障："></a>3.物理硬盘故障：</h4><ul>
-<li>降级卷关联的硬盘可能存在物理损坏、连接松动或电源问题。</li>
-</ul>
-<h4 id="4-工具兼容性或权限问题："><a href="#4-工具兼容性或权限问题：" class="headerlink" title="4.工具兼容性或权限问题："></a>4.工具兼容性或权限问题：</h4><ul>
-<li><code>storcli64</code> 和 <code>sas3ircu</code> 版本与当前系统或硬件不兼容，或执行权限不足。</li>
-</ul>
-<hr>
-<h3 id="三、-建议操作步骤"><a href="#三、-建议操作步骤" class="headerlink" title="三、 建议操作步骤"></a>三、 建议操作步骤</h3><h4 id="1-检查-RAID-控制器硬件："><a href="#1-检查-RAID-控制器硬件：" class="headerlink" title="1.检查 RAID 控制器硬件："></a>1.检查 RAID 控制器硬件：</h4><ul>
-<li>确认控制器 0 的物理连接（如 PCIe插槽、电源线）。  </li>
-<li>更新 RAID 控制器驱动或固件。</li>
-</ul>
-<h4 id="2-定位故障硬盘："><a href="#2-定位故障硬盘：" class="headerlink" title="2.定位故障硬盘："></a>2.定位故障硬盘：</h4><ul>
-<li>根据 <code>sas3ircu</code> 输出的 <code>Enclosure#/Slot#</code>（如 <code>1:2</code>），找到对应槽位的硬盘，检查其状态灯（通常故障盘会亮红灯）。  </li>
-<li>使用 <code>smartctl</code> 检查硬盘 SMART 健康状态：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">smartctl -a /dev/sdX  </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="3-修复-RAID-卷："><a href="#3-修复-RAID-卷：" class="headerlink" title="3.修复 RAID 卷："></a>3.修复 RAID 卷：</h4><ul>
-<li>更换故障硬盘后，通过 <code>sas3ircu</code> 或 RAID 管理界面重建阵列。</li>
-</ul>
-<h4 id="4-排查工具问题："><a href="#4-排查工具问题：" class="headerlink" title="4.排查工具问题："></a>4.排查工具问题：</h4><ul>
-<li>确认 <code>storcli64</code> 和 <code>sas3ircu</code> 版本与硬件兼容。  </li>
-<li>以 <code>root</code> 权限执行命令，或检查文件执行权限：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /home/ansible/storcli64  </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="5-查看系统日志："><a href="#5-查看系统日志：" class="headerlink" title="5.查看系统日志："></a>5.查看系统日志：</h4><ul>
-<li>检查 <code>/var/log/messages</code> 或 <code>dmesg</code> 输出，获取更多硬件错误信息。</li>
-</ul>
-<hr>
-<h3 id="四-总结"><a href="#四-总结" class="headerlink" title="四. 总结"></a>四. 总结</h3><ul>
-<li><strong>当前问题</strong>：  <ul>
-<li>RAID 控制器 0 无法识别，RAID10 卷降级，存在硬盘故障风险。  </li>
-<li>SAS 控制器工具报错，可能因部分硬盘通信异常。</li>
-</ul>
-</li>
-<li><strong>风险等级</strong>：<br><strong>高</strong>（降级卷可能导致数据丢失，需立即处理）。  </li>
-<li><strong>处理优先级</strong>：  <ol>
-<li>定位并更换故障硬盘，修复降级卷。  </li>
-<li>排查 RAID 控制器硬件或驱动问题。  </li>
-<li>验证工具兼容性，确保后续管理操作正常。</li>
-</ol>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>硬件运维</category>
-        <category>硬盘</category>
-      </categories>
-      <tags>
-        <tag>硬件运维</tag>
-        <tag>sas3ircu</tag>
-        <tag>storcli64</tag>
-        <tag>硬盘</tag>
       </tags>
   </entry>
   <entry>
@@ -1999,79 +1999,72 @@
       </tags>
   </entry>
   <entry>
-    <title>日志分析统计sort与uniq命令详解</title>
-    <url>/2025/04/01/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E7%BB%9F%E8%AE%A1sort%E4%B8%8Euniq%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="日志分析统计sort与uniq命令详解"><a href="#日志分析统计sort与uniq命令详解" class="headerlink" title="日志分析统计sort与uniq命令详解"></a>日志分析统计sort与uniq命令详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Log-SortUniq.jpg" alt="Linux-Log-SortUniq"></p>
-<h2 id="一、sort命令：排序工具"><a href="#一、sort命令：排序工具" class="headerlink" title="一、sort命令：排序工具"></a>一、sort命令：排序工具</h2><h3 id="1-基本功能"><a href="#1-基本功能" class="headerlink" title="1. 基本功能"></a>1. 基本功能</h3><ul>
-<li><strong>作用</strong>：对文件内容或命令结果进行排序。</li>
-<li><strong>常用选项</strong>：<ul>
-<li><code>-n</code>：按数字大小排序（默认按字符排序）。</li>
-<li><code>-r</code>：逆序排序（从大到小）。</li>
-<li><code>-k</code>：指定排序的列（如<code>-k2</code>表示按第2列排序）。</li>
-<li><code>-t</code>：指定分隔符（如<code>-t&#39;:&#39;</code>表示以冒号分隔列）。</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-核心案例"><a href="#2-核心案例" class="headerlink" title="2. 核心案例"></a>2. 核心案例</h3><p><strong>生成测试文件</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim file.txt</span><br><span class="line">99</span><br><span class="line">1</span><br><span class="line">10</span><br><span class="line">23</span><br><span class="line">3</span><br><span class="line">0000</span><br><span class="line">02</span><br><span class="line">9</span><br><span class="line">19</span><br></pre></td></tr></table></figure>
-
-<h4 id="案例1：基本数字排序"><a href="#案例1：基本数字排序" class="headerlink" title="案例1：基本数字排序"></a>案例1：基本数字排序</h4><blockquote>
-<p><strong>sort默认是按照字母&#x2F;字符进行对比，会造成数字对比失败！</strong></p>
-<p>解决 -n</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 按字符排序（默认）</span></span><br><span class="line"><span class="built_in">sort</span> file.txt</span><br><span class="line">0000</span><br><span class="line">02</span><br><span class="line">1</span><br><span class="line">10</span><br><span class="line">19</span><br><span class="line">23</span><br><span class="line">3</span><br><span class="line">9</span><br><span class="line">99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按数字排序</span></span><br><span class="line"><span class="built_in">sort</span> -n file.txt</span><br><span class="line">0000</span><br><span class="line">1</span><br><span class="line">02</span><br><span class="line">3</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">19</span><br><span class="line">23</span><br><span class="line">99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 逆序数字排序</span></span><br><span class="line"><span class="built_in">sort</span> -nr file.txt</span><br><span class="line">99</span><br><span class="line">23</span><br><span class="line">19</span><br><span class="line">10</span><br><span class="line">9</span><br><span class="line">3</span><br><span class="line">02</span><br><span class="line">1</span><br><span class="line">0000</span><br></pre></td></tr></table></figure>
-
-<h4 id="案例2：按指定列排序"><a href="#案例2：按指定列排序" class="headerlink" title="案例2：按指定列排序"></a>案例2：按指定列排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试文件</span></span><br><span class="line">vim file.txt</span><br><span class="line">99 19 </span><br><span class="line">1 9</span><br><span class="line">10 02</span><br><span class="line">23 0000</span><br><span class="line">3 3</span><br><span class="line">0000 23</span><br><span class="line">02 10</span><br><span class="line">9 1</span><br><span class="line">19 99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按第2列数字排序</span></span><br><span class="line"><span class="built_in">sort</span> -nk2 file.txt</span><br><span class="line">23 0000</span><br><span class="line">9 1</span><br><span class="line">10 02</span><br><span class="line">3 3</span><br><span class="line">1 9</span><br><span class="line">02 10</span><br><span class="line">99 19 </span><br><span class="line">0000 23</span><br><span class="line">19 99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按第2列逆序排序</span></span><br><span class="line"><span class="built_in">sort</span> -nrk2 file.txt</span><br><span class="line">19 99</span><br><span class="line">0000 23</span><br><span class="line">99 19 </span><br><span class="line">02 10</span><br><span class="line">1 9</span><br><span class="line">3 3</span><br><span class="line">10 02</span><br><span class="line">9 1</span><br><span class="line">23 0000</span><br></pre></td></tr></table></figure>
-
-<h4 id="案例3：多列排序"><a href="#案例3：多列排序" class="headerlink" title="案例3：多列排序"></a>案例3：多列排序</h4><p><strong><code>-nk1 -nk2</code> 的执行逻辑</strong>：</p>
+    <title>日志messages中有IO和文件系统报错</title>
+    <url>/2025/03/18/%E6%97%A5%E5%BF%97messages%E4%B8%AD%E6%9C%89IO%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%8A%A5%E9%94%99/</url>
+    <content><![CDATA[<h1 id="日志messages中有IO和文件系统报错"><a href="#日志messages中有IO和文件系统报错" class="headerlink" title="日志messages中有IO和文件系统报错"></a>日志messages中有IO和文件系统报错</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-messages-XFSIOEXT4.jpg" alt="Linux-messages-XFSIOEXT4"></p>
+<h3 id="一、-检查日志中的I-O和文件系统报错"><a href="#一、-检查日志中的I-O和文件系统报错" class="headerlink" title="一、 检查日志中的I&#x2F;O和文件系统报错"></a>一、 检查日志中的I&#x2F;O和文件系统报错</h3><p><strong>命令含义</strong>：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /var/log/messages | grep <span class="string">&#x27;kernel&#x27;</span> | egrep -i <span class="string">&#x27;error|fail|readonly|abort|offline|fatal&#x27;</span> | egrep -i <span class="string">&#x27;ext.-fs|I/O|xfs-fs&#x27;</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>首先按<strong>第一列（<code>k1</code>）数值排序</strong>（<code>-n</code>）。</li>
-<li><strong>仅当第一列的值相同时</strong>，才会按<strong>第二列（<code>k2</code>）数值排序</strong>。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试文件</span></span><br><span class="line">vim file2.txt</span><br><span class="line">3 300</span><br><span class="line">1 100</span><br><span class="line">2 200</span><br><span class="line">3 30</span><br><span class="line">1 10</span><br><span class="line">2 20</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先按第1列排序，再按第2列排序</span></span><br><span class="line"><span class="built_in">sort</span> -nk1 -nk2 file2.txt</span><br><span class="line">1 10    <span class="comment"># 第一列=1，第二列升序</span></span><br><span class="line">1 100</span><br><span class="line">2 20    <span class="comment"># 第一列=2，第二列升序</span></span><br><span class="line">2 200</span><br><span class="line">3 30    <span class="comment"># 第一列=3，第二列升序</span></span><br><span class="line">3 300</span><br></pre></td></tr></table></figure>
-
-<h4 id="案例4：指定分隔符排序"><a href="#案例4：指定分隔符排序" class="headerlink" title="案例4：指定分隔符排序"></a>案例4：指定分隔符排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以冒号为分隔符，按第3列逆序排序</span></span><br><span class="line"><span class="built_in">sort</span> -t<span class="string">&#x27;:&#x27;</span> -nrk3 /etc/passwd</span><br><span class="line">xiao:x:1000:1000:xiao:/home/xiao:/bin/bash</span><br><span class="line">polkitd:x:999:997:User <span class="keyword">for</span> polkitd:/:/sbin/nologin</span><br><span class="line">chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">nobody:x:99:99:Nobody:/:/sbin/nologin</span><br><span class="line">postfix:x:89:89::/var/spool/postfix:/sbin/nologin</span><br><span class="line">dbus:x:81:81:System message bus:/:/sbin/nologin</span><br><span class="line">sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin</span><br><span class="line">ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line"><span class="built_in">sync</span>:x:5:0:<span class="built_in">sync</span>:/sbin:/bin/sync</span><br><span class="line">lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-企业面试题"><a href="#3-企业面试题" class="headerlink" title="3. 企业面试题"></a>3. 企业面试题</h3><p><strong>题目</strong>：从<code>ls /etc/</code>输出中取出文件大小最大的前5个文件。<br><strong>解答</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> -l /etc/ | <span class="built_in">sort</span> -nrk5 | <span class="built_in">head</span> -5</span><br><span class="line">-rw-r--r--.  1 root root   670293 6月   7 2013 services</span><br><span class="line">-rw-r--r--.  1 root root    19138 4月   3 15:50 ld.so.cache</span><br><span class="line">-rw-r--r--.  1 root root    12288 4月   3 15:48 aliases.db</span><br><span class="line">-rw-r--r--.  1 root root     7274 4月   3 15:48 kdump.conf</span><br><span class="line">-rw-r--r--.  1 root root     6545 4月   1 2020 protocols</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="二、uniq命令：去重与统计"><a href="#二、uniq命令：去重与统计" class="headerlink" title="二、uniq命令：去重与统计"></a>二、uniq命令：去重与统计</h2><h3 id="1-基本功能-1"><a href="#1-基本功能-1" class="headerlink" title="1. 基本功能"></a>1. 基本功能</h3><ul>
-<li><strong>作用</strong>：去除相邻的重复行，并可统计重复次数。</li>
-<li><strong>常用选项</strong>：<ul>
-<li><p><code>-c</code>：统计每行出现的次数。</p>
+<li><p><strong>作用</strong>：从系统日志 <code>/var/log/messages</code> 中筛选出与内核（<code>kernel</code>）相关的错误信息，进一步过滤出包含 <strong>I&#x2F;O错误、文件系统异常（ext4、XFS）</strong> 的关键字条目（如 <code>error</code>, <code>fail</code>, <code>readonly</code> 等）。  </p>
 </li>
-<li><p><code>uniq -c</code> 的默认格式是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[出现次数] [原行内容]</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>输出关键信息</strong>：  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.278904] blk_update_request: I/O error, dev sdd, sector 5855646432  </span><br><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.279098] blk_update_request: I/O error, dev sdd, sector 5855512576  </span><br><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.279120] Buffer I/O error on dev sdd1, logical block 731938816, lost sync page write  </span><br></pre></td></tr></table></figure></li>
+<li><p><strong>结论</strong>：  </p>
+<ul>
+<li>设备 <code>sdd</code> 出现 <strong>I&#x2F;O错误</strong>，涉及特定扇区和逻辑块，可能是物理磁盘损坏、连接故障或文件系统损坏。  </li>
+<li><strong>需立即通知二线备份团队（Backup）进行应急处理</strong>，并通知应用团队检查业务是否受影响。</li>
 </ul>
 </li>
 </ul>
-<h3 id="2-核心案例-1"><a href="#2-核心案例-1" class="headerlink" title="2. 核心案例"></a>2. 核心案例</h3><h4 id="案例1：去重并统计次数"><a href="#案例1：去重并统计次数" class="headerlink" title="案例1：去重并统计次数"></a>案例1：去重并统计次数</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先排序使相同行相邻，再去重统计</span></span><br><span class="line"><span class="built_in">sort</span> file2.txt | <span class="built_in">uniq</span> -c</span><br><span class="line">      1 1 10</span><br><span class="line">      1 1 100</span><br><span class="line">      1 2 20</span><br><span class="line">      1 2 200</span><br><span class="line">      1 3 30</span><br><span class="line">      1 3 300</span><br><span class="line">      </span><br><span class="line"><span class="comment"># 按出现次数逆序排序</span></span><br><span class="line"><span class="built_in">sort</span> file2.txt | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr</span><br><span class="line">      1 3 300</span><br><span class="line">      1 3 30</span><br><span class="line">      1 2 200</span><br><span class="line">      1 2 20</span><br><span class="line">      1 1 100</span><br><span class="line">      1 1 10</span><br></pre></td></tr></table></figure>
-
-<h4 id="案例2：日志分析实战"><a href="#案例2：日志分析实战" class="headerlink" title="案例2：日志分析实战"></a>案例2：日志分析实战</h4><p><strong>需求</strong>：统计日志文件中每个IP出现的次数，取前2名。<br><strong>解答</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试文件</span></span><br><span class="line"><span class="comment"># grep -oE &#x27;\b([0-9]&#123;1,3&#125;\.)&#123;3&#125;[0-9]&#123;1,3&#125;\b&#x27; /var/log/secure &gt; secure-ip.txt</span></span><br><span class="line"><span class="comment"># cat secure-ip.txt</span></span><br><span class="line">0.0.0.0</span><br><span class="line">192.168.184.1</span><br><span class="line">0.0.0.0</span><br><span class="line">0.0.0.0</span><br><span class="line">192.168.184.1</span><br><span class="line">0.0.0.0</span><br><span class="line">192.168.184.1</span><br><span class="line">0.0.0.0</span><br><span class="line">192.168.184.1</span><br><span class="line">192.168.184.1</span><br><span class="line">192.168.184.1</span><br><span class="line"></span><br><span class="line"><span class="built_in">sort</span> secure-ip.txt | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr | <span class="built_in">head</span> -2</span><br><span class="line">      6 192.168.184.1</span><br><span class="line">      5 0.0.0.0</span><br></pre></td></tr></table></figure>
-
 <hr>
-<h2 id="三、sort与uniq组合应用"><a href="#三、sort与uniq组合应用" class="headerlink" title="三、sort与uniq组合应用"></a>三、sort与uniq组合应用</h2><ul>
-<li><strong>典型流程</strong>：<br><code>sort</code> → <code>uniq -c</code> → <code>sort -nr</code> → <code>head</code>  </li>
-<li><strong>适用场景</strong>：<br>日志分析、数据统计、系统信息整理等。</li>
+<h3 id="二、-查看磁盘状态（是否掉盘）"><a href="#二、-查看磁盘状态（是否掉盘）" class="headerlink" title="二、. 查看磁盘状态（是否掉盘）"></a>二、. 查看磁盘状态（是否掉盘）</h3><p><strong>命令含义</strong>：  </p>
+<ul>
+<li><p>**<code>/home/ansible/storcli64 /c0 show all</code>**：<br>使用 RAID 管理工具 <code>storcli64</code> 检查控制器 <code>/c0</code> 下所有物理磁盘（PD）的状态。  </p>
+<ul>
+<li><strong>输出关键信息</strong>：<br>所有磁盘状态为 <code>Onln</code>（在线），DG（驱动器组）值为 1-10，无 <code>Offln</code>（离线）或 <code>UBad</code>（异常）磁盘。  </li>
+<li><strong>结论</strong>：<br>磁盘阵列中 <strong>未检测到掉盘</strong>，硬件层面未发现全局故障。</li>
 </ul>
-<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><ul>
-<li><strong>sort</strong>：排序工具，支持多列、数字、逆序、分隔符等功能。</li>
-<li><strong>uniq</strong>：去重工具，需与<code>sort</code>配合使用。</li>
-<li><strong>组合命令</strong>：<code>sort | uniq -c | sort -nr</code>是日志分析的黄金组合。</li>
+</li>
+<li><p>**<code>lsblk</code>**：<br>列出所有块设备及其挂载信息，确认文件系统挂载点正常。  </p>
+<ul>
+<li><strong>输出关键信息</strong>：<br><code>sdd</code> 对应的分区 <code>sdd1</code> 挂载至 <code>/srv/BigData/hadoop/data*</code>，未显示异常状态。  </li>
+<li><strong>结论</strong>：<br>date也为1-10证明没有掉盘，逻辑层面挂载正常，但需结合日志进一步排查 <code>sdd</code> 的硬件健康状态。</li>
 </ul>
+</li>
+</ul>
+<hr>
+<h3 id="三、综合分析"><a href="#三、综合分析" class="headerlink" title="三、综合分析"></a>三、综合分析</h3><h4 id="1-问题定位："><a href="#1-问题定位：" class="headerlink" title="1.问题定位："></a>1.问题定位：</h4><ul>
+<li>日志显示 <code>sdd</code> 存在 <strong>I&#x2F;O错误</strong>，可能是物理磁盘损坏、数据线接触不良或文件系统故障。  </li>
+<li>磁盘阵列状态正常（无掉盘），说明问题可能局限于单盘 <code>sdd</code>，而非全局存储故障。</li>
+</ul>
+<h4 id="2-建议操作："><a href="#2-建议操作：" class="headerlink" title="2.建议操作："></a>2.建议操作：</h4><ul>
+<li><strong>立即行动</strong>：  <ul>
+<li>通知二线备份团队介入，启动业务应急预案。  </li>
+<li>检查 <code>/srv/BigData/hadoop/data*</code> 的业务是否受影响（如数据写入失败、服务中断）。</li>
+</ul>
+</li>
+<li><strong>进一步排查</strong>：  <ul>
+<li>使用 <code>smartctl</code> 检查 <code>sdd</code> 的 SMART 健康状态。  </li>
+<li>检查磁盘连接线、控制器插槽是否松动。  </li>
+<li>尝试对 <code>sdd</code> 执行文件系统修复（如 <code>xfs_repair</code> 或 <code>fsck</code>）。</li>
+</ul>
+</li>
+<li><strong>长期建议</strong>：  <ul>
+<li>监控磁盘 I&#x2F;O 错误率，提前替换潜在故障盘。  </li>
+<li>优化日志监控告警规则，确保及时响应。</li>
+</ul>
+</li>
+</ul>
+<hr>
 ]]></content>
       <categories>
-        <category>Linux</category>
-        <category>基础命令</category>
-        <category>日志</category>
+        <category>Linux文件系统</category>
+        <category>messages</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
-        <tag>日志</tag>
-        <tag>sort</tag>
-        <tag>uniq</tag>
+        <tag>文件系统</tag>
+        <tag>硬盘</tag>
+        <tag>messages</tag>
       </tags>
   </entry>
   <entry>
@@ -2383,75 +2376,6 @@
       </tags>
   </entry>
   <entry>
-    <title>日志messages中有IO和文件系统报错</title>
-    <url>/2025/03/18/%E6%97%A5%E5%BF%97messages%E4%B8%AD%E6%9C%89IO%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%8A%A5%E9%94%99/</url>
-    <content><![CDATA[<h1 id="日志messages中有IO和文件系统报错"><a href="#日志messages中有IO和文件系统报错" class="headerlink" title="日志messages中有IO和文件系统报错"></a>日志messages中有IO和文件系统报错</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-messages-XFSIOEXT4.jpg" alt="Linux-messages-XFSIOEXT4"></p>
-<h3 id="一、-检查日志中的I-O和文件系统报错"><a href="#一、-检查日志中的I-O和文件系统报错" class="headerlink" title="一、 检查日志中的I&#x2F;O和文件系统报错"></a>一、 检查日志中的I&#x2F;O和文件系统报错</h3><p><strong>命令含义</strong>：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /var/log/messages | grep <span class="string">&#x27;kernel&#x27;</span> | egrep -i <span class="string">&#x27;error|fail|readonly|abort|offline|fatal&#x27;</span> | egrep -i <span class="string">&#x27;ext.-fs|I/O|xfs-fs&#x27;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p><strong>作用</strong>：从系统日志 <code>/var/log/messages</code> 中筛选出与内核（<code>kernel</code>）相关的错误信息，进一步过滤出包含 <strong>I&#x2F;O错误、文件系统异常（ext4、XFS）</strong> 的关键字条目（如 <code>error</code>, <code>fail</code>, <code>readonly</code> 等）。  </p>
-</li>
-<li><p><strong>输出关键信息</strong>：  </p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.278904] blk_update_request: I/O error, dev sdd, sector 5855646432  </span><br><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.279098] blk_update_request: I/O error, dev sdd, sector 5855512576  </span><br><span class="line">Mar 11 14:41:11 DSJ-FS-FI-1441 kernel: [334658.279120] Buffer I/O error on dev sdd1, logical block 731938816, lost sync page write  </span><br></pre></td></tr></table></figure></li>
-<li><p><strong>结论</strong>：  </p>
-<ul>
-<li>设备 <code>sdd</code> 出现 <strong>I&#x2F;O错误</strong>，涉及特定扇区和逻辑块，可能是物理磁盘损坏、连接故障或文件系统损坏。  </li>
-<li><strong>需立即通知二线备份团队（Backup）进行应急处理</strong>，并通知应用团队检查业务是否受影响。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="二、-查看磁盘状态（是否掉盘）"><a href="#二、-查看磁盘状态（是否掉盘）" class="headerlink" title="二、. 查看磁盘状态（是否掉盘）"></a>二、. 查看磁盘状态（是否掉盘）</h3><p><strong>命令含义</strong>：  </p>
-<ul>
-<li><p>**<code>/home/ansible/storcli64 /c0 show all</code>**：<br>使用 RAID 管理工具 <code>storcli64</code> 检查控制器 <code>/c0</code> 下所有物理磁盘（PD）的状态。  </p>
-<ul>
-<li><strong>输出关键信息</strong>：<br>所有磁盘状态为 <code>Onln</code>（在线），DG（驱动器组）值为 1-10，无 <code>Offln</code>（离线）或 <code>UBad</code>（异常）磁盘。  </li>
-<li><strong>结论</strong>：<br>磁盘阵列中 <strong>未检测到掉盘</strong>，硬件层面未发现全局故障。</li>
-</ul>
-</li>
-<li><p>**<code>lsblk</code>**：<br>列出所有块设备及其挂载信息，确认文件系统挂载点正常。  </p>
-<ul>
-<li><strong>输出关键信息</strong>：<br><code>sdd</code> 对应的分区 <code>sdd1</code> 挂载至 <code>/srv/BigData/hadoop/data*</code>，未显示异常状态。  </li>
-<li><strong>结论</strong>：<br>date也为1-10证明没有掉盘，逻辑层面挂载正常，但需结合日志进一步排查 <code>sdd</code> 的硬件健康状态。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="三、综合分析"><a href="#三、综合分析" class="headerlink" title="三、综合分析"></a>三、综合分析</h3><h4 id="1-问题定位："><a href="#1-问题定位：" class="headerlink" title="1.问题定位："></a>1.问题定位：</h4><ul>
-<li>日志显示 <code>sdd</code> 存在 <strong>I&#x2F;O错误</strong>，可能是物理磁盘损坏、数据线接触不良或文件系统故障。  </li>
-<li>磁盘阵列状态正常（无掉盘），说明问题可能局限于单盘 <code>sdd</code>，而非全局存储故障。</li>
-</ul>
-<h4 id="2-建议操作："><a href="#2-建议操作：" class="headerlink" title="2.建议操作："></a>2.建议操作：</h4><ul>
-<li><strong>立即行动</strong>：  <ul>
-<li>通知二线备份团队介入，启动业务应急预案。  </li>
-<li>检查 <code>/srv/BigData/hadoop/data*</code> 的业务是否受影响（如数据写入失败、服务中断）。</li>
-</ul>
-</li>
-<li><strong>进一步排查</strong>：  <ul>
-<li>使用 <code>smartctl</code> 检查 <code>sdd</code> 的 SMART 健康状态。  </li>
-<li>检查磁盘连接线、控制器插槽是否松动。  </li>
-<li>尝试对 <code>sdd</code> 执行文件系统修复（如 <code>xfs_repair</code> 或 <code>fsck</code>）。</li>
-</ul>
-</li>
-<li><strong>长期建议</strong>：  <ul>
-<li>监控磁盘 I&#x2F;O 错误率，提前替换潜在故障盘。  </li>
-<li>优化日志监控告警规则，确保及时响应。</li>
-</ul>
-</li>
-</ul>
-<hr>
-]]></content>
-      <categories>
-        <category>Linux文件系统</category>
-        <category>messages</category>
-      </categories>
-      <tags>
-        <tag>文件系统</tag>
-        <tag>硬盘</tag>
-        <tag>messages</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深入解析Linux inode</title>
     <url>/2025/03/25/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90Linux%20inode/</url>
     <content><![CDATA[<h1 id="深入解析Linux-inode"><a href="#深入解析Linux-inode" class="headerlink" title="深入解析Linux inode"></a>深入解析Linux inode</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-FileSystem-inode.jpg" alt="Linux-FileSystem-inode"></p>
@@ -2533,6 +2457,82 @@
       <tags>
         <tag>文件系统</tag>
         <tag>inode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>日志分析统计sort与uniq命令详解</title>
+    <url>/2025/04/01/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E7%BB%9F%E8%AE%A1sort%E4%B8%8Euniq%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="日志分析统计sort与uniq命令详解"><a href="#日志分析统计sort与uniq命令详解" class="headerlink" title="日志分析统计sort与uniq命令详解"></a>日志分析统计sort与uniq命令详解</h1><p><img src="https://rhcloudops.oss-cn-shenzhen.aliyuncs.com/img/Linux-Log-SortUniq.jpg" alt="Linux-Log-SortUniq"></p>
+<h2 id="一、sort命令：排序工具"><a href="#一、sort命令：排序工具" class="headerlink" title="一、sort命令：排序工具"></a>一、sort命令：排序工具</h2><h3 id="1-基本功能"><a href="#1-基本功能" class="headerlink" title="1. 基本功能"></a>1. 基本功能</h3><ul>
+<li><strong>作用</strong>：对文件内容或命令结果进行排序。</li>
+<li><strong>常用选项</strong>：<ul>
+<li><code>-n</code>：按数字大小排序（默认按字符排序）。</li>
+<li><code>-r</code>：逆序排序（从大到小）。</li>
+<li><code>-k</code>：指定排序的列（如<code>-k2</code>表示按第2列排序）。</li>
+<li><code>-t</code>：指定分隔符（如<code>-t&#39;:&#39;</code>表示以冒号分隔列）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-核心案例"><a href="#2-核心案例" class="headerlink" title="2. 核心案例"></a>2. 核心案例</h3><p><strong>生成测试文件</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim file.txt</span><br><span class="line">99</span><br><span class="line">1</span><br><span class="line">10</span><br><span class="line">23</span><br><span class="line">3</span><br><span class="line">0000</span><br><span class="line">02</span><br><span class="line">9</span><br><span class="line">19</span><br></pre></td></tr></table></figure>
+
+<h4 id="案例1：基本数字排序"><a href="#案例1：基本数字排序" class="headerlink" title="案例1：基本数字排序"></a>案例1：基本数字排序</h4><blockquote>
+<p><strong>sort默认是按照字母&#x2F;字符进行对比，会造成数字对比失败！</strong></p>
+<p>解决 -n</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 按字符排序（默认）</span></span><br><span class="line"><span class="built_in">sort</span> file.txt</span><br><span class="line">0000</span><br><span class="line">02</span><br><span class="line">1</span><br><span class="line">10</span><br><span class="line">19</span><br><span class="line">23</span><br><span class="line">3</span><br><span class="line">9</span><br><span class="line">99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按数字排序</span></span><br><span class="line"><span class="built_in">sort</span> -n file.txt</span><br><span class="line">0000</span><br><span class="line">1</span><br><span class="line">02</span><br><span class="line">3</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">19</span><br><span class="line">23</span><br><span class="line">99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 逆序数字排序</span></span><br><span class="line"><span class="built_in">sort</span> -nr file.txt</span><br><span class="line">99</span><br><span class="line">23</span><br><span class="line">19</span><br><span class="line">10</span><br><span class="line">9</span><br><span class="line">3</span><br><span class="line">02</span><br><span class="line">1</span><br><span class="line">0000</span><br></pre></td></tr></table></figure>
+
+<h4 id="案例2：按指定列排序"><a href="#案例2：按指定列排序" class="headerlink" title="案例2：按指定列排序"></a>案例2：按指定列排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试文件</span></span><br><span class="line">vim file.txt</span><br><span class="line">99 19 </span><br><span class="line">1 9</span><br><span class="line">10 02</span><br><span class="line">23 0000</span><br><span class="line">3 3</span><br><span class="line">0000 23</span><br><span class="line">02 10</span><br><span class="line">9 1</span><br><span class="line">19 99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按第2列数字排序</span></span><br><span class="line"><span class="built_in">sort</span> -nk2 file.txt</span><br><span class="line">23 0000</span><br><span class="line">9 1</span><br><span class="line">10 02</span><br><span class="line">3 3</span><br><span class="line">1 9</span><br><span class="line">02 10</span><br><span class="line">99 19 </span><br><span class="line">0000 23</span><br><span class="line">19 99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按第2列逆序排序</span></span><br><span class="line"><span class="built_in">sort</span> -nrk2 file.txt</span><br><span class="line">19 99</span><br><span class="line">0000 23</span><br><span class="line">99 19 </span><br><span class="line">02 10</span><br><span class="line">1 9</span><br><span class="line">3 3</span><br><span class="line">10 02</span><br><span class="line">9 1</span><br><span class="line">23 0000</span><br></pre></td></tr></table></figure>
+
+<h4 id="案例3：多列排序"><a href="#案例3：多列排序" class="headerlink" title="案例3：多列排序"></a>案例3：多列排序</h4><p><strong><code>-nk1 -nk2</code> 的执行逻辑</strong>：</p>
+<ul>
+<li>首先按<strong>第一列（<code>k1</code>）数值排序</strong>（<code>-n</code>）。</li>
+<li><strong>仅当第一列的值相同时</strong>，才会按<strong>第二列（<code>k2</code>）数值排序</strong>。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试文件</span></span><br><span class="line">vim file2.txt</span><br><span class="line">3 300</span><br><span class="line">1 100</span><br><span class="line">2 200</span><br><span class="line">3 30</span><br><span class="line">1 10</span><br><span class="line">2 20</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先按第1列排序，再按第2列排序</span></span><br><span class="line"><span class="built_in">sort</span> -nk1 -nk2 file2.txt</span><br><span class="line">1 10    <span class="comment"># 第一列=1，第二列升序</span></span><br><span class="line">1 100</span><br><span class="line">2 20    <span class="comment"># 第一列=2，第二列升序</span></span><br><span class="line">2 200</span><br><span class="line">3 30    <span class="comment"># 第一列=3，第二列升序</span></span><br><span class="line">3 300</span><br></pre></td></tr></table></figure>
+
+<h4 id="案例4：指定分隔符排序"><a href="#案例4：指定分隔符排序" class="headerlink" title="案例4：指定分隔符排序"></a>案例4：指定分隔符排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以冒号为分隔符，按第3列逆序排序</span></span><br><span class="line"><span class="built_in">sort</span> -t<span class="string">&#x27;:&#x27;</span> -nrk3 /etc/passwd</span><br><span class="line">xiao:x:1000:1000:xiao:/home/xiao:/bin/bash</span><br><span class="line">polkitd:x:999:997:User <span class="keyword">for</span> polkitd:/:/sbin/nologin</span><br><span class="line">chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">nobody:x:99:99:Nobody:/:/sbin/nologin</span><br><span class="line">postfix:x:89:89::/var/spool/postfix:/sbin/nologin</span><br><span class="line">dbus:x:81:81:System message bus:/:/sbin/nologin</span><br><span class="line">sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin</span><br><span class="line">ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line"><span class="built_in">sync</span>:x:5:0:<span class="built_in">sync</span>:/sbin:/bin/sync</span><br><span class="line">lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-企业面试题"><a href="#3-企业面试题" class="headerlink" title="3. 企业面试题"></a>3. 企业面试题</h3><p><strong>题目</strong>：从<code>ls /etc/</code>输出中取出文件大小最大的前5个文件。<br><strong>解答</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> -l /etc/ | <span class="built_in">sort</span> -nrk5 | <span class="built_in">head</span> -5</span><br><span class="line">-rw-r--r--.  1 root root   670293 6月   7 2013 services</span><br><span class="line">-rw-r--r--.  1 root root    19138 4月   3 15:50 ld.so.cache</span><br><span class="line">-rw-r--r--.  1 root root    12288 4月   3 15:48 aliases.db</span><br><span class="line">-rw-r--r--.  1 root root     7274 4月   3 15:48 kdump.conf</span><br><span class="line">-rw-r--r--.  1 root root     6545 4月   1 2020 protocols</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、uniq命令：去重与统计"><a href="#二、uniq命令：去重与统计" class="headerlink" title="二、uniq命令：去重与统计"></a>二、uniq命令：去重与统计</h2><h3 id="1-基本功能-1"><a href="#1-基本功能-1" class="headerlink" title="1. 基本功能"></a>1. 基本功能</h3><ul>
+<li><strong>作用</strong>：去除相邻的重复行，并可统计重复次数。</li>
+<li><strong>常用选项</strong>：<ul>
+<li><p><code>-c</code>：统计每行出现的次数。</p>
+</li>
+<li><p><code>uniq -c</code> 的默认格式是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[出现次数] [原行内容]</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="2-核心案例-1"><a href="#2-核心案例-1" class="headerlink" title="2. 核心案例"></a>2. 核心案例</h3><h4 id="案例1：去重并统计次数"><a href="#案例1：去重并统计次数" class="headerlink" title="案例1：去重并统计次数"></a>案例1：去重并统计次数</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先排序使相同行相邻，再去重统计</span></span><br><span class="line"><span class="built_in">sort</span> file2.txt | <span class="built_in">uniq</span> -c</span><br><span class="line">      1 1 10</span><br><span class="line">      1 1 100</span><br><span class="line">      1 2 20</span><br><span class="line">      1 2 200</span><br><span class="line">      1 3 30</span><br><span class="line">      1 3 300</span><br><span class="line">      </span><br><span class="line"><span class="comment"># 按出现次数逆序排序</span></span><br><span class="line"><span class="built_in">sort</span> file2.txt | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr</span><br><span class="line">      1 3 300</span><br><span class="line">      1 3 30</span><br><span class="line">      1 2 200</span><br><span class="line">      1 2 20</span><br><span class="line">      1 1 100</span><br><span class="line">      1 1 10</span><br></pre></td></tr></table></figure>
+
+<h4 id="案例2：日志分析实战"><a href="#案例2：日志分析实战" class="headerlink" title="案例2：日志分析实战"></a>案例2：日志分析实战</h4><p><strong>需求</strong>：统计日志文件中每个IP出现的次数，取前2名。<br><strong>解答</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试文件</span></span><br><span class="line"><span class="comment"># grep -oE &#x27;\b([0-9]&#123;1,3&#125;\.)&#123;3&#125;[0-9]&#123;1,3&#125;\b&#x27; /var/log/secure &gt; secure-ip.txt</span></span><br><span class="line"><span class="comment"># cat secure-ip.txt</span></span><br><span class="line">0.0.0.0</span><br><span class="line">192.168.184.1</span><br><span class="line">0.0.0.0</span><br><span class="line">0.0.0.0</span><br><span class="line">192.168.184.1</span><br><span class="line">0.0.0.0</span><br><span class="line">192.168.184.1</span><br><span class="line">0.0.0.0</span><br><span class="line">192.168.184.1</span><br><span class="line">192.168.184.1</span><br><span class="line">192.168.184.1</span><br><span class="line"></span><br><span class="line"><span class="built_in">sort</span> secure-ip.txt | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr | <span class="built_in">head</span> -2</span><br><span class="line">      6 192.168.184.1</span><br><span class="line">      5 0.0.0.0</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、sort与uniq组合应用"><a href="#三、sort与uniq组合应用" class="headerlink" title="三、sort与uniq组合应用"></a>三、sort与uniq组合应用</h2><ul>
+<li><strong>典型流程</strong>：<br><code>sort</code> → <code>uniq -c</code> → <code>sort -nr</code> → <code>head</code>  </li>
+<li><strong>适用场景</strong>：<br>日志分析、数据统计、系统信息整理等。</li>
+</ul>
+<h2 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h2><ul>
+<li><strong>sort</strong>：排序工具，支持多列、数字、逆序、分隔符等功能。</li>
+<li><strong>uniq</strong>：去重工具，需与<code>sort</code>配合使用。</li>
+<li><strong>组合命令</strong>：<code>sort | uniq -c | sort -nr</code>是日志分析的黄金组合。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>基础命令</category>
+        <category>日志</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>日志</tag>
+        <tag>sort</tag>
+        <tag>uniq</tag>
       </tags>
   </entry>
 </search>
